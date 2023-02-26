@@ -1,0 +1,11 @@
+.ClockDisplayContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.ClockDisplayInner {
+    font-size: 10rem;
+    color: #333;
+}
