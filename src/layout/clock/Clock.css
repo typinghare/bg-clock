@@ -1,0 +1,18 @@
+.Clock {
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.Clock > .SectionA, .SectionB {
+    height: 100%;
+
+    flex: 14;
+    text-align: center;
+}
+
+.ClockRibbon {
+    flex: 1;
+    background-color: #333333;
+}
