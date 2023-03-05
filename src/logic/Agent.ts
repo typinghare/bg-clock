@@ -7,10 +7,10 @@ import { Timer } from './Timer';
  */
 export class Agent {
   /**
-   * The time policy applied to this agent.
+   * The time control applied to this agent.
    * @private
    */
-  private readonly _timePolicy: TimeControl;
+  private readonly _timeControl: TimeControl;
 
   /**
    * The timer to this agent.
@@ -23,15 +23,15 @@ export class Agent {
    * @param timeControl
    */
   public constructor(timeControl: TimeControl) {
-    this._timePolicy = timeControl;
+    this._timeControl = timeControl;
     this._timer = new Timer(timeControl);
   }
 
   /**
-   * Returns the time policy applied to this agent.
+   * Returns the time control applied to this agent.
    */
-  public get timePolicy(): TimeControl {
-    return this._timePolicy;
+  public get timeControl(): TimeControl {
+    return this._timeControl;
   }
 
   /**

@@ -28,7 +28,7 @@ export class AgentManager {
     if (AgentManager.INSTANCE === undefined) {
       AgentManager.INSTANCE = new AgentManager();
 
-      const main: Time.Symbol = Time.create(0, 0, 10);
+      const main: Time.Symbol = Time.create(1, 0, 0);
       const period: Time.Symbol = Time.create(0, 0, 5);
       const periodNumber: number = 5;
 
@@ -94,8 +94,8 @@ export class AgentManager {
       return;
     }
 
-    console.log('Now pausing: ' + (isAgentARunning ? 'A' : 'B'));
-    console.log('Now resuming: ' + (isAgentARunning ? 'B' : 'A'));
+    console.log('Now pausing agent: ' + (isAgentARunning ? 'A' : 'B') + '.');
+    console.log('Now resuming agent: ' + (isAgentARunning ? 'B' : 'A') + '.');
     runningAgent.timer.pause();
     pausingAgent.timer.resume();
 

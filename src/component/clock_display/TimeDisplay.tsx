@@ -44,7 +44,7 @@ export const TimeDisplay: FunctionComponent<TimeDisplayProps> = (props: TimeDisp
     };
   }, [props.isFlashing, props.flashingInterval, showColon]);
 
-  return <Box display='inline-block' className={props.className} sx={props.sx}>
+  return <Box display='inline-block' className={props.className} sx={{ color: props.color }}>
     {
       hour + (props.isFlashing && !showColon ? ' ' : ':') +
       minute + (props.isFlashing && !showColon ? ' ' : ':') +

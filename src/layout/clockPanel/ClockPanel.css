@@ -1,18 +1,19 @@
-.Clock {
+.ClockPanel {
     height: 100%;
-
     display: flex;
     flex-direction: column;
 }
 
-.Clock > .SectionA, .SectionB {
-    height: 100%;
-
+.ClockPanel > .ClockPanelSectionA, .ClockPanelSectionB {
     flex: 14;
     text-align: center;
 }
 
-.ClockRibbon {
+.SectionA {
+    background-color: aqua;
+}
+
+.ClockPanelRibbon {
     flex: 1;
     background-color: #333333;
 }

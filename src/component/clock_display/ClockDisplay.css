@@ -8,4 +8,6 @@
 .ClockDisplayInner {
     font-size: 10rem;
     color: #333;
+    user-select: none;
+    cursor: default;
 }

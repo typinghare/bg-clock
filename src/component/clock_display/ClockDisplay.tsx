@@ -36,7 +36,7 @@ export const ClockDisplay: FunctionComponent<ClockDisplayProps> = (props: ClockD
         const realtimeSymbol = agent.timer.time;
         setTimeSymbol(Time.copy(realtimeSymbol));
       }
-    }, 200);
+    }, 250);
   }, [props.agentPosition]);
 
   if (agent === undefined) {

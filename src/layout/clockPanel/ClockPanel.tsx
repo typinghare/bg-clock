@@ -2,14 +2,14 @@ import React, { FunctionComponent } from 'react';
 import { AgentManager, AgentPosition } from '../../logic/AgentManager';
 import { Box } from '@mui/material';
 import { ClockDisplay } from '../../component/clock_display/ClockDisplay';
-import './Clock.css';
+import './ClockPanel.css';
 import { useAppDispatch } from '../../redux/hooks';
 import { clockRun, switchAgent } from '../../redux/slice/AgentSlice';
+import { PanelProps } from '../app/App';
 
-export type ClockProps = {}
+export type ClockPanelProps = PanelProps & {};
 
-export const Clock: FunctionComponent = (props: ClockProps) => {
-
+export const ClockPanel: FunctionComponent<ClockPanelProps> = (props: ClockPanelProps) => {
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
@@ -25,12 +25,12 @@ export const Clock: FunctionComponent = (props: ClockProps) => {
     };
   };
 
-  return <Box className='Clock'>
-    <Box className='SectionB' onClick={onClickSectionProvider(AgentPosition.B)}>
+  return <Box className='ClockPanel' sx={{ display: props.isShow ? 'flex' : 'none' }}>
+    <Box className='ClockPanelSectionB' onClick={onClickSectionProvider(AgentPosition.B)}>
       <ClockDisplay agentPosition={AgentPosition.B} rotateAngle={180} />
     </Box>
-    <Box className='ClockRibbon'></Box>
-    <Box className='SectionA' onClick={onClickSectionProvider(AgentPosition.A)}>
+    <Box className='ClockPanelRibbon'></Box>
+    <Box className='ClockPanelSectionA' onClick={onClickSectionProvider(AgentPosition.A)}>
       <ClockDisplay agentPosition={AgentPosition.A} />
     </Box>
   </Box>;

@@ -3,7 +3,7 @@ import { Time } from './Time';
 
 export class Timer {
   /**
-   * Time policy.
+   * Time control.
    * @private
    */
   private readonly timeControl: TimeControl;
@@ -40,12 +40,12 @@ export class Timer {
 
   /**
    * Creates a timer.
-   * @param timePolicy
+   * @param timeControl
    */
-  public constructor(timePolicy: TimeControl) {
-    this.timeControl = timePolicy;
-    this._time = Time.copy(timePolicy.main);
-    this._periodNumberLeft = timePolicy.periodNumber;
+  public constructor(timeControl: TimeControl) {
+    this.timeControl = timeControl;
+    this._time = Time.copy(timeControl.main);
+    this._periodNumberLeft = timeControl.periodNumber;
   }
 
   get periodNumberLeft(): number {
@@ -66,10 +66,9 @@ export class Timer {
     this.intervalId = setInterval(() => {
       this._time.consume(Time.MS_IN_SECOND);
       this.lastSetTimestamp = Time.time();
-      console.log('interval id: ' + this.intervalId);
     }, Time.MS_IN_SECOND);
 
-    // time up clock
+    // time up clockPanel
     this.timeOutId = setTimeout(() => {
       this.lastSetTimestamp = undefined;
       this.pause();

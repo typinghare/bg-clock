@@ -1,9 +1,11 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 import agentSlice from './slice/AgentSlice';
+import panelSlice from './slice/PanelSlice';
 
 export const store = configureStore({
   reducer: {
     agentSlice: agentSlice,
+    panelSlice: panelSlice
   },
 });
 
