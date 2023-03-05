@@ -40,4 +40,11 @@ export class Agent {
   public get timer(): Timer {
     return this._timer;
   }
+
+  /**
+   * Closes the agent.
+   */
+  public close(): void {
+    this._timer.pause();
+  }
 }

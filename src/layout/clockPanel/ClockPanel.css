@@ -5,7 +5,7 @@
 }
 
 .ClockPanel > .ClockPanelSectionA, .ClockPanelSectionB {
-    flex: 14;
+    flex: 12;
     text-align: center;
 }
 

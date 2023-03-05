@@ -1,12 +1,35 @@
 import { Agent } from './Agent';
 import { Time } from './Time';
 import { TimeControl } from './TimeControl';
+import { Game } from './Game';
+import { AgentHasNotBeenSetException } from '../exception/AgentHasNotBeenSetException';
 
 /**
  * The position of agents. Currently only support two agents in a game.
  */
-export enum AgentPosition {
-  A, B
+export class AgentPosition {
+  public static readonly A: AgentPosition = new AgentPosition('A');
+  public static readonly B: AgentPosition = new AgentPosition('B');
+
+  public static parse(agentPositionString: string): AgentPosition {
+    if (agentPositionString === 'A') {
+      return AgentPosition.A;
+    } else if (agentPositionString === 'B') {
+      return AgentPosition.B;
+    }
+
+    throw new Error('Unknown agent position string: ' + agentPositionString);
+  }
+
+  private readonly _name: string;
+
+  public constructor(name: string) {
+    this._name = name;
+  }
+
+  public toString(): string {
+    return this._name;
+  }
 }
 
 /**
@@ -19,7 +42,7 @@ export class AgentManager {
 
   private _agentB?: Agent = undefined;
 
-  private _runningAgent: AgentPosition = AgentPosition.A;
+  private _game?: Game = undefined;
 
   private constructor() {
   }
@@ -28,7 +51,7 @@ export class AgentManager {
     if (AgentManager.INSTANCE === undefined) {
       AgentManager.INSTANCE = new AgentManager();
 
-      const main: Time.Symbol = Time.create(1, 0, 0);
+      const main: Time.Symbol = Time.create(0, 0, 10);
       const period: Time.Symbol = Time.create(0, 0, 5);
       const periodNumber: number = 5;
 
@@ -41,12 +64,17 @@ export class AgentManager {
   }
 
   /**
-   * Returns the agent that is running.
+   * Returns the game.
    */
-  get runningAgent(): AgentPosition {
-    return this._runningAgent;
+  get game(): Game | undefined {
+    return this._game;
   }
 
+  /**
+   * Sets an agent.
+   * @param agentPosition
+   * @param agent
+   */
   public setAgent(agentPosition: AgentPosition, agent: Agent) {
     if (agentPosition === AgentPosition.A) {
       this._agentA = agent;
@@ -56,49 +84,24 @@ export class AgentManager {
   }
 
   /**
+   * Starts a game. This method will stop and remove the ongoing game.
+   */
+  public startGame(): Game {
+    if (this._agentA === undefined) {
+      throw new AgentHasNotBeenSetException(AgentPosition.A);
+    } else if (this._agentB === undefined) {
+      throw new AgentHasNotBeenSetException(AgentPosition.B);
+    }
+
+    this._game = new Game(this);
+    return this._game;
+  }
+
+  /**
    * Returns an agent by its position.
    * @param agentPosition
    */
   public getAgent(agentPosition: AgentPosition): Agent | undefined {
     return agentPosition === AgentPosition.A ? this._agentA : this._agentB;
-  }
-
-  /**
-   * Starts from a specified agent.
-   * @param agentPosition
-   */
-  public start(agentPosition: AgentPosition): void {
-    const agent = this.getAgent(agentPosition);
-    if (agent !== undefined) {
-      agent.timer.resume();
-    }
-  }
-
-  /**
-   * Whether a specified agent is running.
-   * @param agentPosition
-   */
-  public isRunning(agentPosition: AgentPosition): boolean {
-    return this._runningAgent === agentPosition;
-  }
-
-  /**
-   * Switches an agent.
-   */
-  public switchAgent(): void {
-    const isAgentARunning = this.isRunning(AgentPosition.A);
-    const runningAgent = isAgentARunning ? this._agentA : this._agentB;
-    const pausingAgent = isAgentARunning ? this._agentB : this._agentA;
-
-    if (runningAgent === undefined || pausingAgent === undefined) {
-      return;
-    }
-
-    console.log('Now pausing agent: ' + (isAgentARunning ? 'A' : 'B') + '.');
-    console.log('Now resuming agent: ' + (isAgentARunning ? 'B' : 'A') + '.');
-    runningAgent.timer.pause();
-    pausingAgent.timer.resume();
-
-    this._runningAgent = isAgentARunning ? AgentPosition.B : AgentPosition.A;
   }
 }

@@ -62,7 +62,7 @@ export namespace Time {
      * @param ms
      */
     public consume(ms: number): void {
-      this._ms -= ms;
+      this._ms = Math.max(this._ms - ms, 0);
     }
   }
 

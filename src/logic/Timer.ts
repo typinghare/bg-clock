@@ -39,6 +39,12 @@ export class Timer {
   private timeOutId?: NodeJS.Timeout;
 
   /**
+   * Whether this timer has time up.
+   * @private
+   */
+  private _isTimeUp: boolean = false;
+
+  /**
    * Creates a timer.
    * @param timeControl
    */
@@ -46,6 +52,10 @@ export class Timer {
     this.timeControl = timeControl;
     this._time = Time.copy(timeControl.main);
     this._periodNumberLeft = timeControl.periodNumber;
+  }
+
+  get isTimeUp(): boolean {
+    return this._isTimeUp;
   }
 
   get periodNumberLeft(): number {
@@ -83,11 +93,12 @@ export class Timer {
       this._periodNumberLeft--;
       this._time = Time.copy(this.timeControl.period);
       this.resume();
-    }, this._time.ms);
+    }, this._time.ms + 1000);
   }
 
   /**
-   * Pauses this timer.
+   * Pauses this timer. This method will clear all timeout and interval and thus
+   * the instance is safe to free.
    */
   public pause(): void {
     if (!this.isRunning()) return;
@@ -122,6 +133,7 @@ export class Timer {
     this.pause();
 
     this._time = Time.creatZero();
+    this._isTimeUp = true;
 
     console.log('Time up!');
   }

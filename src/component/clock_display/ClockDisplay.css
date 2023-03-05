@@ -1,4 +1,5 @@
 .ClockDisplayContainer {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -6,8 +7,20 @@
 }
 
 .ClockDisplayInner {
-    font-size: 10rem;
+    font-size: 20vw;
     color: #333;
     user-select: none;
     cursor: default;
+}
+
+.PeriodsDisplay {
+    position: absolute;
+    display: block;
+    height: 10vw;
+    width: 10vw;
+    background-color: #a2d2ff;
+}
+
+.PeriodsDisplayInner {
+    font-size: 3.5rem;
 }
