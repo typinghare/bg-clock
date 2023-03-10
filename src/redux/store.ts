@@ -3,10 +3,10 @@ import gameSlice from './slice/GameSlice';
 import panelSlice from './slice/PanelSlice';
 
 export const store = configureStore({
-  reducer: {
-    gameSlice: gameSlice,
-    panelSlice: panelSlice,
-  },
+    reducer: {
+        gameSlice: gameSlice,
+        panelSlice: panelSlice,
+    },
 });
 
 export type AppDispatch = typeof store.dispatch;

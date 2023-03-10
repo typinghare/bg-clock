@@ -4,13 +4,8 @@
     flex-direction: column;
 }
 
-.ClockPanel > .ClockPanelSectionA, .ClockPanelSectionB {
+.ClockPanelSectionA, .ClockPanelSectionB {
     flex: 12;
-    text-align: center;
-}
-
-.SectionA {
-    background-color: aqua;
 }
 
 .ClockPanelRibbon {
