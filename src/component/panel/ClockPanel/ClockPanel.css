@@ -1,10 +1,12 @@
 .ClockPanel {
     height: 100%;
     display: flex;
+    margin: 0 !important;
+    padding: 0 !important;
     flex-direction: column;
 }
 
-.ClockPanelSectionA, .ClockPanelSectionB {
+.ClockPanelSection {
     flex: 12;
 }
 

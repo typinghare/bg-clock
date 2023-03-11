@@ -1,140 +1,112 @@
-import { TimeControl } from './TimeControl';
-import { Time } from './Time';
+import { Time } from '../common/Time';
+import { timestamp } from '../common/helper';
+import { Closable } from '../common/Closable';
 
-export class Timer {
-    /**
-     * Time control.
-     * @private
-     */
-    private readonly timeControl: TimeControl;
+export type TimeoutCallback = () => Time | undefined;
 
-    /**
-     * The number of periods left.
-     * @private
-     */
-    private _periodNumberLeft: number;
+export type TimerSettings = {
+    time: Time
+    timeoutTolerance?: Time
+    timeoutCallback?: TimeoutCallback
+}
 
-    /**
-     * Current time.
-     * @private
-     */
-    private _time: Time.Symbol;
+/**
+ * Timer.
+ */
+export class Timer implements Closable {
+    private static readonly DEFAULT_TIMEOUT_TOLERANCE = Time.zero();
 
     /**
-     * The timestamp of last set time.
+     * Time settings.
      * @private
      */
-    private lastSetTimestamp?: number;
+    private readonly _timeSettings: TimerSettings;
 
     /**
-     * Interval id.
+     * Time.
      * @private
      */
-    private intervalId?: NodeJS.Timer;
+    private _time: Time;
 
-    /**
-     * Timeout id.
-     * @private
-     */
-    private timeOutId?: NodeJS.Timeout;
+    private _intervalId?: NodeJS.Timer;
 
-    /**
-     * Whether this timer has time up.
-     * @private
-     */
-    private _isTimeUp: boolean = false;
+    private _timeoutId?: NodeJS.Timeout;
+
+    private _lastTimeStamp?: number;
 
     /**
      * Creates a timer.
-     * @param timeControl
+     * @param timerSettings
      */
-    public constructor(timeControl: TimeControl) {
-        this.timeControl = timeControl;
-        this._time = Time.copy(timeControl.main);
-        this._periodNumberLeft = timeControl.periodNumber;
+    public constructor(timerSettings: TimerSettings) {
+        this._timeSettings = timerSettings;
+        this._time = timerSettings.time.clone();
     }
 
-    get isTimeUp(): boolean {
-        return this._isTimeUp;
-    }
-
-    get periodNumberLeft(): number {
-        return this._periodNumberLeft;
-    }
-
-    get time(): Time.Symbol {
+    /**
+     * Returns the time of this timer.
+     */
+    get time(): Time {
         return this._time;
     }
 
     /**
-     * Resumes this timer.
+     * Starts or resumes this timer.
      */
     public resume(): void {
-        if (this.isRunning()) return;
+        this._intervalId = setInterval(() => {
+            this._time.consume(Time.SECOND);
+            this._lastTimeStamp = timestamp();
+        }, Time.SECOND);
 
-        this.lastSetTimestamp = Time.time();
-        this.intervalId = setInterval(() => {
-            this._time.consume(Time.MS_IN_SECOND);
-            this.lastSetTimestamp = Time.time();
-        }, Time.MS_IN_SECOND);
-
-        // time up clockPanel
-        this.timeOutId = setTimeout(() => {
-            this.lastSetTimestamp = undefined;
+        const tolerance: Time = this._timeSettings.timeoutTolerance || Timer.DEFAULT_TIMEOUT_TOLERANCE;
+        this._timeoutId = setTimeout(() => {
+            // clear interval and timeout
+            this._lastTimeStamp = undefined;
             this.pause();
 
-            // if there is no time periods left
-            if (this._periodNumberLeft <= 1) {
-                this.timeUp();
-                return;
+            // invoke timeout callback function
+            const timeoutCallback = this._timeSettings.timeoutCallback;
+            if (timeoutCallback) {
+                const newTime: Time | undefined = timeoutCallback();
+                if (newTime !== undefined) {
+                    this._time = newTime.clone();
+                    this.resume();
+                }
             }
-
-            // if there is time periods left, then consume one
-            this._periodNumberLeft--;
-            this._time = Time.copy(this.timeControl.period);
-            this.resume();
-        }, this._time.ms + 1000);
+        }, tolerance.ms);
     }
 
     /**
-     * Pauses this timer. This method will clear all timeout and interval and thus
-     * the instance is safe to free.
+     * Pauses this timer.
      */
     public pause(): void {
-        if (!this.isRunning()) return;
+        this._intervalId && clearInterval(this._intervalId);
+        this._intervalId = undefined;
 
-        // stop interval
-        this.intervalId && clearInterval(this.intervalId);
-        this.intervalId = undefined;
-
-        // clear time up
-        this.timeOutId && clearTimeout(this.timeOutId);
-        this.timeOutId = undefined;
+        this._timeoutId && clearTimeout(this._timeoutId);
+        this._timeoutId = undefined;
 
         // consumes excessive time
-        if (this.lastSetTimestamp !== undefined) {
-            const excessiveTime: number = Time.time() - this.lastSetTimestamp;
-            this._time.consume(excessiveTime);
+        if (this._lastTimeStamp !== undefined) {
+            this._time.consume(timestamp() - this._lastTimeStamp);
         }
     }
 
     /**
-     * Whether this timer is running.
-     * @return true if this timer is running; false if this timer paused
+     * Whether is timer is running.
+     * @return true if the timer is running; false otherwise.
      */
     public isRunning(): boolean {
-        return this.intervalId !== undefined;
+        return this._intervalId !== undefined;
     }
 
     /**
-     * This timer stops due to time up.
+     * Closes this timer.
+     * @override
      */
-    private timeUp(): void {
+    public close(): void {
+        this._lastTimeStamp = undefined;
         this.pause();
-
-        this._time = Time.creatZero();
-        this._isTimeUp = true;
-
-        console.log('Time up!');
     }
 }

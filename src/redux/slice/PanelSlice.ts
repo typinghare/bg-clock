@@ -1,29 +1,31 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 
-export enum Panel {
+export enum PanelEnum {
     PORTAL_PANEL,
-    SELECT_PANEL,
     CLOCK_PANEL,
+
+    // option panels
+    GO_OPTION_PANEL,
 }
 
 export type PanelState = {
-    panel: Panel
+    panel: PanelEnum
 }
 
-export const panelSlice = createSlice({
+export const panelSlice = createSlice<PanelState, SliceCaseReducers<PanelState>>({
     name: 'panel',
     initialState: {
-        panel: Panel.SELECT_PANEL,
+        panel: PanelEnum.CLOCK_PANEL,
     },
     reducers: {
-        switchPanel: (state: PanelState, panel: PayloadAction<Panel>) => {
+        changePanel: (state: PanelState, panel: PayloadAction<PanelEnum>) => {
             state.panel = panel.payload;
         },
     },
 });
 
-export const { switchPanel } = panelSlice.actions;
+export const { changePanel } = panelSlice.actions;
 
 export const selectPanel = (state: RootState) => state.panelSlice.panel;
 

@@ -1,91 +1,55 @@
-import { AgentManager, AgentPosition } from './AgentManager';
-import { Agent } from './Agent';
+import { BasicOptions, OptionContainer } from './OptionContainer';
+import { Player, PlayerOptions } from './Player';
+import { Role } from './Role';
+import { Closable } from '../common/Closable';
 
-export class Game {
-    private readonly agentManager: AgentManager;
+export type GameOptions = BasicOptions & {}
 
-    /**
-     * The agent that is currently running.
-     * @private
-     */
-    private _runningAgent: AgentPosition = AgentPosition.A;
+export type GameEndCallback = (role: Role) => void;
+
+/**
+ * @abstract
+ * @generic <G> game options
+ * @generic <P> player options
+ */
+export abstract class Game<G extends GameOptions = GameOptions, P extends PlayerOptions = PlayerOptions> extends OptionContainer<G> implements Closable {
+    private readonly _playerA: Player<P>;
+    private readonly _playerB: Player<P>;
 
     /**
      * Creates a game.
-     * @param agentManager
      */
-    public constructor(agentManager: AgentManager) {
-        this.agentManager = agentManager;
+    public constructor() {
+        super();
+        this._playerA = new Player<P>(Role.A);
+        this._playerB = new Player<P>(Role.B);
+
+        this.init();
     }
 
     /**
-     * Returns time up agent.
+     * Returns the player of a specified role
+     * @param role
      */
-    get timeUpAgent(): AgentPosition | undefined {
-        if (this.agentManager.getAgent(AgentPosition.A)?.timer.isTimeUp) {
-            return AgentPosition.A;
-        } else if (this.agentManager.getAgent(AgentPosition.B)?.timer.isTimeUp) {
-            return AgentPosition.B;
-        }
-
-        return undefined;
+    public getPlayer(role: Role): Player<P> {
+        return role === Role.A ? this._playerA : this._playerB;
     }
 
     /**
-     * Closes the game.
+     * Initializes this game. Implementations should initialize the default settings for players.
      */
-    public close() {
-        this.agentManager.getAgent(AgentPosition.A)?.close();
-        this.agentManager.getAgent(AgentPosition.B)?.close();
-    }
+    public abstract init(): void;
 
     /**
-     * Starts from a specified agent.
-     * @param agentPosition
+     * Starts this game. Implementations should create time controls for both players.
+     * @abstract
      */
-    public start(agentPosition: AgentPosition): void {
-        const agent = this.agentManager.getAgent(agentPosition);
-        if (agent !== undefined) {
-            agent.timer.resume();
-        }
-    }
+    public abstract start(gameEndCallback: GameEndCallback): void;
 
     /**
-     * Whether a specified agent is running.
-     * @param agentPosition
+     * @override
      */
-    public isRunning(agentPosition: AgentPosition): boolean {
-        return this._runningAgent === agentPosition;
-    }
-
-    /**
-     * The position of running agent.
-     */
-    public runningAgent(): AgentPosition {
-        return this._runningAgent;
-    }
-
-    /**
-     * Switches an agent.
-     */
-    public switchAgent(): void {
-        const agentA: Agent | undefined = this.agentManager.getAgent(AgentPosition.A);
-        const agentB: Agent | undefined = this.agentManager.getAgent(AgentPosition.B);
-
-        if (agentA === undefined || agentB === undefined) {
-            return;
-        }
-        const isAgentARunning = this.isRunning(AgentPosition.A);
-        const runningAgent = isAgentARunning ? agentA : agentB;
-        const pausingAgent = isAgentARunning ? agentB : agentA;
-
-
-        console.log('Now pausing agent: ' + (isAgentARunning ? 'A' : 'B') + '.');
-        console.log('Now resuming agent: ' + (isAgentARunning ? 'B' : 'A') + '.');
-
-        runningAgent.timer.pause();
-        pausingAgent.timer.resume();
-
-        this._runningAgent = isAgentARunning ? AgentPosition.B : AgentPosition.A;
+    public close(): void {
+        this._playerA.close();
     }
 }

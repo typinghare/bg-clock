@@ -19,8 +19,24 @@ export class Time {
     /**
      * Creates a time holds zero milliseconds.
      */
-    public static createZero(): Time {
+    public static zero(): Time {
         return new Time(0);
+    }
+
+    /**
+     * Creates a time by specified seconds.
+     * @param second
+     */
+    public static second(second: number): Time {
+        return new Time(second * Time.SECOND);
+    }
+
+    /**
+     * Creates a time by specified minutes.
+     * @param minute
+     */
+    public static minute(minute: number): Time {
+        return new Time(minute * Time.MINUTE);
     }
 
     /**

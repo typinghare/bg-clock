@@ -1,3 +1,5 @@
+/* Global CSS style */
+
 body {
     margin: 0;
     padding: 0;
@@ -6,9 +8,16 @@ body {
     sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    /* full screen width */
+    height: 100vh;
+
+    /* fixed screen */
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
-code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#root {
+    /* inherit 100% full screen width */
+    height: 100%;
 }

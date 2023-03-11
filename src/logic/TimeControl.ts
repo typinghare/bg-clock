@@ -1,53 +1,121 @@
-import { Time } from './Time';
+import { Closable } from '../common/Closable';
+import { Timer } from './Timer';
+import { Time } from '../common/Time';
 
+export type TimerEndCallback = (timeControl: TimeControl) => void;
 
-export class TimeControl {
+export type TimeControlSettings = {
+    // the main time
+    mainTime: Time,
+
+    // the time of each period
+    timePerPeriod: Time,
+
+    // the number of periods
+    periods: number
+
+    // callback of timer end
+    timerEndCallback: TimerEndCallback
+}
+
+export abstract class TimeControl implements Closable {
     /**
-     * Default time control.
-     */
-    public static defaultTimeControl: TimeControl
-        = new TimeControl(Time.create(0, 0, 0), Time.create(0, 0, 30), 5);
-
-    /**
-     * @chinese 主时间
+     * Time control settings.
      * @private
      */
-    private readonly _main: Time.Symbol;
+    private readonly _settings: TimeControlSettings;
 
     /**
-     * @chinese 读秒时间
-     * @japanese 秒読みな時間
+     * Timer.
      * @private
      */
-    private readonly _period: Time.Symbol;
+    private _timer: Timer;
 
     /**
-     * @chinese 保留时间次数
+     * The number of periods left.
      * @private
      */
-    private readonly _periodNumber: number;
+    private _periodsLeft: number;
 
     /**
      * Creates a time control.
-     * @param main
-     * @param timePeriod
-     * @param timePeriodNumber
+     * @param settings
      */
-    constructor(main: Time.Symbol, timePeriod: Time.Symbol, timePeriodNumber: number) {
-        this._main = main;
-        this._period = timePeriod;
-        this._periodNumber = timePeriodNumber;
+    protected constructor(settings: TimeControlSettings) {
+        this._settings = settings;
+        this._timer = this.initTimer();
+        this._periodsLeft = settings.periods;
     }
 
-    get main(): Time.Symbol {
-        return this._main;
+    /**
+     * Returns time control settings.
+     * @protected
+     */
+    protected get settings(): TimeControlSettings {
+        return this._settings;
     }
 
-    get period(): Time.Symbol {
-        return this._period;
+    /**
+     * Returns periods left.
+     */
+    public getPeriodsLeft(): number {
+        return this._periodsLeft;
     }
 
-    get periodNumber(): number {
-        return this._periodNumber;
+    /**
+     * Sets periods left.
+     * @param periodsLeft
+     */
+    public setPeriodsLeft(periodsLeft: number): void {
+        this._periodsLeft = periodsLeft;
+    }
+
+    /**
+     * Resumes the timer.
+     */
+    public resumeTimer(): void {
+        this._timer.resume();
+    }
+
+    /**
+     * Pauses the timer.
+     */
+    public pauseTimer(): void {
+        this._timer.pause();
+    }
+
+    /**
+     * When the timer ends, this function will be invoked.
+     */
+    public timerEnd(): void {
+        this._settings.timerEndCallback(this);
+    }
+
+    /**
+     * Whether the timer is running.
+     */
+    public isTimerRunning(): boolean {
+        return this._timer.isRunning();
+    }
+
+    /**
+     * Returns the time.
+     */
+    public getTime(): Time {
+        return this._timer.time.clone() || Time.zero();
+    }
+
+    /**
+     * Initializes a timer.
+     * @abstract
+     */
+    public abstract initTimer(): Timer;
+
+    /**
+     * Closes this time control.
+     * @override
+     */
+    close(): void {
+        this._timer.close();
     }
 }

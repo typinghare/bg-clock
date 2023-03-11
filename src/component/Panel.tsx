@@ -9,7 +9,9 @@ const SHOW_DISPLAY_PROPERTY: string = 'flex';
 const HIDDEN_DISPLAY_PROPERTY: string = 'none';
 
 const panelStyle = (isShow: boolean): React.CSSProperties => ({
+    height: '100%',
     display: isShow ? SHOW_DISPLAY_PROPERTY : HIDDEN_DISPLAY_PROPERTY,
+    flexDirection: 'column',
 });
 
 /**
