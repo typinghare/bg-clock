@@ -13,9 +13,7 @@ export const ClockPanel: FunctionComponent<ClockPanelProps> = ({ isShow }) => {
     const onClickSectionProvider = (role: Role) => {
         return () => {
             const game: Game = GameController.INSTANCE.getGame();
-            game.getPlayer(role);
-
-            console.log(role);
+            game.playerClick(role);
         };
     };
 

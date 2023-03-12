@@ -1,10 +1,14 @@
+import * as React from 'react';
 import { FunctionComponent } from 'react';
-import { useAppDispatch } from '../../../redux/hooks';
 import { OptionAccordion } from '../../OptionAccordion';
 import { GoPlayerOption } from './GoPlayerOption';
 import { Role } from '../../../logic/Role';
-import { Box, Button } from '@mui/material';
+import { Box, Button, FormControlLabel, FormGroup, Switch } from '@mui/material';
 import { Panel, PanelProps } from '../../Panel';
+import { Game } from '../../../logic/Game';
+import { GameController } from '../../../logic/GameController';
+import { useAppDispatch } from '../../../redux/hooks';
+import { changePanel, PanelEnum } from '../../../redux/slice/PanelSlice';
 
 export type GoOptionPanelProps = PanelProps & {}
 
@@ -14,20 +18,50 @@ export type GoOptionPanelProps = PanelProps & {}
 export const GoOptionPanel: FunctionComponent<GoOptionPanelProps> = ({ isShow }) => {
     const dispatch = useAppDispatch();
     const onClickStartGame = () => {
-        console.log('click start game');
+        const game: Game = GameController.INSTANCE.getGame();
+        game.start(() => {
+            console.log('Game End Callback.');
+        });
+
+        dispatch(changePanel(PanelEnum.CLOCK_PANEL));
+    };
+
+    const [synchronizedPlayerOptions, setSynchronizedPlayerOptions] = React.useState(true);
+
+    const SynchronizeSwitch = () => {
+        const handleSynchronizeSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+            setSynchronizedPlayerOptions(event.target.checked);
+        };
+
+        return <Switch
+            defaultChecked={synchronizedPlayerOptions}
+            onChange={handleSynchronizeSwitchChange}
+        />;
     };
 
     return <Panel isShow={isShow} sx={{ padding: '1em' }}>
-        <OptionAccordion summaryId={'GoOptionBlackAccordion'} title={'BLACK OPTIONS'} expanded={true}>
-            <GoPlayerOption role={Role.A} />
-        </OptionAccordion>
+        <h1>Game Options</h1>
 
-        <OptionAccordion summaryId={'GoOptionWhiteAccordion'} title={'WHITE OPTIONS'} expanded={true}>
-            <GoPlayerOption role={Role.B} />
-        </OptionAccordion>
+        <Box hidden={synchronizedPlayerOptions}>
+            <OptionAccordion summaryId={'GoOptionBlackAccordion'} title={'OPTIONS (BLACK)'} expanded={true}>
+                <GoPlayerOption role={Role.A} />
+            </OptionAccordion>
 
-        <OptionAccordion summaryId={'GoOptionAdvancedAccordion'} title={'ADVANCED SETTINGS'} expanded={false}>
-            Nothing here ...
+            <OptionAccordion summaryId={'GoOptionWhiteAccordion'} title={'OPTIONS (WHITE)'} expanded={true}>
+                <GoPlayerOption role={Role.B} />
+            </OptionAccordion>
+        </Box>
+
+        <Box hidden={!synchronizedPlayerOptions}>
+            <OptionAccordion summaryId={'GoOptionBlackAccordion'} title={'OPTIONS'} expanded={true}>
+                <GoPlayerOption />
+            </OptionAccordion>
+        </Box>
+
+        <OptionAccordion summaryId={'GoOptionAdvancedAccordion'} title={'ADVANCED GAME OPTIONS'} expanded={false}>
+            <FormGroup>
+                <FormControlLabel control={<SynchronizeSwitch />} label="To synchronize player's options." />
+            </FormGroup>
         </OptionAccordion>
 
         <Box sx={{ textAlign: 'center', marginTop: '3em' }}>
@@ -40,3 +74,4 @@ export const GoOptionPanel: FunctionComponent<GoOptionPanelProps> = ({ isShow })
         </Box>
     </Panel>;
 };
+

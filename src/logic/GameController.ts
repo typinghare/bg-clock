@@ -1,6 +1,5 @@
 import { Game } from './Game';
 import { GoGame } from './game/go/GoGame';
-import { Role } from './Role';
 
 export type GameClass = new () => Game<any, any>;
 
@@ -14,10 +13,6 @@ export class GameController {
 
     private constructor() {
         this.bootGame(GoGame);
-        console.log(this._game);
-        this._game?.start((role: Role) => {
-
-        });
     }
 
     /**
@@ -44,10 +39,17 @@ export class GameController {
     }
 
     /**
-     * Whether a game has booted.
+     * Whether the game has booted.
      */
     public isGameBooted(): boolean {
         return this._game !== undefined;
+    }
+
+    /**
+     * Whether the game has started.
+     */
+    public isGameStarted(): boolean {
+        return this._game?.hasStarted ||  false;
     }
 
     /**

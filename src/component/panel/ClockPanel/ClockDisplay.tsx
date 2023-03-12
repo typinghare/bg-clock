@@ -9,6 +9,10 @@ import { TimeControl } from '../../../logic/TimeControl';
 import { Time } from '../../../common/Time';
 import { PeriodDisplay } from './PeriodDisplay';
 
+const CLOCK_END_COLOR: string = '#ef233c';
+const CLOCK_PAUSED_COLOR: string = '#999';
+const CLOCK_RUNNING_COLOR: string = '#333';
+
 export type ClockDisplayProps = {
     // the role of the player
     playerRole: Role,
@@ -32,17 +36,19 @@ export const ClockDisplay: FunctionComponent<ClockDisplayProps> = ({ playerRole,
     const [color, setColor] = React.useState('#999');
 
     React.useEffect(() => {
-        if (!GameController.INSTANCE.isGameBooted())
-            return;
-
-        const game: Game = GameController.INSTANCE.getGame();
-        const timeControl: TimeControl = game.getPlayer(playerRole).timeControl;
-
         const intervalId: NodeJS.Timer = setInterval(() => {
+            if (!GameController.INSTANCE.isGameStarted())
+                return;
+
+            const game: Game = GameController.INSTANCE.getGame();
+            const timeControl: TimeControl = game.getPlayer(playerRole).timeControl;
+            const isRunning: boolean = timeControl.isTimerRunning();
+            const isEnd: boolean = timeControl.isEnd();
+
             setTime(timeControl.getTime());
             setPeriods(timeControl.getPeriodsLeft());
-            setColor(timeControl.isTimerRunning() ? '#333' : '#999')
-        }, 250);
+            setColor(isEnd ? CLOCK_END_COLOR : (isRunning ? CLOCK_RUNNING_COLOR : CLOCK_PAUSED_COLOR));
+        }, Time.SECOND / 4);
 
         return () => {
             intervalId && clearInterval(intervalId);

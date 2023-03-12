@@ -10,6 +10,8 @@ export type GoByoyomiTimeControlSettings = TimeControlSettings & {}
  * @japanese 秒読み
  */
 export class GoByoyomiTimeControl extends TimeControl {
+    private _isMainTimeOver: boolean = false;
+
     /**
      * Creates a Go byoyomi time control.
      * @param settings
@@ -17,7 +19,6 @@ export class GoByoyomiTimeControl extends TimeControl {
     public constructor(settings: GoByoyomiTimeControlSettings) {
         super(settings);
     }
-
 
     /**
      * Initializes a timer.
@@ -29,15 +30,29 @@ export class GoByoyomiTimeControl extends TimeControl {
             time: settings.mainTime,
             timeoutTolerance: new Time(Time.SECOND),
             timeoutCallback: (): Time | undefined => {
+                this._isMainTimeOver = true;
+
                 const periodsLeft = this.getPeriodsLeft();
-                if (periodsLeft <= 1) {
+                if (periodsLeft > 1) {
+                    this.setPeriodsLeft(periodsLeft - 1);
+                    return settings.timePerPeriod;
+                } else {
                     this.timerEnd();
                     return undefined;
                 }
-
-                this.setPeriodsLeft(periodsLeft - 1);
-                return settings.timePerPeriod;
             },
         });
+    }
+
+    /**
+     * @override
+     */
+    public beforeResume(): Time | undefined {
+        // if main time stops
+        if (this._isMainTimeOver) {
+            return this.settings.timePerPeriod;
+        }
+
+        return undefined;
     }
 }

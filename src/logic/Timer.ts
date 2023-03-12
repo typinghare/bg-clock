@@ -46,18 +46,30 @@ export class Timer implements Closable {
     /**
      * Returns the time of this timer.
      */
-    get time(): Time {
+    public get time(): Time {
         return this._time;
+    }
+
+    /**
+     * Sets a time for this timer (will cover the current time). Note that this method will
+     * automatically pause (or say, stop) before setting.
+     * @param time
+     */
+    public setTime(time: Time): void {
+        this.pause();
+        this._time = time.clone();
     }
 
     /**
      * Starts or resumes this timer.
      */
     public resume(): void {
+        const interval: number = Time.SECOND / 4;
+
         this._intervalId = setInterval(() => {
-            this._time.consume(Time.SECOND);
+            this._time.consume(interval);
             this._lastTimeStamp = timestamp();
-        }, Time.SECOND);
+        }, interval);
 
         const tolerance: Time = this._timeSettings.timeoutTolerance || Timer.DEFAULT_TIMEOUT_TOLERANCE;
         this._timeoutId = setTimeout(() => {
@@ -74,7 +86,7 @@ export class Timer implements Closable {
                     this.resume();
                 }
             }
-        }, tolerance.ms);
+        }, this._time.ms + tolerance.ms);
     }
 
     /**

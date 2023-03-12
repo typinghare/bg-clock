@@ -20,7 +20,7 @@ export const OptionAccordion: FunctionComponent<OptionAccordionProps> = (props: 
         setExpanded(!expanded);
     };
 
-    return <Accordion expanded={expanded} sx={{ width: '100%', margin: '1em' }}>
+    return <Accordion expanded={expanded} sx={{ width: '100%' }}>
         <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             id={summaryId}

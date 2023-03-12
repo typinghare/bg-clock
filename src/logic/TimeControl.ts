@@ -38,6 +38,12 @@ export abstract class TimeControl implements Closable {
     private _periodsLeft: number;
 
     /**
+     * Whether this time control has ended.
+     * @private
+     */
+    private _isEnd: boolean = false;
+
+    /**
      * Creates a time control.
      * @param settings
      */
@@ -63,6 +69,13 @@ export abstract class TimeControl implements Closable {
     }
 
     /**
+     * Whether this time control ends.
+     */
+    public isEnd(): boolean {
+        return this._isEnd;
+    }
+
+    /**
      * Sets periods left.
      * @param periodsLeft
      */
@@ -74,6 +87,9 @@ export abstract class TimeControl implements Closable {
      * Resumes the timer.
      */
     public resumeTimer(): void {
+        const time: Time | undefined = this.beforeResume();
+        if (time !== undefined) this._timer.setTime(time);
+
         this._timer.resume();
     }
 
@@ -88,6 +104,7 @@ export abstract class TimeControl implements Closable {
      * When the timer ends, this function will be invoked.
      */
     public timerEnd(): void {
+        this._isEnd = true;
         this._settings.timerEndCallback(this);
     }
 
@@ -110,6 +127,11 @@ export abstract class TimeControl implements Closable {
      * @abstract
      */
     public abstract initTimer(): Timer;
+
+    /**
+     * @abstract
+     */
+    public abstract beforeResume(): Time | undefined;
 
     /**
      * Closes this time control.

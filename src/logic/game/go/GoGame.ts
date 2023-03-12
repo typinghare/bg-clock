@@ -15,21 +15,22 @@ export const goOptionsMaps: {
     }
 } = {
     mainTime: {
-        '0': Time.zero(),
-        '10min': Time.minute(10),
-        '30min': Time.minute(30),
-        '60min': Time.minute(60),
-        '90min': Time.minute(90),
-        '120min': Time.minute(120),
+        '1 min': Time.minute(1),
+        '10 min': Time.minute(10),
+        '30 min': Time.minute(30),
+        '60 min': Time.minute(60),
+        '90 min': Time.minute(90),
+        '120 min': Time.minute(120),
     },
     timePerPeriod: {
-        '10sec': Time.second(10),
-        '30sec': Time.second(30),
-        '60sec': Time.second(60),
+        '10 sec': Time.second(10),
+        '30 sec': Time.second(30),
+        '40 sec': Time.second(40),
+        '60 sec': Time.second(60),
     },
     periods: {
-        '1': 1,
-        '3': 5,
+        '1': 2,
+        '3': 3,
         '5': 5,
         '10': 10,
     },
@@ -38,8 +39,8 @@ export const goOptionsMaps: {
 export const goOptionsDefaultValues: {
     [K in keyof GoPlayerOptions]: number
 } = {
-    mainTime: 2,
-    timePerPeriod: 1,
+    mainTime: 0,
+    timePerPeriod: 0,
     periods: 1,
 };
 
@@ -70,7 +71,7 @@ export class GoGame extends Game<GoGameOptions, GoPlayerOptions> {
     /**
      * @override
      */
-    public start(gameEndCallback: GameEndCallback): void {
+    public starts(gameEndCallback: GameEndCallback): void {
         [Role.A, Role.B].forEach(role => {
             const player = this.getPlayer(role);
             const mainTime: Time = player.getOption('mainTime');
@@ -87,5 +88,21 @@ export class GoGame extends Game<GoGameOptions, GoPlayerOptions> {
 
             player.setTimeControl(timeControl);
         });
+    }
+
+    /**
+     * @override
+     * @param role
+     */
+    public playerClick(role: Role): void {
+        const clickPlayer = this.getPlayer(role);
+        const otherPlayer = this.getPlayer(Role.switch(role));
+
+        if (clickPlayer.timeControl.isEnd() || clickPlayer.timeControl.isEnd()) {
+            return;
+        }
+
+        clickPlayer.timeControl.pauseTimer();
+        otherPlayer.timeControl.resumeTimer();
     }
 }

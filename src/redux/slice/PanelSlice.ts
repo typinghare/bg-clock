@@ -16,7 +16,7 @@ export type PanelState = {
 export const panelSlice = createSlice<PanelState, SliceCaseReducers<PanelState>>({
     name: 'panel',
     initialState: {
-        panel: PanelEnum.CLOCK_PANEL,
+        panel: PanelEnum.GO_OPTION_PANEL,
     },
     reducers: {
         changePanel: (state: PanelState, panel: PayloadAction<PanelEnum>) => {

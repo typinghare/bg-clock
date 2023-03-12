@@ -16,6 +16,8 @@ export abstract class Game<G extends GameOptions = GameOptions, P extends Player
     private readonly _playerA: Player<P>;
     private readonly _playerB: Player<P>;
 
+    private _hasStarted: boolean = false;
+
     /**
      * Creates a game.
      */
@@ -28,11 +30,27 @@ export abstract class Game<G extends GameOptions = GameOptions, P extends Player
     }
 
     /**
+     * Whether this game has started.
+     */
+    get hasStarted(): boolean {
+        return this._hasStarted;
+    }
+
+    /**
      * Returns the player of a specified role
      * @param role
      */
     public getPlayer(role: Role): Player<P> {
         return role === Role.A ? this._playerA : this._playerB;
+    }
+
+    /**
+     * Starts this game.
+     * @param gameEndCallback
+     */
+    public start(gameEndCallback: GameEndCallback): void {
+        this.starts(gameEndCallback);
+        this._hasStarted = true;
     }
 
     /**
@@ -44,12 +62,20 @@ export abstract class Game<G extends GameOptions = GameOptions, P extends Player
      * Starts this game. Implementations should create time controls for both players.
      * @abstract
      */
-    public abstract start(gameEndCallback: GameEndCallback): void;
+    protected abstract starts(gameEndCallback: GameEndCallback): void;
+
+    /**
+     * Players click their sections.
+     * @param role the role of the player
+     * @abstract
+     */
+    public abstract playerClick(role: Role): void;
 
     /**
      * @override
      */
     public close(): void {
         this._playerA.close();
+        this._playerB.close();
     }
 }

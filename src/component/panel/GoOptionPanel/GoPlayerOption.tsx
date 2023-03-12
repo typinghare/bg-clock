@@ -9,7 +9,7 @@ import { Role } from '../../../logic/Role';
 import { GoGameOptions, goOptionsDefaultValues, goOptionsMaps, GoPlayerOptions } from '../../../logic/game/go/GoGame';
 
 export type GoPlayerOptionProps = {
-    role: Role
+    role?: Role
 }
 
 /**
@@ -34,7 +34,14 @@ export const GoPlayerOption: FunctionComponent<GoPlayerOptionProps> = ({ role })
         if (value >= 0 && value < mainTimeItemList.length) {
             const time: Time = mainTimeValueList[value];
             const game: Game<GoGameOptions, GoPlayerOptions> = GameController.INSTANCE.getGame();
-            game.getPlayer(role).setOption('mainTime', time.clone());
+
+            if (role) {
+                game.getPlayer(role).setOption('mainTime', time.clone());
+            } else {
+                [Role.A, Role.B].forEach(role => {
+                    game.getPlayer(role).setOption('mainTime', time.clone());
+                });
+            }
         }
     };
 
@@ -44,7 +51,13 @@ export const GoPlayerOption: FunctionComponent<GoPlayerOptionProps> = ({ role })
         if (value >= 0 && value < timePerPeriodItemList.length) {
             const time: Time = timePerPeriodValueList[value];
             const game: Game<GoGameOptions, GoPlayerOptions> = GameController.INSTANCE.getGame();
-            game.getPlayer(role).setOption('timePerPeriod', time.clone());
+            if (role) {
+                game.getPlayer(role).setOption('timePerPeriod', time.clone());
+            } else {
+                [Role.A, Role.B].forEach(role => {
+                    game.getPlayer(role).setOption('timePerPeriod', time.clone());
+                });
+            }
         }
     };
 
@@ -52,7 +65,13 @@ export const GoPlayerOption: FunctionComponent<GoPlayerOptionProps> = ({ role })
         const value: number = toNumber(event.target.value);
         if (value < periodItemList.length) {
             const game: Game<GoGameOptions, GoPlayerOptions> = GameController.INSTANCE.getGame();
-            game.getPlayer(role).setOption('periods', periodValueList[value]);
+            if (role) {
+                game.getPlayer(role).setOption('periods', periodValueList[value]);
+            } else {
+                [Role.A, Role.B].forEach(role => {
+                    game.getPlayer(role).setOption('periods', periodValueList[value]);
+                });
+            }
         }
     };
 
@@ -69,7 +88,7 @@ export const GoPlayerOption: FunctionComponent<GoPlayerOptionProps> = ({ role })
             <Grid item xs={4}>
                 <BasicSelect
                     label={'Time Per Period'}
-                    itemList={periodItemList}
+                    itemList={timePerPeriodItemList}
                     defaultValue={goOptionsDefaultValues.timePerPeriod}
                     handleChange={timePerPeriodHandleChange}
                 ></BasicSelect>
