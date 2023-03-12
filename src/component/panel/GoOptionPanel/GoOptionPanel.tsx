@@ -50,7 +50,7 @@ export const GoOptionPanel: FunctionComponent<GoOptionPanelProps> = ({ isShow })
     return <Panel isShow={isShow} sx={{ padding: '1em' }} id='GoOptionPanel'>
         <h1>Game Options</h1>
 
-        <Box hidden={!synchronizedPlayerOptions}>
+        <Box hidden={synchronizedPlayerOptions}>
             <OptionAccordion summaryId={'GoOptionBlackAccordion'} title={'OPTIONS (BLACK)'} expanded={true}>
                 <GoPlayerOption role={Role.A} />
             </OptionAccordion>
@@ -60,7 +60,7 @@ export const GoOptionPanel: FunctionComponent<GoOptionPanelProps> = ({ isShow })
             </OptionAccordion>
         </Box>
 
-        <Box hidden={synchronizedPlayerOptions}>
+        <Box hidden={!synchronizedPlayerOptions}>
             <OptionAccordion summaryId={'GoOptionBlackAccordion'} title={'OPTIONS'} expanded={true}>
                 <GoPlayerOption />
             </OptionAccordion>
