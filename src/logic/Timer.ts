@@ -64,6 +64,8 @@ export class Timer implements Closable {
      * Starts or resumes this timer.
      */
     public resume(): void {
+        this.pause();
+
         const interval: number = Time.SECOND / 4;
 
         this._intervalId = setInterval(() => {

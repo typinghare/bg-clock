@@ -9,6 +9,7 @@ import { Game } from '../../../logic/Game';
 import { GameController } from '../../../logic/GameController';
 import { useAppDispatch } from '../../../redux/hooks';
 import { changePanel, PanelEnum } from '../../../redux/slice/PanelSlice';
+import { FullScreen } from '../../../common/FullScreen';
 
 export type GoOptionPanelProps = PanelProps & {}
 
@@ -23,11 +24,18 @@ export const GoOptionPanel: FunctionComponent<GoOptionPanelProps> = ({ isShow })
             console.log('Game End Callback.');
         });
 
+        try {
+            const fullScreen = new FullScreen(document.getElementById('GoOptionPanel'));
+            fullScreen.start();
+        } catch (e) {
+            console.log(e);
+        }
+
         dispatch(changePanel(PanelEnum.CLOCK_PANEL));
     };
 
-    const [synchronizedPlayerOptions, setSynchronizedPlayerOptions] = React.useState(true);
 
+    const [synchronizedPlayerOptions, setSynchronizedPlayerOptions] = React.useState(true);
     const SynchronizeSwitch = () => {
         const handleSynchronizeSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             setSynchronizedPlayerOptions(event.target.checked);
@@ -39,10 +47,10 @@ export const GoOptionPanel: FunctionComponent<GoOptionPanelProps> = ({ isShow })
         />;
     };
 
-    return <Panel isShow={isShow} sx={{ padding: '1em' }}>
+    return <Panel isShow={isShow} sx={{ padding: '1em' }} id='GoOptionPanel'>
         <h1>Game Options</h1>
 
-        <Box hidden={synchronizedPlayerOptions}>
+        <Box hidden={!synchronizedPlayerOptions}>
             <OptionAccordion summaryId={'GoOptionBlackAccordion'} title={'OPTIONS (BLACK)'} expanded={true}>
                 <GoPlayerOption role={Role.A} />
             </OptionAccordion>
@@ -52,7 +60,7 @@ export const GoOptionPanel: FunctionComponent<GoOptionPanelProps> = ({ isShow })
             </OptionAccordion>
         </Box>
 
-        <Box hidden={!synchronizedPlayerOptions}>
+        <Box hidden={synchronizedPlayerOptions}>
             <OptionAccordion summaryId={'GoOptionBlackAccordion'} title={'OPTIONS'} expanded={true}>
                 <GoPlayerOption />
             </OptionAccordion>
@@ -74,4 +82,3 @@ export const GoOptionPanel: FunctionComponent<GoOptionPanelProps> = ({ isShow })
         </Box>
     </Panel>;
 };
-

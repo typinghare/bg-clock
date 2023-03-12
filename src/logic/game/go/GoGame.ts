@@ -102,6 +102,12 @@ export class GoGame extends Game<GoGameOptions, GoPlayerOptions> {
             return;
         }
 
+        const isClickPlayerRunning = clickPlayer.timeControl.isTimerRunning();
+        const isOtherPlayerRunning = otherPlayer.timeControl.isTimerRunning();
+        if (!isClickPlayerRunning && isOtherPlayerRunning) {
+            return;
+        }
+
         clickPlayer.timeControl.pauseTimer();
         otherPlayer.timeControl.resumeTimer();
     }
