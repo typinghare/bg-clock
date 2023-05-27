@@ -1,23 +1,20 @@
-import React, { FunctionComponent } from 'react';
-import { Box, BoxProps } from '@mui/material';
+import React from 'react'
+import { Box, BoxProps } from '@mui/material'
 
-export type PanelProps = BoxProps & {
-    readonly isShow: boolean
+export type PanelProps = BoxProps & { readonly isShow: boolean }
+
+export const Panel: React.FC<PanelProps> = function(props): JSX.Element {
+    const { isShow, sx, ...otherProps } = props
+
+    const panelStyle: React.CSSProperties = {
+        height: '100vh',
+        display: isShow ? 'flex' : 'none',
+        flexDirection: 'column',
+        margin: '0 !important',
+        padding: '0 !important',
+    } as React.CSSProperties
+
+    Object.assign(panelStyle, sx)
+
+    return <Box sx={panelStyle} {...otherProps}></Box>
 }
-
-const SHOW_DISPLAY_PROPERTY: string = 'flex';
-const HIDDEN_DISPLAY_PROPERTY: string = 'none';
-
-const panelStyle = (isShow: boolean): React.CSSProperties => ({
-    height: '100%',
-    display: isShow ? SHOW_DISPLAY_PROPERTY : HIDDEN_DISPLAY_PROPERTY,
-    flexDirection: 'column',
-});
-
-/**
- * @component General Panel.
- */
-export const Panel: FunctionComponent<PanelProps> = (props: PanelProps) => {
-    const { isShow, ...boxProps } = props;
-    return <Box style={panelStyle(isShow)} {...boxProps}></Box>;
-};

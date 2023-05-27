@@ -2,11 +2,10 @@ import { createSlice, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit'
 import { RootState } from '../store';
 
 export enum PanelEnum {
-    PORTAL_PANEL,
-    CLOCK_PANEL,
-
-    // option panels
-    GO_OPTION_PANEL,
+    PORTAL = 0,
+    GAME_SELECT = 0,
+    GAME_SETTINGS = 1,
+    CLOCK = 2,
 }
 
 export type PanelState = {
@@ -16,10 +15,10 @@ export type PanelState = {
 export const panelSlice = createSlice<PanelState, SliceCaseReducers<PanelState>>({
     name: 'panel',
     initialState: {
-        panel: PanelEnum.GO_OPTION_PANEL,
+        panel: PanelEnum.GAME_SETTINGS,
     },
     reducers: {
-        changePanel: (state: PanelState, panel: PayloadAction<PanelEnum>) => {
+        changePanel: (state: PanelState, panel: PayloadAction<PanelEnum>): void => {
             state.panel = panel.payload;
         },
     },
