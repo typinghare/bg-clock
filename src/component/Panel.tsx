@@ -3,6 +3,11 @@ import { Box, BoxProps } from '@mui/material'
 
 export type PanelProps = BoxProps & { readonly isShow: boolean }
 
+/**
+ * A full-screen panel.
+ * @param props
+ * @constructor
+ */
 export const Panel: React.FC<PanelProps> = function(props): JSX.Element {
     const { isShow, sx, ...otherProps } = props
 
@@ -16,5 +21,5 @@ export const Panel: React.FC<PanelProps> = function(props): JSX.Element {
 
     Object.assign(panelStyle, sx)
 
-    return <Box sx={panelStyle} {...otherProps}></Box>
+    return <Box sx={panelStyle} {...otherProps} />
 }

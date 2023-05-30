@@ -1,28 +1,30 @@
 import React, { ChangeEvent } from 'react'
 import { Box, BoxProps, MenuItem, Select, Switch, Typography } from '@mui/material'
-import { BoardGameSetting } from '@typinghare/board-game-clock-core'
 import { SelectChangeEvent } from '@mui/material/Select/SelectInput'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { convertStringToTime, convertTimeToString } from '../common/helper'
+import { Setting } from '@typinghare/settings'
 
 export type GameSettingControlProps = {
-    setting: BoardGameSetting<any>
+    setting: Setting<any, any>
+    signal: boolean
     onValueChange?: (newValue: any) => void
 }
 
 export const GameSettingControl: React.FC<GameSettingControlProps> = function(props): JSX.Element {
     const { setting, onValueChange } = props
 
-    const value = setting.value
     const type = setting.getProperty('type')
     const label = setting.getProperty('label')
     const description = setting.getProperty('description')
     const options = setting.getProperty('options')
 
+    const [value, setValue] = React.useState(setting.value)
+
     const InputControl: React.FC = function(): JSX.Element {
         function handleValueChange<T>(newValue: T): void {
-            setting.value = newValue
+            setValue(newValue)
 
             if (onValueChange) onValueChange(newValue)
         }
@@ -40,13 +42,11 @@ export const GameSettingControl: React.FC<GameSettingControlProps> = function(pr
                 options={options as number[]}
             />
         } else if (type === 'text') {
-            // TODO: ExpandableTextInputControl
         } else if (type === 'bool') {
             return <ExpandableBoolInputControl
                 initValue={value as boolean}
                 onValueChange={handleValueChange}
             />
-            // TODO: ExpandableBoolInputControl
         }
 
         return <Box></Box>
@@ -73,9 +73,7 @@ export const GameSettingControl: React.FC<GameSettingControlProps> = function(pr
     return <Box sx={style}>
         <Box sx={formStyle}>
             <Box display='inline'>{label}</Box>
-            <Box display='inline'>
-                <InputControl />
-            </Box>
+            <Box display='inline'><InputControl /></Box>
         </Box>
         <Typography sx={descriptionStyle}>{description}</Typography>
     </Box>

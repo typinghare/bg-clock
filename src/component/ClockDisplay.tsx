@@ -3,10 +3,11 @@ import React from 'react'
 import { TimeDisplay } from './TimeDisplay'
 import { HourMinuteSecond, SlowHourMinuteSecond } from '@typinghare/hour-minute-second'
 import { TIME_PAUSED_COLOR, TIME_RUNNING_COLOR, TIME_UP_COLOR } from '../common/constant'
-import { GameManager } from '../game/GameManager'
-import { Player, Role } from '@typinghare/board-game-clock-core'
+import { AnyGame, Player } from '@typinghare/board-game-clock-core'
 
 export type ClockDisplayProps = BoxProps & {
+    game: AnyGame
+
     // The label of role of this clock display.
     role: 'A' | 'B'
 
@@ -15,13 +16,12 @@ export type ClockDisplayProps = BoxProps & {
 }
 
 export const ClockDisplay: React.FC<ClockDisplayProps> = function(props): JSX.Element {
-    const { role, overturn, sx, ...otherProps } = props
+    const { game, role, overturn, sx, ...otherProps } = props
     const [time, setTime] = React.useState<HourMinuteSecond>(SlowHourMinuteSecond.ofSeconds(0))
     const [color, setColor] = React.useState(TIME_PAUSED_COLOR)
 
     function handleClockDisplayClick(): void {
-        const game = GameManager.INSTANCE.game
-        game.getPlayer(new Role(role)).onClick()
+        game.getPlayer(role).click()
     }
 
     const style: React.CSSProperties = {
@@ -43,13 +43,11 @@ export const ClockDisplay: React.FC<ClockDisplayProps> = function(props): JSX.El
 
     React.useEffect(() => {
         const intervalHandle = setInterval((): void => {
-            if (!GameManager.INSTANCE.isGameStarted()) return
-
-            const game = GameManager.INSTANCE.game
-            const player: Player = game.getPlayer(new Role(role))
+            const player: Player = game.getPlayer(role)
             const time = player.clockController.clockTime
             setTime(time)
 
+            // Change Color.
             if (time.ms === 0) {
                 setColor(TIME_UP_COLOR)
             } else {
@@ -62,9 +60,10 @@ export const ClockDisplay: React.FC<ClockDisplayProps> = function(props): JSX.El
         }, 500)
 
         return (): void => {
+            // Clear time interval.
             if (intervalHandle) clearInterval(intervalHandle)
         }
-    }, [role])
+    }, [game, role])
 
     return <Box sx={style} {...otherProps} onClick={handleClockDisplayClick}>
         <TimeDisplay time={time} color={color} sx={timeDisplayStyle} />

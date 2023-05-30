@@ -1,5 +1,9 @@
 import { HourMinuteSecond, SlowHourMinuteSecond } from '@typinghare/hour-minute-second'
 
+/**
+ * Converts a time (HourMinuteSecond) to a string ("{<hour> hour} {<minute> min} {<second> sec}").
+ * @param time
+ */
 export const convertTimeToString = function(time: HourMinuteSecond): string {
     const strArray = []
     if (time.hour > 0) strArray.push(`${time.hour.toString()} hour`)
@@ -13,6 +17,10 @@ export const convertTimeToString = function(time: HourMinuteSecond): string {
     return strArray.join(' ')
 }
 
+/**
+ * Converts a string to a time (HourMinuteSecond).
+ * @param string
+ */
 export const convertStringToTime = function(string: string): HourMinuteSecond {
     const sp: string[] = string.split(' ')
     let hour = 0, minute = 0, second = 0

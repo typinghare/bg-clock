@@ -6,7 +6,7 @@ export type SettingsSectionProps = BoxProps & {
 }
 
 export const SettingsSection: React.FC<SettingsSectionProps> = function(props): JSX.Element {
-    const { title, sx, children, ...otherProps } = props
+    const { title, children } = props
 
     const titleStyle: React.CSSProperties = {
         color: '#999999',
@@ -15,13 +15,15 @@ export const SettingsSection: React.FC<SettingsSectionProps> = function(props): 
         marginBottom: '0.4em',
     }
 
-    const childrenStyle: React.CSSProperties = {
+    const childrenContainerStyle: React.CSSProperties = {
         borderRadius: '0.5em',
         backgroundColor: '#FAFAFA',
     }
 
-    return <Box {...otherProps} sx={{ marginBottom: '1.25em' }}>
+    return <Box sx={{ marginBottom: '1.25em' }}>
         <Box sx={titleStyle}>{title}</Box>
-        <Box sx={childrenStyle} children={children}></Box>
+        <Box sx={childrenContainerStyle}>
+            {children}
+        </Box>
     </Box>
 }
