@@ -21,6 +21,9 @@ export const GameSettingControl: React.FC<GameSettingControlProps> = function(pr
     const options = setting.getProperty('options')
 
     const [value, setValue] = React.useState(setting.value)
+    React.useEffect((): void => {
+        setValue(setting.value)
+    }, [setting.value])
 
     const InputControl: React.FC = function(): JSX.Element {
         function handleValueChange<T>(newValue: T): void {
@@ -231,7 +234,6 @@ const ExpandableBoolInputControl: React.FC<ExpandableBoolInputControlProps> = fu
     }
 
     return <Box display='inline' sx={style} {...otherProps}>
-        <Box display='inline' sx={{ alignItems: 'center', color: '#999999' }}>{value}</Box>
         <Box sx={switchStyle}>
             <Switch checked={value} onChange={handleChange} />
         </Box>

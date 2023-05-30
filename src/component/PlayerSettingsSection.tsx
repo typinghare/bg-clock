@@ -12,6 +12,7 @@ export type PlayerSettingsSectionProps = {
 
 export const PlayerSettingsSection: React.FC<PlayerSettingsSectionProps> = function(props): JSX.Element {
     const { game, role, signal, onSettingChange } = props
+    const timeControlClassName = getTimeControlClassName(game)
     const player: Player = game.getPlayer(role)
     const settingContainer = (player.timeControl as TimeControl<any>).settings
 
@@ -34,7 +35,7 @@ export const PlayerSettingsSection: React.FC<PlayerSettingsSectionProps> = funct
     for (const settingName of settingNames) {
         const setting = settingContainer.getSetting(settingName)
         gameSettingControlArray.push(<GameSettingControl
-            key={settingName}
+            key={timeControlClassName + settingName}
             setting={setting}
             signal={signal}
             onValueChange={handleValueChangeProvider(settingName)}
@@ -42,4 +43,8 @@ export const PlayerSettingsSection: React.FC<PlayerSettingsSectionProps> = funct
     }
 
     return <SettingsSection title={`Player ${role} Time Control Settings`} children={gameSettingControlArray} />
+}
+
+function getTimeControlClassName(game: AnyGame) {
+    return Object.getPrototypeOf(game.getPlayer('A').timeControl).constructor.name
 }

@@ -22,8 +22,6 @@ export const SettingsSection: React.FC<SettingsSectionProps> = function(props): 
 
     return <Box sx={{ marginBottom: '1.25em' }}>
         <Box sx={titleStyle}>{title}</Box>
-        <Box sx={childrenContainerStyle}>
-            {children}
-        </Box>
+        <Box sx={childrenContainerStyle} children={children} />
     </Box>
 }
