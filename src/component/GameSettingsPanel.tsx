@@ -20,7 +20,8 @@ export const GameSettingsPanel: React.FC<GameSettingsPanelProps> = function(prop
     }
 
     const style: React.CSSProperties = {
-        margin: '1.5em 1em 1em 1em',
+        padding: '1.5em 1em 1em 1em',
+        backgroundColor: '#dcdcdd'
     }
 
     return <Panel isShow={isShow} sx={style} {...otherProps}>
