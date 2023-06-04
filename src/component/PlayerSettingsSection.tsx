@@ -1,32 +1,37 @@
 import React from 'react'
-import { AnyGame, Player, TimeControl } from '@typinghare/board-game-clock-core'
+import { Player, StandardGameHolder, StandardGameSettings, TimeControl } from '@typinghare/board-game-clock-core'
 import { GameSettingControl } from './GameSettingControl'
 import { SettingsSection } from './SettingsSection'
+import { SettingContainer } from '@typinghare/settings'
 
 export type PlayerSettingsSectionProps = {
-    game: AnyGame,
-    role: string,
-    signal: boolean,
+    gameHolder: StandardGameHolder
+    player: Player
+    signal: boolean
     onSettingChange: () => void
 }
 
 export const PlayerSettingsSection: React.FC<PlayerSettingsSectionProps> = function(props): JSX.Element {
-    const { game, role, signal, onSettingChange } = props
-    const timeControlClassName = getTimeControlClassName(game)
-    const player: Player = game.getPlayer(role)
-    const settingContainer = (player.timeControl as TimeControl<any>).settings
+    const { gameHolder, player, signal, onSettingChange } = props
+    const game = gameHolder.game
+    const role = player.role
+    const settingContainer = (player.timeControl as TimeControl).settings
 
     function handleValueChangeProvider(settingName: string) {
         return function(newValue: any): void {
+            // Update this player's setting.
             settingContainer.getSetting(settingName).value = newValue
 
-            // Update another player's setting.
-            const anotherPlayer: Player = game.getPlayer(game.getNextRole(role))
-            const anotherPlayerSettings = (anotherPlayer.timeControl as TimeControl<any>).settings
-            anotherPlayerSettings.getSetting(settingName).setValue(newValue, true)
+            const gameSettings = game.settings as SettingContainer<StandardGameSettings>
+            if (gameSettings.getSetting('synchronizePlayerSettings').value === true) {
+                // Update another player's setting.
+                const anotherPlayer: Player = game.getPlayer(game.getNextRole(role))
+                const anotherPlayerSettings = (anotherPlayer.timeControl as TimeControl).settings
+                anotherPlayerSettings.getSetting(settingName).setValue(newValue, true)
 
-            // Invokes on setting change.
-            onSettingChange()
+                // Invokes on setting change.
+                onSettingChange()
+            }
         }
     }
 
@@ -35,7 +40,7 @@ export const PlayerSettingsSection: React.FC<PlayerSettingsSectionProps> = funct
     for (const settingName of settingNames) {
         const setting = settingContainer.getSetting(settingName)
         gameSettingControlArray.push(<GameSettingControl
-            key={timeControlClassName + settingName}
+            key={gameHolder.gameType + gameHolder.timeControlType + settingName}
             setting={setting}
             signal={signal}
             onValueChange={handleValueChangeProvider(settingName)}
@@ -43,8 +48,4 @@ export const PlayerSettingsSection: React.FC<PlayerSettingsSectionProps> = funct
     }
 
     return <SettingsSection title={`Player ${role} Time Control Settings`} children={gameSettingControlArray} />
-}
-
-function getTimeControlClassName(game: AnyGame) {
-    return Object.getPrototypeOf(game.getPlayer('A').timeControl).constructor.name
 }

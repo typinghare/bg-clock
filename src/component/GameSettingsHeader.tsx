@@ -1,33 +1,34 @@
-import { Box, BoxProps, Button } from '@mui/material'
-import { AnyGame } from '@typinghare/board-game-clock-core'
-import { gameStart, GameType } from '../redux/slice/GameSlice'
+import { Box, BoxProps, Button, useTheme } from '@mui/material'
+import { StandardGameHolder, StandardGameType } from '@typinghare/board-game-clock-core'
+import { gameStart } from '../redux/slice/GameSlice'
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { GameHolder } from '../game/GameManager'
 import { changePanel, PanelEnum } from '../redux/slice/PanelSlice'
 import { TimeControlSelect } from './TimeControlSelect'
-import { GameTimeControls } from '../common/games'
+import { globalGameHolder, standardGameContainer } from '../common/games'
 
 export type GameSettingsHeaderProps = BoxProps & {
-    game: AnyGame,
-    gametype: GameType,
+    gameHolder: StandardGameHolder
     onTimeControlChange: (newTimeControlName: string) => void
 }
 
 export const GameSettingsHeader: React.FC<GameSettingsHeaderProps> = function(props): JSX.Element {
-    const { game, gametype, onTimeControlChange, ...otherProps } = props
+    const { gameHolder, onTimeControlChange, ...otherProps } = props
     const dispatch = useDispatch()
-
-    const timeControlArray = GameTimeControls[gametype]
+    const gameType = gameHolder.gameType as StandardGameType
+    const timeControlArray = standardGameContainer.getTimeControls(gameType)
+    const game = gameHolder.game
 
     function handleTimeControlSelect(newTimeControlName: string): void {
         onTimeControlChange(newTimeControlName)
     }
 
     function handleGameStart(): void {
-        // Start this game and hold it by GameHolder.
+        // Pass game holder to the clock panel.
+        globalGameHolder.content = gameHolder
+
+        // Start the game.
         game.start()
-        GameHolder.setGame(game)
 
         // The clock panel will retrieve the game from the GameHolder.
         dispatch(gameStart(null))
@@ -49,6 +50,12 @@ export const GameSettingsHeader: React.FC<GameSettingsHeaderProps> = function(pr
     const gameStartButtonStyle: React.CSSProperties = {
         display: 'inline-block',
         flex: 3,
+    }
+
+    // Adjust the flex value based on screen size
+    const theme = useTheme()
+    if (theme.breakpoints.down('sm')) {
+        gameStartButtonStyle.flex = 5
     }
 
     return <Box sx={containerStyle} {...otherProps}>

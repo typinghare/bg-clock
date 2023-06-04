@@ -1,31 +1,50 @@
 import React, { useState } from 'react'
 import { Panel, PanelProps } from './Panel'
-import { AnyGame, GameSupplierMap } from '@typinghare/board-game-clock-core'
 import { useAppSelector } from '../redux/hooks'
-import { GameType, selectGameType } from '../redux/slice/GameSlice'
-import { GameSupplierMaps, GameTimeControls } from '../common/games'
+import { selectGameType } from '../redux/slice/GameSlice'
 import { GameSettingsSection } from './GameSettingsSection'
+import {
+    Game,
+    GameSupplier,
+    StandardGameContainer,
+    StandardGameHolder,
+    StandardGameType,
+    TimeControlType,
+} from '@typinghare/board-game-clock-core'
 
-export type GameSettingsPanelProps = PanelProps & {}
 
-export const GameSettingsPanel: React.FC<GameSettingsPanelProps> = function(props): JSX.Element {
-    const { isShow, ...otherProps } = props
-    const gametype: GameType = useAppSelector(selectGameType)
-    const [timeControlName, setTimeControlName] = useState(GameTimeControls[gametype][0])
-    const gameSupplierMap: GameSupplierMap<any> = GameSupplierMaps[gametype]
-    const game: AnyGame = gameSupplierMap[timeControlName]()
+export const GameSettingsPanel: React.FC<PanelProps> = function(props): JSX.Element {
+    const { isDisplay } = props
 
-    function handleTimeControlChange(newTimeControlName: string): void {
-        setTimeControlName(newTimeControlName)
+    // Retrieve game type from redux.
+    const gameType: StandardGameType = useAppSelector(selectGameType)
+
+    // Get time controls.
+    const standardGameContainer = new StandardGameContainer()
+    const timeControlTypeArray: TimeControlType[] = standardGameContainer.getTimeControls(gameType)
+
+    // Create time control state and create a corresponding game.
+    const [timeControlType, setTimeControlType] = useState<TimeControlType>(timeControlTypeArray[0])
+    const gameSupplier: GameSupplier = standardGameContainer.getGameSupplier(gameType, timeControlType as never)
+    const game = gameSupplier() as Game
+
+    // Create a game holder.
+    const gameHolder = new StandardGameHolder(gameType, timeControlType, game)
+
+    function handleTimeControlChange(newTimeControlType: TimeControlType): void {
+        setTimeControlType(newTimeControlType)
     }
 
-    const style: React.CSSProperties = {
-        padding: '1.5em 1em 1em 1em',
-        backgroundColor: '#dcdcdd'
+    const style = {
+        padding: '1.5em 0 1em 1em',
+        backgroundColor: '#dcdcdd',
+        overflowY: 'scroll',
     }
 
-    return <Panel isShow={isShow} sx={style} {...otherProps}>
-        <GameSettingsSection game={game} gametype={gametype} onTimeChangeControl={handleTimeControlChange} />
+    return <Panel isDisplay={isDisplay} sx={style}>
+        <GameSettingsSection
+            gameHolder={gameHolder}
+            onTimeChangeControl={handleTimeControlChange}
+        />
     </Panel>
 }
-

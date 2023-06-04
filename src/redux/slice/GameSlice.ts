@@ -1,21 +1,20 @@
 import { createSlice, PayloadAction, SliceCaseReducers } from '@reduxjs/toolkit'
 import { RootState } from '../store'
-
-export type GameType = 'GoGame' | 'ChessGame'
+import { StandardGameType } from '@typinghare/board-game-clock-core'
 
 export type GameState = {
-    gameType: GameType
+    gameType: StandardGameType
     gameStarted: boolean
 }
 
 export const gameSlice = createSlice<GameState, SliceCaseReducers<GameState>>({
     name: 'game',
     initialState: {
-        gameType: 'GoGame',
+        gameType: 'Go',
         gameStarted: false,
     },
     reducers: {
-        changeGameType: (state: GameState, panel: PayloadAction<GameType>): void => {
+        changeGameType: (state: GameState, panel: PayloadAction<StandardGameType>): void => {
             state.gameType = panel.payload
         },
         gameStart: (state: GameState): void => {

@@ -1,25 +1,31 @@
 import React from 'react'
-import { Box, BoxProps } from '@mui/material'
+import { Box, BoxProps, SxProps } from '@mui/material'
 
-export type PanelProps = BoxProps & { readonly isShow: boolean }
+export type PanelProps = BoxProps & {
+    // Whether this panel is shown.
+    isDisplay: boolean
+    sx?: SxProps;
+}
 
 /**
- * A full-screen panel.
- * @param props
+ * A full-screen panel component that utilizes the "flex" value for its "display" property when it is intended to be
+ * displayed on the screen.
  * @constructor
  */
 export const Panel: React.FC<PanelProps> = function(props): JSX.Element {
-    const { isShow, sx, ...otherProps } = props
+    const { isDisplay, sx } = props
 
-    const panelStyle: React.CSSProperties = {
+    const style = {
         height: '100vh',
-        display: isShow ? 'flex' : 'none',
+        width: '100vw',
+        overflowX: 'hidden',
+        overflowY: 'hidden',
+        display: isDisplay ? 'flex' : 'none',
         flexDirection: 'column',
         margin: '0 !important',
         padding: '0 !important',
-    } as React.CSSProperties
+        ...sx,
+    }
 
-    Object.assign(panelStyle, sx)
-
-    return <Box sx={panelStyle} {...otherProps} />
+    return <Box sx={style} />
 }

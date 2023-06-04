@@ -18,10 +18,10 @@ import { GameSettingsPanel } from './GameSettingsPanel'
  */
 export const App: React.FC = function(): JSX.Element {
     const panel = useAppSelector(selectPanel)
-    const style: React.CSSProperties = { height: '100vh' }
+    const style = { height: '100vh' }
 
     return <Box sx={style}>
-        <ClockPanel isShow={panel === PanelEnum.CLOCK} />
-        <GameSettingsPanel isShow={panel === PanelEnum.GAME_SETTINGS} />
+        <ClockPanel isDisplay={panel === PanelEnum.CLOCK} />
+        <GameSettingsPanel isDisplay={panel === PanelEnum.GAME_SETTINGS} />
     </Box>
 }
