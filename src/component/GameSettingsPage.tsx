@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Panel, PanelProps } from './Panel'
+import { Page, PanelProps } from './Page'
 import { useAppSelector } from '../redux/hooks'
 import { selectGameType } from '../redux/slice/GameSlice'
 import { GameSettingsSection } from './GameSettingsSection'
@@ -41,10 +41,10 @@ export const GameSettingsPanel: React.FC<PanelProps> = function(props): JSX.Elem
         overflowY: 'scroll',
     }
 
-    return <Panel isDisplay={isDisplay} sx={style}>
+    return <Page isDisplay={isDisplay} sx={style}>
         <GameSettingsSection
             gameHolder={gameHolder}
             onTimeChangeControl={handleTimeControlChange}
         />
-    </Panel>
+    </Page>
 }

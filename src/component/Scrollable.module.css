@@ -1,0 +1,15 @@
+.root {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.content {
+    overflow: auto;
+    scrollbar-width: none;
+}
+
+.content::-webkit-scrollbar {
+    display: none;
+}
+
