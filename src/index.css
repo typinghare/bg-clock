@@ -9,8 +9,7 @@ body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
-    /* full screen width */
-    height: 100vh;
+    height: 100%;
 
     /* fixed screen */
     overflow-x: hidden;
@@ -20,17 +19,4 @@ body {
 #root {
     /* inherit 100% full screen width */
     height: 100%;
-}
-
-/* For WebKit based browsers (e.g., Chrome, Safari) */
-::-webkit-scrollbar {
-    width: 1em;
-}
-
-::-webkit-scrollbar-track {
-    background-color: #dcdcdd; /* Set the background color */
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #dcdcdd; /* Set the thumb color */
 }

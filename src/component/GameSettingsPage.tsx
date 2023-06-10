@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Page, PanelProps } from './Page'
+import { Page, PageProps } from './Page'
 import { useAppSelector } from '../redux/hooks'
 import { selectGameType } from '../redux/slice/GameSlice'
-import { GameSettingsSection } from './GameSettingsSection'
 import {
     Game,
     GameSupplier,
@@ -11,16 +10,21 @@ import {
     StandardGameType,
     TimeControlType,
 } from '@typinghare/board-game-clock-core'
+import { GameSettingsHeader } from './GameSettingsHeader'
+import { PlayerSettingsSection } from './PlayerSettingsSection'
+import { AdvancedSettingsSection } from './AdvancedSettingsSection'
+import { useSignal } from '../state/Signal'
+import { Box, SxProps } from '@mui/material'
 
+export const standardGameContainer = new StandardGameContainer()
 
-export const GameSettingsPanel: React.FC<PanelProps> = function(props): JSX.Element {
+export const GameSettingsPage = function(props: PageProps): JSX.Element {
     const { isDisplay } = props
 
     // Retrieve game type from redux.
     const gameType: StandardGameType = useAppSelector(selectGameType)
 
-    // Get time controls.
-    const standardGameContainer = new StandardGameContainer()
+    // Get time control types from standard game container.
     const timeControlTypeArray: TimeControlType[] = standardGameContainer.getTimeControls(gameType)
 
     // Create time control state and create a corresponding game.
@@ -35,16 +39,38 @@ export const GameSettingsPanel: React.FC<PanelProps> = function(props): JSX.Elem
         setTimeControlType(newTimeControlType)
     }
 
-    const style = {
-        padding: '1.5em 0 1em 1em',
-        backgroundColor: '#dcdcdd',
-        overflowY: 'scroll',
+    const [signal, setSignal] = useSignal()
+    const style: SxProps = {
+        padding: '1.5em 1em 0 1em', backgroundColor: '#dcdcdd',
+        display: 'block !important',
+        overflowY: 'scroll !important',
+        height: '2000px !important',
+        scrollWidth : 'none',
+        scrollbarWidth: ''
     }
 
-    return <Page isDisplay={isDisplay} sx={style}>
-        <GameSettingsSection
-            gameHolder={gameHolder}
-            onTimeChangeControl={handleTimeControlChange}
-        />
+    return <Page isDisplay={isDisplay}>
+        <Box sx={style}>
+            <GameSettingsHeader
+                gameHolder={gameHolder}
+                onTimeControlChange={handleTimeControlChange}
+            />
+            <PlayerSettingsSection
+                gameHolder={gameHolder}
+                player={game.getPlayer('A')}
+                signal={signal}
+                onSettingChange={setSignal}
+            />
+            <PlayerSettingsSection
+                gameHolder={gameHolder}
+                player={game.getPlayer('B')}
+                signal={signal}
+                onSettingChange={setSignal}
+            />
+            <AdvancedSettingsSection
+                game={game}
+                signal={signal}
+            />
+        </Box>
     </Page>
 }

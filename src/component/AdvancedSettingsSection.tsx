@@ -1,10 +1,11 @@
 import React from 'react'
 import { SettingsSection } from './SettingsSection'
-import { AnyGame } from '@typinghare/board-game-clock-core'
 import { GameSettingControl } from './GameSettingControl'
+import { Game } from '@typinghare/board-game-clock-core'
+import { Setting, SettingMap } from '@typinghare/settings'
 
 export type GameSettingsSectionProps = {
-    game: AnyGame
+    game: Game
     signal: boolean
 }
 
@@ -17,7 +18,7 @@ export const AdvancedSettingsSection: React.FC<GameSettingsSectionProps> = funct
     for (const [settingName, setting] of Object.entries(gameSettings)) {
         settingControlArray.push(<GameSettingControl
             key={gameClassName + settingName}
-            setting={setting}
+            setting={setting as Setting<any, any>}
             signal={signal}
         />)
     }

@@ -4,26 +4,28 @@ import { Box } from '@mui/material'
 import { ClockDisplay } from './ClockDisplay'
 import { useAppSelector } from '../redux/hooks'
 import { selectGameStarted } from '../redux/slice/GameSlice'
-import { Game, StandardGameHolder } from '@typinghare/board-game-clock-core'
-import { globalGameHolder } from '../common/games'
+import { GameHolder } from '@typinghare/board-game-clock-core'
+import { useGameHolder } from '../state/GameHolder'
 
-export const ClockPanel: React.FC<PageProps> = function(props): JSX.Element {
+export const ClockPage = function(props: PageProps): JSX.Element {
     const { isDisplay } = props
+    const [getGameHolder] = useGameHolder()
 
     // If the game has not been started, display nothing.
     if (!useAppSelector(selectGameStarted)) {
-        return <Page isDisplay={isDisplay} />
+        return <Page isDisplay={isDisplay}>The game has not been started</Page>
     }
 
+    const gameHolder: GameHolder<any> | undefined = getGameHolder()
+
     // Retrieve the game from the game holder.
-    const gameHolder: StandardGameHolder | undefined = globalGameHolder.content
     if (gameHolder === undefined) {
         return <Page isDisplay={isDisplay}>
             <Box> Global game holder in empty.</Box>
         </Page>
     }
 
-    const game: Game = gameHolder!.game
+    const game = gameHolder.game
 
     const styles = {
         section: { flex: 12 },

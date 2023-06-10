@@ -1,23 +1,24 @@
-import { Box, BoxProps, Button, useTheme } from '@mui/material'
+import { Box, BoxProps, Button, Theme } from '@mui/material'
 import { StandardGameHolder, StandardGameType } from '@typinghare/board-game-clock-core'
 import { gameStart } from '../redux/slice/GameSlice'
-import React from 'react'
 import { useDispatch } from 'react-redux'
 import { changePanel, PanelEnum } from '../redux/slice/PanelSlice'
 import { TimeControlSelect } from './TimeControlSelect'
-import { globalGameHolder, standardGameContainer } from '../common/games'
+import { standardGameContainer } from './GameSettingsPage'
+import { useGameHolder } from '../state/GameHolder'
 
-export type GameSettingsHeaderProps = BoxProps & {
+export interface GameSettingsHeaderProps extends BoxProps {
     gameHolder: StandardGameHolder
     onTimeControlChange: (newTimeControlName: string) => void
 }
 
-export const GameSettingsHeader: React.FC<GameSettingsHeaderProps> = function(props): JSX.Element {
+export const GameSettingsHeader = function(props: GameSettingsHeaderProps): JSX.Element {
     const { gameHolder, onTimeControlChange, ...otherProps } = props
     const dispatch = useDispatch()
     const gameType = gameHolder.gameType as StandardGameType
     const timeControlArray = standardGameContainer.getTimeControls(gameType)
     const game = gameHolder.game
+    const [, setGameHolder] = useGameHolder()
 
     function handleTimeControlSelect(newTimeControlName: string): void {
         onTimeControlChange(newTimeControlName)
@@ -25,7 +26,7 @@ export const GameSettingsHeader: React.FC<GameSettingsHeaderProps> = function(pr
 
     function handleGameStart(): void {
         // Pass game holder to the clock panel.
-        globalGameHolder.content = gameHolder
+        setGameHolder(gameHolder)
 
         // Start the game.
         game.start()
@@ -35,39 +36,38 @@ export const GameSettingsHeader: React.FC<GameSettingsHeaderProps> = function(pr
         dispatch(changePanel(PanelEnum.CLOCK))
     }
 
-    const containerStyle: React.CSSProperties = {
-        display: 'flex',
-        marginBottom: '1em',
-        alignItems: 'center',
-        gap: '1em',
+    const styles = {
+        root: {
+            display: 'flex',
+            marginBottom: '1em',
+            alignItems: 'center',
+            gap: '1em',
+        },
+        timeControlSelect: {
+            display: 'inline-block',
+            flex: 10,
+        },
+        gameStartButton: (theme: Theme) => ({
+            display: 'inline-block',
+            [theme.breakpoints.down('md')]: {
+                flex: 5,
+            },
+            [theme.breakpoints.up('md')]: {
+                flex: 3,
+            },
+        }),
     }
 
-    const timeControlSelectStyle: React.CSSProperties = {
-        display: 'inline-block',
-        flex: 10,
-    }
-
-    const gameStartButtonStyle: React.CSSProperties = {
-        display: 'inline-block',
-        flex: 3,
-    }
-
-    // Adjust the flex value based on screen size
-    const theme = useTheme()
-    if (theme.breakpoints.down('sm')) {
-        gameStartButtonStyle.flex = 5
-    }
-
-    return <Box sx={containerStyle} {...otherProps}>
+    return <Box sx={styles.root} {...otherProps}>
         <TimeControlSelect
-            sx={timeControlSelectStyle}
+            sx={styles.timeControlSelect}
             initValue={timeControlArray[0]}
             timeControlOptions={timeControlArray}
             onTimeControlSelect={handleTimeControlSelect}
         />
         <Button
             variant='contained'
-            sx={gameStartButtonStyle}
+            sx={styles.gameStartButton}
             onClick={handleGameStart}
         >{'Game Start'}</Button>
     </Box>

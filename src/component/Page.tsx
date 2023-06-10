@@ -1,31 +1,29 @@
 import React from 'react'
 import { Box, BoxProps, SxProps } from '@mui/material'
 
-export type PanelProps = BoxProps & {
-    // Whether this panel is shown.
+export interface PageProps extends BoxProps {
+    // Whether this page is displayed.
     isDisplay: boolean
-    sx?: SxProps;
 }
 
 /**
- * A full-screen panel component that utilizes the "flex" value for its "display" property when it is intended to be
+ * A full-screen page component that utilizes the "flex" value for its "display" property when it is intended to be
  * displayed on the screen.
  * @constructor
  */
-export const Panel: React.FC<PanelProps> = function(props): JSX.Element {
-    const { isDisplay, sx } = props
-
-    const style = {
+export const Page = function(props: PageProps): JSX.Element {
+    const { isDisplay, sx, children } = props
+    const style: SxProps<any> = {
         height: '100vh',
         width: '100vw',
-        overflowX: 'hidden',
-        overflowY: 'hidden',
-        display: isDisplay ? 'flex' : 'none',
-        flexDirection: 'column',
         margin: '0 !important',
         padding: '0 !important',
+        display: isDisplay ? 'flex' : 'none',
+        flexDirection: 'column',
+        overflowX: 'hidden',
+        overflowY: 'hidden',
         ...sx,
     }
 
-    return <Box sx={style} />
+    return <Box sx={style} children={children} />
 }

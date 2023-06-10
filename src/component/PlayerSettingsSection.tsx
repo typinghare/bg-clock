@@ -1,5 +1,11 @@
 import React from 'react'
-import { Player, StandardGameHolder, StandardGameSettings, TimeControl } from '@typinghare/board-game-clock-core'
+import {
+    GameSettingProperties,
+    Player,
+    StandardGameHolder,
+    StandardGameSettings,
+    TimeControl,
+} from '@typinghare/board-game-clock-core'
 import { GameSettingControl } from './GameSettingControl'
 import { SettingsSection } from './SettingsSection'
 import { SettingContainer } from '@typinghare/settings'
@@ -22,7 +28,7 @@ export const PlayerSettingsSection: React.FC<PlayerSettingsSectionProps> = funct
             // Update this player's setting.
             settingContainer.getSetting(settingName).value = newValue
 
-            const gameSettings = game.settings as SettingContainer<StandardGameSettings>
+            const gameSettings = game.settings as SettingContainer<StandardGameSettings, GameSettingProperties>
             if (gameSettings.getSetting('synchronizePlayerSettings').value === true) {
                 // Update another player's setting.
                 const anotherPlayer: Player = game.getPlayer(game.getNextRole(role))

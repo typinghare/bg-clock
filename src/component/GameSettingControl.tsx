@@ -110,7 +110,7 @@ const ExpandableNumberInputControl: React.FC<ExpandableNumberInputControlProps> 
 
     const style: React.CSSProperties = {
         height: '2.5em !important',
-        fontSize: '0.9em'
+        fontSize: '0.9em',
     }
     Object.assign(style, sx)
 
@@ -173,7 +173,7 @@ const ExpandableTimeInputControl: React.FC<ExpandableTimeInputControlProps> = fu
 
     const style: React.CSSProperties = {
         height: '2.5em !important',
-        fontSize: '0.9em'
+        fontSize: '0.9em',
     }
     Object.assign(style, sx)
 
@@ -227,7 +227,7 @@ const ExpandableBoolInputControl: React.FC<ExpandableBoolInputControlProps> = fu
 
     const style: React.CSSProperties = {
         height: '3em !important',
-        fontSize: '0.9em'
+        fontSize: '0.9em',
     }
     Object.assign(style, sx)
 

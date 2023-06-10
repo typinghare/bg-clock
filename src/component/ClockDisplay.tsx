@@ -2,11 +2,11 @@ import { Box, BoxProps } from '@mui/material'
 import React from 'react'
 import { TimeDisplay } from './TimeDisplay'
 import { HourMinuteSecond, SlowHourMinuteSecond } from '@typinghare/hour-minute-second'
-import { TIME_PAUSED_COLOR, TIME_RUNNING_COLOR, TIME_UP_COLOR } from '../common/constant'
-import { AnyGame, Player } from '@typinghare/board-game-clock-core'
+import { Game, Player } from '@typinghare/board-game-clock-core'
+import { Color } from '../common/constant'
 
 export type ClockDisplayProps = BoxProps & {
-    game: AnyGame
+    game: Game
 
     // The label of role of this clock display.
     role: 'A' | 'B'
@@ -18,7 +18,7 @@ export type ClockDisplayProps = BoxProps & {
 export const ClockDisplay: React.FC<ClockDisplayProps> = function(props): JSX.Element {
     const { game, role, overturn, sx, ...otherProps } = props
     const [time, setTime] = React.useState<HourMinuteSecond>(SlowHourMinuteSecond.ofSeconds(0))
-    const [color, setColor] = React.useState(TIME_PAUSED_COLOR)
+    const [color, setColor] = React.useState(Color.TIME_PAUSED_COLOR)
 
     function handleClockDisplayClick(): void {
         game.getPlayer(role).click()
@@ -49,12 +49,12 @@ export const ClockDisplay: React.FC<ClockDisplayProps> = function(props): JSX.El
 
             // Change Color.
             if (time.ms === 0) {
-                setColor(TIME_UP_COLOR)
+                setColor(Color.TIME_UP_COLOR)
             } else {
                 if (player.clockController.isClockRunning()) {
-                    setColor(TIME_RUNNING_COLOR)
+                    setColor(Color.TIME_RUNNING_COLOR)
                 } else {
-                    setColor(TIME_PAUSED_COLOR)
+                    setColor(Color.TIME_PAUSED_COLOR)
                 }
             }
         }, 500)
