@@ -10,15 +10,15 @@ import { useState } from 'react'
  * @example [on, toggle] = useToggle(false)
  */
 export function useToggle(initialValue: boolean = true): [boolean, () => void, (value: boolean) => void] {
-    const [on, setOn] = useState<boolean>(initialValue);
+    const [on, setOn] = useState<boolean>(initialValue)
 
     /**
      * toggle is a callback function that toggles the current value
      * using the setOn function from useState.
      */
     const toggle = (): void => {
-        setOn((prevOn) => !prevOn);
-    };
+        setOn((prevOn) => !prevOn)
+    }
 
     /**
      * setOnValue is a callback function that explicitly sets the value
@@ -27,8 +27,8 @@ export function useToggle(initialValue: boolean = true): [boolean, () => void, (
      * @param value - The new value to set.
      */
     const setOnValue = (value: boolean): void => {
-        setOn(value);
-    };
+        setOn(value)
+    }
 
-    return [on, toggle, setOnValue];
+    return [on, toggle, setOnValue]
 }

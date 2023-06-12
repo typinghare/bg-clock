@@ -1,12 +1,5 @@
 import { SettingGroup } from './Settings/SettingGroup'
-import {
-    GameSettingProperties,
-    Player,
-    StandardGameHolder,
-    StandardGameSettings,
-    TimeControl,
-} from '@typinghare/board-game-clock-core'
-import { SettingContainer } from '@typinghare/settings'
+import { Player, StandardGameHolder, TimeControl } from '@typinghare/board-game-clock-core'
 import { SettingItem, SettingItemType } from './Settings/SettingItem'
 
 export interface PlayerSettingsSectionProps {
@@ -17,7 +10,7 @@ export interface PlayerSettingsSectionProps {
 }
 
 export function PlayerSettingsSection(props: PlayerSettingsSectionProps): JSX.Element {
-    const { gameHolder, player, onSettingChange } = props
+    const { gameHolder, player, signal, onSettingChange } = props
     const game = gameHolder.game
     const role = player.role
     const settingContainer = (player.timeControl as TimeControl).settings
@@ -27,16 +20,17 @@ export function PlayerSettingsSection(props: PlayerSettingsSectionProps): JSX.El
             // Update this player's setting.
             settingContainer.getSetting(settingName).value = newValue
 
-            const gameSettings = game.settings as SettingContainer<StandardGameSettings, GameSettingProperties>
-            if (gameSettings.getSetting('synchronizePlayerSettings').value === true) {
-                // Update another player's setting.
-                const anotherPlayer: Player = game.getPlayer(game.getNextRole(role))
-                const anotherPlayerSettings = (anotherPlayer.timeControl as TimeControl).settings
-                anotherPlayerSettings.getSetting(settingName).setValue(newValue, true)
-
-                // Invokes on setting change.
-                onSettingChange()
-            }
+            onSettingChange()
+            // const gameSettings = game.settings as SettingContainer<StandardGameSettings, GameSettingProperties>
+            // if (gameSettings.getSetting('synchronizePlayerSettings').value === true) {
+            //     // Update another player's setting.
+            //     const anotherPlayer: Player = game.getPlayer(game.getNextRole(role))
+            //     const anotherPlayerSettings = (anotherPlayer.timeControl as TimeControl).settings
+            //     anotherPlayerSettings.getSetting(settingName).setValue(newValue, true)
+            //
+            //     // Invokes on setting change.
+            //     onSettingChange()
+            // }
         }
     }
 

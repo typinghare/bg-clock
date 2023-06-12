@@ -12,15 +12,12 @@ import {
 import { useAppSelector } from '../redux/hooks'
 import { selectGameType } from '../redux/slice/GameSlice'
 import { useState } from 'react'
-import { PlayerSettingsSection } from './PlayerSettingsSection'
-import { useToggle } from '../hook/Toggle'
-import { GameSettingsHeader } from './GameSettingsHeader'
-import { AdvancedSettingsSection } from './AdvancedSettingsSection'
+import { MuiStyles } from '../common/interfaces'
+import { GameSettingsContent } from './Settings/GameSettingsContent'
 
 export const standardGameContainer = new StandardGameContainer()
 
 export function GameSettingsPage(): JSX.Element {
-    const [signal, toggleSignal] = useToggle()
 
     // Retrieve game type from redux.
     const gameType: StandardGameType = useAppSelector(selectGameType)
@@ -40,7 +37,7 @@ export function GameSettingsPage(): JSX.Element {
         setTimeControlType(newTimeControlType)
     }
 
-    const styles = {
+    const styles: MuiStyles<'container'> = {
         container: {
             height: '100%',
             padding: '1em',
@@ -51,27 +48,9 @@ export function GameSettingsPage(): JSX.Element {
     return (
         <Page pageIndex={PageEnum.GAME_SETTINGS}>
             <Box sx={styles.container}>
-                <GameSettingsHeader
+                <GameSettingsContent
                     gameHolder={gameHolder}
                     onTimeControlChange={handleTimeControlChange}
-                />
-
-                <PlayerSettingsSection
-                    gameHolder={gameHolder}
-                    player={game.getPlayer('A')}
-                    signal={signal}
-                    onSettingChange={toggleSignal} />
-
-                <PlayerSettingsSection
-                    gameHolder={gameHolder}
-                    player={game.getPlayer('B')}
-                    signal={signal}
-                    onSettingChange={toggleSignal} />
-
-                <AdvancedSettingsSection
-                    game={game}
-                    signal={signal}
-                    onSettingChange={toggleSignal}
                 />
             </Box>
         </Page>

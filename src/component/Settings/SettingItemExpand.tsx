@@ -1,5 +1,7 @@
 import { Box, Button, Collapse, Stack } from '@mui/material'
 import { SettingItemType } from './SettingItem'
+import { HourMinuteSecond } from '@typinghare/hour-minute-second'
+import { convertTimeToString } from '../../common/helper'
 
 export interface SettingItemExpandProps {
     type: SettingItemType,
@@ -15,9 +17,11 @@ export function SettingItemExpand(props: SettingItemExpandProps): JSX.Element {
     function Content(): JSX.Element {
         if (type === 'time') {
             return (
-                <Box>
-                    Change time
-                </Box>
+                <TimeSettingItemExpand
+                    currentValue={currentValue as HourMinuteSecond}
+                    optionList={optionList as HourMinuteSecond[]}
+                    onValueSelect={onValueSelect!}
+                />
             )
         } else if (type === 'number') {
             return (
@@ -69,6 +73,39 @@ function NumberSettingItemExpand(props: NumberSettingItemExpandProps): JSX.Eleme
                 key={value.toString()}
                 onClick={handleClickProvider(value)}
                 children={value}
+            />
+        )
+    })
+
+    return (
+        <Stack spacing={2} direction='row'>
+            {buttonList}
+        </Stack>
+    )
+}
+
+interface TimeSettingItemExpandProps {
+    currentValue: HourMinuteSecond
+    optionList: HourMinuteSecond[]
+    onValueSelect: (newTime: HourMinuteSecond) => void
+}
+
+function TimeSettingItemExpand(props: TimeSettingItemExpandProps): JSX.Element {
+    const { currentValue, optionList, onValueSelect } = props
+
+    function handleClickProvider(value: HourMinuteSecond) {
+        return function() {
+            onValueSelect(value)
+        }
+    }
+
+    const buttonList: JSX.Element[] = optionList.map(value => {
+        return (
+            <Button
+                variant={currentValue === value ? 'contained' : 'outlined'}
+                key={value.toString()}
+                onClick={handleClickProvider(value)}
+                children={convertTimeToString(value)}
             />
         )
     })

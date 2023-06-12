@@ -51,6 +51,11 @@ export function SettingItem(props: SettingItemProps): JSX.Element {
         setExpand((expand) => !expand)
     }
 
+    function handleChange(newValue: HourMinuteSecond | number): void {
+        setExpand(false)
+        onChange(newValue as never)
+    }
+
     const styles: MuiStyles = {
         line: {
             display: 'flex',
@@ -82,12 +87,14 @@ export function SettingItem(props: SettingItemProps): JSX.Element {
                 expand={expand}
                 currentValue={value}
                 optionList={optionList}
+                onValueSelect={handleChange}
             />}
             {type === 'number' && <SettingItemExpand
                 type='number'
                 expand={expand}
                 currentValue={value}
                 optionList={optionList}
+                onValueSelect={handleChange}
             />}
         </>
     )

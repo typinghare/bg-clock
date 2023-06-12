@@ -4,48 +4,22 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7b250530-3cfd-4106-9670-83191c7c3ec6" name="Changes" comment="initial">
-      <change afterPath="$PROJECT_DIR$/src/assets/fonts/digital-7/digital-7.mono.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/fonts/digital-7/digital-7.monoitalic.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/images/banner-chess.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/common/interfaces.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/component/Common/IosSwitch.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/component/PortalPage.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/component/Settings/SettingGroup.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/component/Settings/SettingItem.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/component/Settings/SettingItemExpand.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/component/Settings/SettingValue.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/hook/Toggle.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/redux/slice/PageSlice.ts" afterDir="false" />
+    <list default="true" id="7b250530-3cfd-4106-9670-83191c7c3ec6" name="Changes" comment="feat: refactored the app; formulated a style guide">
+      <change afterPath="$PROJECT_DIR$/src/assets/images/banner-go.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/component/Settings/GameSettingsContent.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.prettierrc.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.prettierrc.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/FullScreen.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/constant.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/constant.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/common/helper.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/common/helper.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/AdvancedSettingsSection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/AdvancedSettingsSection.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/ClockDisplay.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/ClockDisplay.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/ClockPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/ClockPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/GameSelectPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/GameSelectPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/GameSettingControl.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/GameSettingsHeader.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/GameSettingsHeader.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/GameSettingsPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/GameSettingsPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/Page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Page.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/component/PlayerSettingsSection.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/PlayerSettingsSection.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Scrollable.module.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/Scrollable.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/SettingsSection.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/TimeControlSelect.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/component/TimeDisplay.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/TimeDisplay.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/slice/PanelSlice.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/redux/store.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/redux/store.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/GameHolder.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hook/GameHolder.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/state/Signal.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/Settings/SettingItem.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Settings/SettingItem.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/Settings/SettingItemExpand.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Settings/SettingItemExpand.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/component/Settings/SettingValue.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/component/Settings/SettingValue.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hook/Toggle.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/hook/Toggle.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -205,7 +179,7 @@
       <workItem from="1686363646225" duration="61000" />
       <workItem from="1686422979927" duration="3438000" />
       <workItem from="1686454902944" duration="2578000" />
-      <workItem from="1686509475037" duration="12689000" />
+      <workItem from="1686509475037" duration="17480000" />
     </task>
     <task id="LOCAL-00001" summary="initial">
       <created>1677444910687</created>
@@ -312,7 +286,14 @@
       <option name="project" value="LOCAL" />
       <updated>1685505259545</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="feat: refactored the app; formulated a style guide">
+      <created>1686532792858</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1686532792858</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -344,6 +325,7 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="initial" />
-    <option name="LAST_COMMIT_MESSAGE" value="initial" />
+    <MESSAGE value="feat: refactored the app; formulated a style guide" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: refactored the app; formulated a style guide" />
   </component>
 </project>

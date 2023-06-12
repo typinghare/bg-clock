@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, BoxProps } from '@mui/material'
+import { Box, BoxProps, Theme } from '@mui/material'
 import { PageEnum, selectPage } from '../redux/slice/PageSlice'
 import { useAppSelector } from '../redux/hooks'
 import { MuiStyles } from '../common/interfaces'
@@ -17,7 +17,7 @@ export const Page = function(props: PageProps): JSX.Element {
     const { pageIndex, sx, children } = props
     const page: PageEnum = useAppSelector(selectPage)
 
-    const styles: MuiStyles = {
+    const styles: MuiStyles<'root' | 'container'> = {
         root: {
             display: page === pageIndex ? 'flex' : 'none',
             flexDirection: 'column',
@@ -29,14 +29,19 @@ export const Page = function(props: PageProps): JSX.Element {
             overflowY: 'hidden',
             ...sx,
         },
-        container: {
+        container: (theme: Theme) => ({
             display: 'flex',
             flexDirection: 'column',
             width: '100%',
             maxWidth: '75vh',
             height: '100%',
             margin: '0 auto',
-        },
+
+            [theme.breakpoints.up('md')]: {
+                // Edging.
+                border: '8px #999999 solid',
+            },
+        }),
     }
 
     return (

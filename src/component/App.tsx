@@ -2,7 +2,7 @@ import React from 'react'
 import { GameSettingsPage } from './GameSettingsPage'
 import { ClockPage } from './ClockPage'
 import { GameSelectPage } from './GameSelectPage'
-import { Portal } from '@mui/material'
+import { PortalPage } from './PortalPage'
 
 /**
  * Application.
@@ -11,7 +11,7 @@ import { Portal } from '@mui/material'
 export function App(): JSX.Element {
     // Pages are collected here.
     return <>
-        <Portal />
+        <PortalPage />
         <GameSelectPage />
         <GameSettingsPage />
         <ClockPage />

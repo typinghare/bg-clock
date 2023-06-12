@@ -50,6 +50,7 @@ export function SettingValue(props: SettingValueProps): JSX.Element {
         } else if (type === 'time') {
             const style: MuiStyle = {
                 fontFamily: 'Digital-7',
+                fontSize: '1.25em'
             }
 
             return (

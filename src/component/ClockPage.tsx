@@ -7,6 +7,7 @@ import { GameHolder } from '@typinghare/board-game-clock-core'
 import { Box } from '@mui/material'
 import { ClockDisplay } from './ClockDisplay'
 import { MuiStyles } from '../common/interfaces'
+import screenfull from 'screenfull'
 
 export function ClockPage(): JSX.Element {
     const [getGameHolder] = useGameHolder()
@@ -42,6 +43,11 @@ export function ClockPage(): JSX.Element {
             flex: 1,
             backgroundColor: '#333333',
         },
+    }
+
+    // Enable full screen.
+    if (screenfull.isEnabled) {
+        screenfull.request().then()
     }
 
     return (
