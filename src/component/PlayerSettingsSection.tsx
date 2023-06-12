@@ -1,23 +1,15 @@
-import React from 'react'
-import {
-    GameSettingProperties,
-    Player,
-    StandardGameHolder,
-    StandardGameSettings,
-    TimeControl,
-} from '@typinghare/board-game-clock-core'
-import { GameSettingControl } from './GameSettingControl'
-import { SettingsSection } from './SettingsSection'
-import { SettingContainer } from '@typinghare/settings'
+import { SettingGroup } from './Settings/SettingGroup'
+import { Player, StandardGameHolder, TimeControl } from '@typinghare/board-game-clock-core'
+import { SettingItem, SettingItemType } from './Settings/SettingItem'
 
-export type PlayerSettingsSectionProps = {
+export interface PlayerSettingsSectionProps {
     gameHolder: StandardGameHolder
     player: Player
     signal: boolean
     onSettingChange: () => void
 }
 
-export const PlayerSettingsSection: React.FC<PlayerSettingsSectionProps> = function(props): JSX.Element {
+export function PlayerSettingsSection(props: PlayerSettingsSectionProps): JSX.Element {
     const { gameHolder, player, signal, onSettingChange } = props
     const game = gameHolder.game
     const role = player.role
@@ -28,16 +20,17 @@ export const PlayerSettingsSection: React.FC<PlayerSettingsSectionProps> = funct
             // Update this player's setting.
             settingContainer.getSetting(settingName).value = newValue
 
-            const gameSettings = game.settings as SettingContainer<StandardGameSettings, GameSettingProperties>
-            if (gameSettings.getSetting('synchronizePlayerSettings').value === true) {
-                // Update another player's setting.
-                const anotherPlayer: Player = game.getPlayer(game.getNextRole(role))
-                const anotherPlayerSettings = (anotherPlayer.timeControl as TimeControl).settings
-                anotherPlayerSettings.getSetting(settingName).setValue(newValue, true)
-
-                // Invokes on setting change.
-                onSettingChange()
-            }
+            onSettingChange()
+            // const gameSettings = game.settings as SettingContainer<StandardGameSettings, GameSettingProperties>
+            // if (gameSettings.getSetting('synchronizePlayerSettings').value === true) {
+            //     // Update another player's setting.
+            //     const anotherPlayer: Player = game.getPlayer(game.getNextRole(role))
+            //     const anotherPlayerSettings = (anotherPlayer.timeControl as TimeControl).settings
+            //     anotherPlayerSettings.getSetting(settingName).setValue(newValue, true)
+            //
+            //     // Invokes on setting change.
+            //     onSettingChange()
+            // }
         }
     }
 
@@ -45,13 +38,29 @@ export const PlayerSettingsSection: React.FC<PlayerSettingsSectionProps> = funct
     const settingNames = Object.keys(settingContainer.getSettings())
     for (const settingName of settingNames) {
         const setting = settingContainer.getSetting(settingName)
-        gameSettingControlArray.push(<GameSettingControl
-            key={gameHolder.gameType + gameHolder.timeControlType + settingName}
-            setting={setting}
-            signal={signal}
-            onValueChange={handleValueChangeProvider(settingName)}
-        />)
+        const value = setting.value
+        const type = setting.getProperty('type')
+        const label = setting.getProperty('label')
+        const description = setting.getProperty('description')
+        const optionList = setting.getProperty('options')
+
+        gameSettingControlArray.push(
+            <SettingItem
+                key={gameHolder.gameType + gameHolder.timeControlType + settingName}
+                type={type as SettingItemType}
+                value={value}
+                onChange={handleValueChangeProvider(settingName)}
+                label={label}
+                description={description}
+                optionList={optionList}
+            />,
+        )
     }
 
-    return <SettingsSection title={`Player ${role} Time Control Settings`} children={gameSettingControlArray} />
+    return (
+        <SettingGroup
+            title={`Player ${role} Time Control Settings`}
+            children={gameSettingControlArray}
+        />
+    )
 }

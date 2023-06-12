@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import panelSlice from './slice/PanelSlice'
+import pageSlice from './slice/PageSlice'
 import gameSlice from './slice/GameSlice'
 
 export const store = configureStore({
     reducer: {
-        panelSlice: panelSlice,
-        gameSlice: gameSlice,
+        pageSlice,
+        gameSlice,
     },
 })
 

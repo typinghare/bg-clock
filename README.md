@@ -13,9 +13,11 @@ See [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.
 See [react.dev](https://github.com/reactjs/react.dev)
 
 A complete React component is coded as follows.
+
 ~~~tsx
 import { Box, BoxProps } from '@mui/material'
 import { useEffect, useState } from 'react'
+import { MuiStyles } from './interfaces'
 
 // Define the properties of a component above it.
 // The name of the properties interface should follow the Pascal naming convention.
@@ -42,12 +44,13 @@ export function MyComponent(props: MyComponentProps): JSX.Element {
     useEffect(() => {
         // Effect content...
     }, [])
-    
+
     // You can define some custom variables and functions in-between.
-    function handleSomething(): void {}
+    function handleSomething(): void {
+    }
 
     // Define styles.
-    const styles = {
+    const styles: MuiStyles<'root' | 'inner'> = {
         root: {
             padding: '1em',
         },
@@ -58,9 +61,12 @@ export function MyComponent(props: MyComponentProps): JSX.Element {
     }
 
     // Returns the JSX element.
-    return <Box {...otherProps} sx={styles.root}>
-        <Box sx={styles.inner}> {children} </Box>
-    </Box>
+    return (
+        // Using parentheses to align elements.
+        <Box {...otherProps} sx={styles.root}>
+            <Box sx={styles.inner}> {children} </Box>
+        </Box>
+    )
 }
 ~~~
 

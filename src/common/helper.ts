@@ -5,16 +5,23 @@ import { HourMinuteSecond, SlowHourMinuteSecond } from '@typinghare/hour-minute-
  * @param time
  */
 export const convertTimeToString = function(time: HourMinuteSecond): string {
-    const strArray = []
-    if (time.hour > 0) strArray.push(`${time.hour.toString()} hour`)
-    if (time.minute > 0) strArray.push(`${time.minute.toString()} min`)
-    if (time.second > 0) strArray.push(`${time.second.toString()} sec`)
+    // const strArray = []
+    // if (time.hour > 0) strArray.push(`${time.hour.toString()} hour`)
+    // if (time.minute > 0) strArray.push(`${time.minute.toString()} min`)
+    // if (time.second > 0) strArray.push(`${time.second.toString()} sec`)
+    //
+    // if (strArray.length === 0) {
+    //     strArray.push('0 sec')
+    // }
+    //
+    // return strArray.join(' ')
 
-    if (strArray.length === 0) {
-        strArray.push('0 sec')
-    }
+    const stringArray = [] as string[]
+    if (time.hour > 0) stringArray.push(time.hour.toString())
+    stringArray.push(time.minute.toString().padStart(2, '0'))
+    stringArray.push(time.second.toString().padStart(2, '0'))
 
-    return strArray.join(' ')
+    return stringArray.join(':')
 }
 
 /**

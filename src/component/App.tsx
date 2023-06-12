@@ -1,18 +1,19 @@
 import React from 'react'
-import { Box } from '@mui/material'
-import { PanelEnum, selectPanel } from '../redux/slice/PanelSlice'
-import { useAppSelector } from '../redux/hooks'
-import { ClockPage } from './ClockPage'
 import { GameSettingsPage } from './GameSettingsPage'
+import { ClockPage } from './ClockPage'
 import { GameSelectPage } from './GameSelectPage'
+import { PortalPage } from './PortalPage'
 
-export const App = function(): JSX.Element {
-    const panel = useAppSelector(selectPanel)
-    const style = { height: '100vh' }
-
-    return <Box sx={style}>
-        <ClockPage isDisplay={panel === PanelEnum.CLOCK} />
-        <GameSettingsPage isDisplay={panel === PanelEnum.GAME_SETTINGS} />
-        <GameSelectPage isDisplay={panel === PanelEnum.GAME_SELECT} />
-    </Box>
+/**
+ * Application.
+ * @constructor
+ */
+export function App(): JSX.Element {
+    // Pages are collected here.
+    return <>
+        <PortalPage />
+        <GameSelectPage />
+        <GameSettingsPage />
+        <ClockPage />
+    </>
 }

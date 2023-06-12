@@ -1,28 +1,53 @@
-import React from 'react'
-import { SettingsSection } from './SettingsSection'
-import { GameSettingControl } from './GameSettingControl'
-import { Game } from '@typinghare/board-game-clock-core'
-import { Setting, SettingMap } from '@typinghare/settings'
+import { Game, GameSettingProperties, StandardGameSettings } from '@typinghare/board-game-clock-core'
+import { SettingItem, SettingItemType } from './Settings/SettingItem'
+import { SettingContainer, SettingMap } from '@typinghare/settings'
+import { SettingGroup } from './Settings/SettingGroup'
 
-export type GameSettingsSectionProps = {
+export interface AdvancedSettingsSectionProps {
     game: Game
     signal: boolean
+    onSettingChange: () => void
 }
 
-export const AdvancedSettingsSection: React.FC<GameSettingsSectionProps> = function(props): JSX.Element {
-    const { game, signal } = props
+export function AdvancedSettingsSection(props: AdvancedSettingsSectionProps): JSX.Element {
+    const { game, onSettingChange } = props
     const gameClassName = Object.getPrototypeOf(game).constructor.name
-    const gameSettings = game.settings.getSettings()
+    const settingContainer = game.settings as SettingContainer<any>
+    const gameSettings = game.settings.getSettings() as SettingMap<StandardGameSettings, GameSettingProperties>
 
-    const settingControlArray: JSX.Element[] = []
-    for (const [settingName, setting] of Object.entries(gameSettings)) {
-        settingControlArray.push(<GameSettingControl
-            key={gameClassName + settingName}
-            setting={setting as Setting<any, any>}
-            signal={signal}
-        />)
+    function handleValueChangeProvider(settingName: string) {
+        return function(newValue: any): void {
+            // Update this player's setting.
+            settingContainer.getSetting(settingName).value = newValue
+
+            onSettingChange()
+        }
     }
 
-    return <SettingsSection title='Advanced Game Settings' children={settingControlArray} />
-}
+    const settingItemArray: JSX.Element[] = []
+    for (const [settingName, setting] of Object.entries(gameSettings)) {
+        const value = setting.value
+        const type = setting.getProperty('type')
+        const label = setting.getProperty('label')
+        const description = setting.getProperty('description')
 
+        settingItemArray.push(
+            // @ts-ignore
+            <SettingItem
+                key={gameClassName + settingName}
+                type={type as SettingItemType}
+                value={value}
+                onChange={handleValueChangeProvider(settingName)}
+                label={label}
+                description={description}
+            />,
+        )
+    }
+
+    return (
+        <SettingGroup
+            title='Advanced Game Settings'
+            children={settingItemArray}
+        />
+    )
+}

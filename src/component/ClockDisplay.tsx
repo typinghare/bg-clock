@@ -1,49 +1,48 @@
-import { Box, BoxProps } from '@mui/material'
-import React from 'react'
-import { TimeDisplay } from './TimeDisplay'
+import { Game } from '@typinghare/board-game-clock-core'
+import { useEffect, useState } from 'react'
 import { HourMinuteSecond, SlowHourMinuteSecond } from '@typinghare/hour-minute-second'
-import { Game, Player } from '@typinghare/board-game-clock-core'
-import { Color } from '../common/constant'
+import { Color, GameParameters } from '../common/constant'
+import { Box, BoxProps, SxProps } from '@mui/material'
+import { TimeDisplay } from './TimeDisplay'
+import { MuiStyles } from '../common/interfaces'
 
-export type ClockDisplayProps = BoxProps & {
+export interface ClockDisplayProps extends BoxProps {
     game: Game
 
     // The label of role of this clock display.
     role: 'A' | 'B'
-
-    // Whether the clock is overturn.
-    overturn?: boolean
 }
 
-export const ClockDisplay: React.FC<ClockDisplayProps> = function(props): JSX.Element {
-    const { game, role, overturn, sx, ...otherProps } = props
-    const [time, setTime] = React.useState<HourMinuteSecond>(SlowHourMinuteSecond.ofSeconds(0))
-    const [color, setColor] = React.useState(Color.TIME_PAUSED_COLOR)
+export function ClockDisplay(props: ClockDisplayProps): JSX.Element {
+    const { game, role, sx, ...otherProps } = props
+    const [time, setTime] = useState<HourMinuteSecond>(SlowHourMinuteSecond.ofSeconds(0))
+    const [color, setColor] = useState(Color.TIME_PAUSED_COLOR)
 
     function handleClockDisplayClick(): void {
         game.getPlayer(role).click()
     }
 
-    const style: React.CSSProperties = {
-        ...sx,
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        transform: overturn === true ? 'rotate(180deg)' : undefined,
-    } as React.CSSProperties
-
-    const timeDisplayStyle: React.CSSProperties = {
-        fontSize: '20vw',
-        color: '',
-        userSelect: 'none',
-        cursor: 'default',
+    const styles: MuiStyles<'root' | 'timeDisplay'> = {
+        root: {
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            ...sx,
+        },
+        timeDisplay: {
+            fontSize: '12vh',
+            fontFamily: 'Digital-7',
+            color: color,
+            userSelect: 'none',
+            cursor: 'default',
+        },
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         const intervalHandle = setInterval((): void => {
-            const player: Player = game.getPlayer(role)
+            const player = game.getPlayer(role)
             const time = player.clockController.clockTime
             setTime(time)
 
@@ -57,7 +56,7 @@ export const ClockDisplay: React.FC<ClockDisplayProps> = function(props): JSX.El
                     setColor(Color.TIME_PAUSED_COLOR)
                 }
             }
-        }, 500)
+        }, SlowHourMinuteSecond.MILLISECONDS_IN_SECOND / GameParameters.REFRESH_RATE)
 
         return (): void => {
             // Clear time interval.
@@ -65,7 +64,14 @@ export const ClockDisplay: React.FC<ClockDisplayProps> = function(props): JSX.El
         }
     }, [game, role])
 
-    return <Box sx={style} {...otherProps} onClick={handleClockDisplayClick}>
-        <TimeDisplay time={time} color={color} sx={timeDisplayStyle} />
+    return <Box
+        sx={styles.root as SxProps<any>}
+        onClick={handleClockDisplayClick}
+        {...otherProps}
+    >
+        <TimeDisplay
+            time={time}
+            sx={styles.timeDisplay}
+        />
     </Box>
 }

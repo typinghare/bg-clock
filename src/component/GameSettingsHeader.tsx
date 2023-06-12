@@ -1,18 +1,29 @@
-import { Box, BoxProps, Button, Theme } from '@mui/material'
 import { StandardGameHolder, StandardGameType } from '@typinghare/board-game-clock-core'
-import { gameStart } from '../redux/slice/GameSlice'
 import { useDispatch } from 'react-redux'
-import { changePanel, PanelEnum } from '../redux/slice/PanelSlice'
-import { TimeControlSelect } from './TimeControlSelect'
 import { standardGameContainer } from './GameSettingsPage'
-import { useGameHolder } from '../state/GameHolder'
+import { useGameHolder } from '../hook/GameHolder'
+import { PageEnum, switchPage } from '../redux/slice/PageSlice'
+import { gameStart } from '../redux/slice/GameSlice'
+import { useState } from 'react'
+import {
+    Box,
+    BoxProps,
+    Button,
+    FormControl,
+    FormControlProps,
+    InputLabel,
+    MenuItem,
+    Select,
+    SelectChangeEvent,
+    Theme,
+} from '@mui/material'
 
 export interface GameSettingsHeaderProps extends BoxProps {
     gameHolder: StandardGameHolder
     onTimeControlChange: (newTimeControlName: string) => void
 }
 
-export const GameSettingsHeader = function(props: GameSettingsHeaderProps): JSX.Element {
+export function GameSettingsHeader(props: GameSettingsHeaderProps): JSX.Element {
     const { gameHolder, onTimeControlChange, ...otherProps } = props
     const dispatch = useDispatch()
     const gameType = gameHolder.gameType as StandardGameType
@@ -25,7 +36,7 @@ export const GameSettingsHeader = function(props: GameSettingsHeaderProps): JSX.
     }
 
     function handleGameStart(): void {
-        // Pass game holder to the clock panel.
+        // Pass on game holder to the clock page.
         setGameHolder(gameHolder)
 
         // Start the game.
@@ -33,7 +44,7 @@ export const GameSettingsHeader = function(props: GameSettingsHeaderProps): JSX.
 
         // The clock panel will retrieve the game from the GameHolder.
         dispatch(gameStart(null))
-        dispatch(changePanel(PanelEnum.CLOCK))
+        dispatch(switchPage(PageEnum.CLOCK))
     }
 
     const styles = {
@@ -71,4 +82,44 @@ export const GameSettingsHeader = function(props: GameSettingsHeaderProps): JSX.
             onClick={handleGameStart}
         >{'Game Start'}</Button>
     </Box>
+}
+
+export interface TimeControlSelectProps extends FormControlProps {
+    initValue: string,
+    timeControlOptions: string[],
+    onTimeControlSelect: (timeControl: string) => void
+}
+
+export const TIME_CONTROL_LABEL = 'Time Control'
+
+export function TimeControlSelect(props: TimeControlSelectProps): JSX.Element {
+    const { initValue, timeControlOptions, onTimeControlSelect, ...otherProps } = props
+    const [value, setValue] = useState(initValue)
+
+    function handleChange(event: SelectChangeEvent) {
+        const newValue = event.target.value as string
+        setValue(newValue)
+        onTimeControlSelect(newValue)
+    }
+
+    const menuItemArray: JSX.Element[] = timeControlOptions.map(timeControlOption => (
+        <MenuItem
+            key={timeControlOption}
+            value={timeControlOption}
+        >
+            {timeControlOption}
+        </MenuItem>
+    ))
+
+    return <FormControl size='small' {...otherProps}>
+        <InputLabel>{TIME_CONTROL_LABEL}</InputLabel>
+        <Select
+            sx={{ width: '100%' }}
+            labelId={TIME_CONTROL_LABEL}
+            value={value}
+            label='Time Control'
+            onChange={handleChange}
+            children={menuItemArray}
+        />
+    </FormControl>
 }
