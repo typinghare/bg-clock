@@ -4,7 +4,7 @@ import { standardGameContainer } from './GameSettingsPage'
 import { useGameHolder } from '../hook/GameHolder'
 import { PageEnum, switchPage } from '../redux/slice/PageSlice'
 import { gameStart } from '../redux/slice/GameSlice'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     Box,
     BoxProps,
@@ -26,9 +26,8 @@ export interface GameSettingsHeaderProps extends BoxProps {
 export function GameSettingsHeader(props: GameSettingsHeaderProps): JSX.Element {
     const { gameHolder, onTimeControlChange, ...otherProps } = props
     const dispatch = useDispatch()
-    const gameType = gameHolder.gameType as StandardGameType
-    const timeControlArray = standardGameContainer.getTimeControls(gameType)
-    const game = gameHolder.game
+    const { gameType, timeControlType, game } = gameHolder
+    const timeControlArray = standardGameContainer.getTimeControls(gameType as StandardGameType)
     const [, setGameHolder] = useGameHolder()
 
     function handleTimeControlSelect(newTimeControlName: string): void {
@@ -72,7 +71,7 @@ export function GameSettingsHeader(props: GameSettingsHeaderProps): JSX.Element 
     return <Box sx={styles.root} {...otherProps}>
         <TimeControlSelect
             sx={styles.timeControlSelect}
-            initValue={timeControlArray[0]}
+            initValue={timeControlType}
             timeControlOptions={timeControlArray}
             onTimeControlSelect={handleTimeControlSelect}
         />
@@ -80,7 +79,8 @@ export function GameSettingsHeader(props: GameSettingsHeaderProps): JSX.Element 
             variant='contained'
             sx={styles.gameStartButton}
             onClick={handleGameStart}
-        >{'Game Start'}</Button>
+            children='Game Start'
+        />
     </Box>
 }
 
@@ -95,6 +95,10 @@ export const TIME_CONTROL_LABEL = 'Time Control'
 export function TimeControlSelect(props: TimeControlSelectProps): JSX.Element {
     const { initValue, timeControlOptions, onTimeControlSelect, ...otherProps } = props
     const [value, setValue] = useState(initValue)
+
+    useEffect(() => {
+        setValue(initValue)
+    }, [initValue])
 
     function handleChange(event: SelectChangeEvent) {
         const newValue = event.target.value as string

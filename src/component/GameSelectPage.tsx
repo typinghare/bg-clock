@@ -30,7 +30,7 @@ export function GameSelectPage(): JSX.Element {
 
     const styles: MuiStyles<'container' | 'bannerChess' | 'bannerGo' | 'bannerXiangqi'> = {
         container: {
-            height: '100%',
+            height: 'calc(100% - 4em)',
             width: '100%',
             padding: '2em 1.5em',
             display: 'flex',
@@ -88,12 +88,12 @@ export function GameSelectPage(): JSX.Element {
                     <img src={bannerGo} alt={'Go Banner'} />
                 </Box>
 
-                <Box
-                    sx={styles.bannerXiangqi}
-                    onClick={handleClickProvider('Xiangqi')}
-                >
-                    <img src={bannerXiangqi} alt={'Xiangqi Banner'} />
-                </Box>
+                {/*<Box*/}
+                {/*    sx={styles.bannerXiangqi}*/}
+                {/*    onClick={handleClickProvider('Xiangqi')}*/}
+                {/*>*/}
+                {/*    <img src={bannerXiangqi} alt={'Xiangqi Banner'} />*/}
+                {/*</Box>*/}
 
                 <Snackbar
                     open={snackbarOpen}

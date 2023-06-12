@@ -1,6 +1,8 @@
 # Board Game Clock
 
-https://en.wikipedia.org/wiki/Time_control
+This application has been deployed on the following website:
+
+https://jameschan.us/bgc
 
 ## Style Guide
 
