@@ -28,7 +28,6 @@ export function SettingGroup(props: SettingGroupProps): JSX.Element {
             color: '#333333',
         },
         childrenContainer: {
-            padding: '0 0.75em',
             backgroundColor: '#F6F6F6',
             borderRadius: '0.4em',
         },

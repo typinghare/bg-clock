@@ -13,7 +13,8 @@ import { useAppSelector } from '../redux/hooks'
 import { selectGameType } from '../redux/slice/GameSlice'
 import { useState } from 'react'
 import { MuiStyles } from '../common/interfaces'
-import { GameSettingsContent } from './Settings/GameSettingsContent'
+import { GameSettingsContent } from './GameSettingsContent'
+import { AppNavigation } from './Common/AppNavigation'
 
 export const standardGameContainer = new StandardGameContainer()
 
@@ -37,16 +38,24 @@ export function GameSettingsPage(): JSX.Element {
         setTimeControlType(newTimeControlType)
     }
 
-    const styles: MuiStyles<'container'> = {
+    const styles: MuiStyles<'navigation' | 'container'> = {
+        navigation: {
+        },
         container: {
             height: '100%',
-            padding: '1em',
-            backgroundColor: '#E5E5E5',
+            padding: '2em 1em',
+            backgroundColor: '#EAEAEA',
         },
     }
 
     return (
         <Page pageIndex={PageEnum.GAME_SETTINGS}>
+            <AppNavigation
+                sx={styles.navigation}
+                previousPage={PageEnum.GAME_SELECT}
+                title={'Game Settings'}
+            />
+
             <Box sx={styles.container}>
                 <GameSettingsContent
                     gameHolder={gameHolder}

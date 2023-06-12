@@ -3,6 +3,7 @@ import { GameSettingsPage } from './GameSettingsPage'
 import { ClockPage } from './ClockPage'
 import { GameSelectPage } from './GameSelectPage'
 import { PortalPage } from './PortalPage'
+import { AppSettingsPage } from './AppSettingsPage'
 
 /**
  * Application.
@@ -15,5 +16,6 @@ export function App(): JSX.Element {
         <GameSelectPage />
         <GameSettingsPage />
         <ClockPage />
+        <AppSettingsPage />
     </>
 }

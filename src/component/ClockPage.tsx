@@ -37,23 +37,33 @@ export function ClockPage(): JSX.Element {
     }
 
     const game = gameHolder.game
-    const styles: MuiStyles<'section' | 'ribbon'> = {
-        section: { flex: 12 },
+    const styles: MuiStyles<'section' | 'ribbon' | 'sectionAClockDisplay'> = {
+        section: {
+            flex: 12,
+            userSelect: 'none',
+        },
         ribbon: {
             flex: 1,
             backgroundColor: '#333333',
+            userSelect: 'none',
+        },
+        sectionAClockDisplay: {
+            transform: 'rotate(180deg)',
         },
     }
 
     // Enable full screen.
     if (screenfull.isEnabled) {
-        screenfull.request().then()
+        screenfull.request().then(() => {
+        }).catch(_ => {
+            // Here a `TypeError` will be thrown, but it does not hurt the app so just ignore it.
+        })
     }
 
     return (
         <Page pageIndex={PageEnum.CLOCK}>
             <Box sx={styles.section}>
-                <ClockDisplay game={game} role={'A'} />
+                <ClockDisplay game={game} role={'A'} sx={styles.sectionAClockDisplay} />
             </Box>
 
             <Box sx={styles.ribbon} />

@@ -1,10 +1,15 @@
-import { useToggle } from '../../hook/Toggle'
-import { Box } from '@mui/material'
-import { GameSettingsHeader } from '../GameSettingsHeader'
-import { PlayerSettingsSection } from '../PlayerSettingsSection'
-import { AdvancedSettingsSection } from '../AdvancedSettingsSection'
-import { MuiStyles } from '../../common/interfaces'
-import { Game, GameHolder, TimeControlType } from '@typinghare/board-game-clock-core'
+import { useToggle } from '../hook/Toggle'
+import { GameSettingsHeader } from './GameSettingsHeader'
+import { PlayerSettingsSection } from './PlayerSettingsSection'
+import { AdvancedSettingsSection } from './AdvancedSettingsSection'
+import {
+    Game,
+    GameHolder,
+    GameSettingProperties,
+    StandardGameSettings,
+    TimeControlType,
+} from '@typinghare/board-game-clock-core'
+import { SettingContainer } from '@typinghare/settings'
 
 export interface GameSettingsContentProps {
     gameHolder: GameHolder<any>
@@ -21,23 +26,11 @@ export function GameSettingsContent(props: GameSettingsContentProps): JSX.Elemen
 
     const game: Game = gameHolder.game
 
-    const styles: MuiStyles<'container' | 'title'> = {
-        container: {
-            height: '100%',
-            padding: '1em',
-            backgroundColor: '#E5E5E5',
-        },
-        title: {
-            fontSize: '2em',
-            marginBottom: '1em',
-        },
-    }
+    const playerSynchronized: boolean = (game.settings as SettingContainer<StandardGameSettings, GameSettingProperties>)
+        .getSetting('synchronizePlayerSettings').value
 
     return (
         <>
-            <Box sx={styles.title}>
-                Game Settings
-            </Box>
             <GameSettingsHeader
                 gameHolder={gameHolder}
                 onTimeControlChange={handleTimeControlChange}
@@ -47,13 +40,18 @@ export function GameSettingsContent(props: GameSettingsContentProps): JSX.Elemen
                 gameHolder={gameHolder}
                 player={game.getPlayer('A')}
                 signal={signal}
-                onSettingChange={toggleSignal} />
+                onSettingChange={toggleSignal}
+                playerSynchronized={playerSynchronized}
+            />
 
             <PlayerSettingsSection
                 gameHolder={gameHolder}
                 player={game.getPlayer('B')}
                 signal={signal}
-                onSettingChange={toggleSignal} />
+                onSettingChange={toggleSignal}
+                playerSynchronized={playerSynchronized}
+                display={playerSynchronized ? 'none' : 'block'}
+            />
 
             <AdvancedSettingsSection
                 game={game}

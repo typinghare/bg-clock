@@ -1,4 +1,4 @@
-import { Box, ClickAwayListener, Fade, IconButton, Tooltip } from '@mui/material'
+import { Box, ClickAwayListener, Divider, Fade, IconButton, Tooltip } from '@mui/material'
 import { SettingItemExpand } from './SettingItemExpand'
 import { SettingValue } from './SettingValue'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
@@ -16,6 +16,7 @@ export interface GeneralSettingItemProps {
     description: string,
     onChange: (...args: any[]) => void
     optionList?: any[]
+    isLastElementInGroup: boolean
 }
 
 export interface BoolSettingItemProps extends GeneralSettingItemProps {
@@ -44,7 +45,7 @@ export type SettingItemProps =
     NumberSettingItemProps
 
 export function SettingItem(props: SettingItemProps): JSX.Element {
-    const { type, label, value, onChange, optionList, description } = props
+    const { type, label, value, onChange, optionList, description, isLastElementInGroup } = props
     const [expand, setExpand] = useState(false)
 
     function handleClick(): void {
@@ -56,7 +57,7 @@ export function SettingItem(props: SettingItemProps): JSX.Element {
         onChange(newValue as never)
     }
 
-    const styles: MuiStyles = {
+    const styles: MuiStyles<'line' | 'label' | 'value' | 'divider'> = {
         line: {
             display: 'flex',
             alignItems: 'center',
@@ -65,10 +66,15 @@ export function SettingItem(props: SettingItemProps): JSX.Element {
         label: {
             display: 'inline',
             fontWeight: 'bold',
+            marginLeft: '1em',
         },
         value: {
             marginLeft: 'auto',
-            marginRight: '0.25em',
+            marginRight: '0.75em',
+        },
+        divider: {
+            marginLeft: '2.5em',
+            display: isLastElementInGroup ? 'none' : 'block',
         },
     }
 
@@ -96,6 +102,7 @@ export function SettingItem(props: SettingItemProps): JSX.Element {
                 optionList={optionList}
                 onValueSelect={handleChange}
             />}
+            <Divider sx={styles.divider} />
         </>
     )
 }

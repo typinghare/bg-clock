@@ -40,6 +40,7 @@ export function AdvancedSettingsSection(props: AdvancedSettingsSectionProps): JS
                 onChange={handleValueChangeProvider(settingName)}
                 label={label}
                 description={description}
+                isLastElementInGroup={true}
             />,
         )
     }

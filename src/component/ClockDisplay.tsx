@@ -22,24 +22,6 @@ export function ClockDisplay(props: ClockDisplayProps): JSX.Element {
         game.getPlayer(role).click()
     }
 
-    const styles: MuiStyles<'root' | 'timeDisplay'> = {
-        root: {
-            position: 'relative',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-            ...sx,
-        },
-        timeDisplay: {
-            fontSize: '12vh',
-            fontFamily: 'Digital-7',
-            color: color,
-            userSelect: 'none',
-            cursor: 'default',
-        },
-    }
-
     useEffect(() => {
         const intervalHandle = setInterval((): void => {
             const player = game.getPlayer(role)
@@ -64,14 +46,88 @@ export function ClockDisplay(props: ClockDisplayProps): JSX.Element {
         }
     }, [game, role])
 
-    return <Box
-        sx={styles.root as SxProps<any>}
-        onClick={handleClockDisplayClick}
-        {...otherProps}
-    >
-        <TimeDisplay
-            time={time}
-            sx={styles.timeDisplay}
-        />
-    </Box>
+    const styles: MuiStyles<'root' | 'timeDisplay' | 'bubbleGroup'> = {
+        root: {
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            ...sx,
+        },
+        timeDisplay: {
+            fontSize: '15vh',
+            fontFamily: 'Digital-7',
+            color: color,
+            userSelect: 'none',
+            cursor: 'default',
+        },
+        bubbleGroup: {
+            position: 'absolute',
+            left: '1.5rem',
+            top: '1.5rem',
+        },
+    }
+
+    return (
+        <Box
+            sx={styles.root as SxProps<any>}
+            onClick={handleClockDisplayClick}
+            {...otherProps}
+        >
+            <ClockBubbleGroup sx={styles.bubbleGroup} />
+            <TimeDisplay
+                time={time}
+                sx={styles.timeDisplay}
+            />
+        </Box>
+    )
+}
+
+interface ClockBubbleGroupProps extends BoxProps {
+
+}
+
+function ClockBubbleGroup(props: ClockBubbleGroupProps): JSX.Element {
+    const { sx } = props
+
+    return (
+        <Box sx={sx}>
+            <ClockBubble index={0} content={'5'} />
+        </Box>
+    )
+}
+
+interface ClockBubbleProps {
+    index: number,
+    content: string
+}
+
+function ClockBubble(props: ClockBubbleProps): JSX.Element {
+    const { index, content } = props
+    const colors = ['skyblue']
+
+    const styles: MuiStyles<'root' | 'inner'> = {
+        root: {
+            backgroundColor: colors[index % colors.length],
+            height: '3rem',
+            width: (1 + content.length * 2) + 'rem',
+            borderRadius: '1.5rem',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        inner: {
+            fontWeight: 'bold',
+            fontSize: '2rem',
+        },
+    }
+
+    return (
+        <Box sx={styles.root}>
+            <Box sx={styles.inner}>
+                {content}
+            </Box>
+        </Box>
+    )
 }

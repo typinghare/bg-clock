@@ -6,6 +6,7 @@ export enum PageEnum {
     GAME_SELECT = 1,
     GAME_SETTINGS = 2,
     CLOCK = 3,
+    APP_SETTINGS = 4
 }
 
 export type PageState = {
@@ -15,7 +16,7 @@ export type PageState = {
 export const pageSlice = createSlice<PageState, SliceCaseReducers<PageState>>({
     name: 'page',
     initialState: {
-        page: PageEnum.GAME_SELECT,
+        page: PageEnum.PORTAL,
     },
     reducers: {
         switchPage: (state: PageState, { payload: page }: PayloadAction<PageEnum>): void => {

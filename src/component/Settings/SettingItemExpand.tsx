@@ -2,6 +2,7 @@ import { Box, Button, Collapse, Stack } from '@mui/material'
 import { SettingItemType } from './SettingItem'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { convertTimeToString } from '../../common/helper'
+import { MuiStyles } from '../../common/interfaces'
 
 export interface SettingItemExpandProps {
     type: SettingItemType,
@@ -36,9 +37,10 @@ export function SettingItemExpand(props: SettingItemExpandProps): JSX.Element {
         return <Box>Unknown type: [ {type} ].</Box>
     }
 
-    const styles = {
+    const styles: MuiStyles<'inner'> = {
         inner: {
             marginBottom: '1em',
+            marginLeft: '1em',
         },
     }
 
@@ -100,9 +102,11 @@ function TimeSettingItemExpand(props: TimeSettingItemExpandProps): JSX.Element {
     }
 
     const buttonList: JSX.Element[] = optionList.map(value => {
+        const equalToCurrentValue: boolean = currentValue.ms === value.ms
+
         return (
             <Button
-                variant={currentValue === value ? 'contained' : 'outlined'}
+                variant={equalToCurrentValue ? 'contained' : 'outlined'}
                 key={value.toString()}
                 onClick={handleClickProvider(value)}
                 children={convertTimeToString(value)}
