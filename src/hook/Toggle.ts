@@ -1,22 +1,34 @@
 import { useState } from 'react'
 
 /**
- * useSignal is a custom hook that provides a boolean value and a function
- * to toggle the signal.
- * @returns {[boolean, () => void]} An array containing the signal value and
- * the toggle function.
- * @example [signal, toggleSignal] = useSignal()
+ * useToggle is a custom hook that provides a boolean value and functions
+ * to toggle the value and set it explicitly.
+ *
+ * @param initialValue - The initial value of the toggle (default: true).
+ * @returns {[boolean, () => void, (value: boolean) => void]} An array containing
+ * the current value, toggle function, and setter function.
+ * @example [on, toggle] = useToggle(false)
  */
-export function useSignal(): [boolean, () => void] {
-    const [signal, setSignal] = useState<boolean>(true)
+export function useToggle(initialValue: boolean = true): [boolean, () => void, (value: boolean) => void] {
+    const [on, setOn] = useState<boolean>(initialValue);
 
     /**
-     * toggleSignal is a callback function that toggles the signal value
-     * using the setSignal function from useState.
+     * toggle is a callback function that toggles the current value
+     * using the setOn function from useState.
      */
-    const toggleSignal = (): void => {
-        setSignal((prevSignal) => !prevSignal)
-    }
+    const toggle = (): void => {
+        setOn((prevOn) => !prevOn);
+    };
 
-    return [signal, toggleSignal]
+    /**
+     * setOnValue is a callback function that explicitly sets the value
+     * of the toggle using the setOn function from useState.
+     *
+     * @param value - The new value to set.
+     */
+    const setOnValue = (value: boolean): void => {
+        setOn(value);
+    };
+
+    return [on, toggle, setOnValue];
 }

@@ -15,7 +15,7 @@ export type PageState = {
 export const pageSlice = createSlice<PageState, SliceCaseReducers<PageState>>({
     name: 'page',
     initialState: {
-        page: PageEnum.GAME_SETTINGS,
+        page: PageEnum.GAME_SELECT,
     },
     reducers: {
         switchPage: (state: PageState, { payload: page }: PayloadAction<PageEnum>): void => {
