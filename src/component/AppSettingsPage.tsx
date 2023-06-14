@@ -1,7 +1,7 @@
 import { Page } from './Page'
 import { PageEnum } from '../redux/slice/PageSlice'
 import { AppSettingsSection } from './AppSettingsSection'
-import { AppNavigation } from './Common/AppNavigation'
+import { Navigation } from './Common/Navigation'
 import { Box } from '@mui/material'
 import { MuiStyles } from '../common/interfaces'
 
@@ -16,7 +16,7 @@ export function AppSettingsPage(): JSX.Element {
 
     return (
         <Page pageIndex={PageEnum.APP_SETTINGS}>
-            <AppNavigation
+            <Navigation
                 previousPage={PageEnum.PORTAL}
                 title='Settings'
             />

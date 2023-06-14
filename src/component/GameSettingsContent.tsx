@@ -7,23 +7,16 @@ import {
     GameHolder,
     GameSettingProperties,
     StandardGameSettings,
-    TimeControlType,
 } from '@typinghare/board-game-clock-core'
 import { SettingContainer } from '@typinghare/settings'
 
 export interface GameSettingsContentProps {
     gameHolder: GameHolder<any>
-    onTimeControlChange: (newTimeControlType: TimeControlType) => void
 }
 
 export function GameSettingsContent(props: GameSettingsContentProps): JSX.Element {
-    const { gameHolder, onTimeControlChange } = props
+    const { gameHolder } = props
     const [signal, toggleSignal] = useToggle()
-
-    function handleTimeControlChange(newTimeControlType: TimeControlType): void {
-        onTimeControlChange(newTimeControlType)
-    }
-
     const game: Game = gameHolder.game
 
     const playerSynchronized: boolean = (game.settings as SettingContainer<StandardGameSettings, GameSettingProperties>)
@@ -33,7 +26,6 @@ export function GameSettingsContent(props: GameSettingsContentProps): JSX.Elemen
         <>
             <GameSettingsHeader
                 gameHolder={gameHolder}
-                onTimeControlChange={handleTimeControlChange}
             />
 
             <PlayerSettingsSection

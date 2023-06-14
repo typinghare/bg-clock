@@ -9,21 +9,34 @@ import {
     StandardGameType,
     TimeControlType,
 } from '@typinghare/board-game-clock-core'
-import { useAppSelector } from '../redux/hooks'
-import { selectGameType } from '../redux/slice/GameSlice'
-import { useState } from 'react'
+import { useAppDispatch, useAppSelector } from '../redux/hooks'
+import { selectGameType, selectTimeControlType, setTimeControlType } from '../redux/slice/GameSlice'
 import { MuiStyles } from '../common/interfaces'
 import { GameSettingsContent } from './GameSettingsContent'
-import { AppNavigation } from './Common/AppNavigation'
+import { Navigation } from './Common/Navigation'
 
 export const standardGameContainer = new StandardGameContainer()
 
 export function GameSettingsPage(): JSX.Element {
-    // Retrieve game type from redux.
-    const gameType: StandardGameType = useAppSelector(selectGameType)
+    const dispatch = useAppDispatch()
 
-    const styles: MuiStyles<'navigation' | 'container'> = {
-        navigation: {},
+    // Retrieve game type and time control type from Redux.
+    const gameType: StandardGameType = useAppSelector(selectGameType)
+    const timeControlType: string = useAppSelector(selectTimeControlType)
+    const timeControlTypeArray: TimeControlType[] = standardGameContainer.getTimeControls(gameType)
+
+    if (!timeControlTypeArray.includes(timeControlType)) {
+        dispatch(setTimeControlType(timeControlTypeArray[0]))
+    }
+
+    // Create a game from the game type and time control type.
+    const gameSupplier: GameSupplier = standardGameContainer.getGameSupplier(gameType, timeControlType as never)
+    const game = gameSupplier() as Game
+
+    // Create a game holder.
+    const gameHolder = new StandardGameHolder(gameType, timeControlType, game)
+
+    const styles: MuiStyles<'container'> = {
         container: {
             height: '100%',
             padding: '2em 1em',
@@ -33,52 +46,29 @@ export function GameSettingsPage(): JSX.Element {
 
     return (
         <Page pageIndex={PageEnum.GAME_SETTINGS}>
-            <AppNavigation
-                sx={styles.navigation}
+            <Navigation
                 previousPage={PageEnum.GAME_SELECT}
                 title={'Game Settings'}
             />
 
             <Box sx={styles.container}>
-                <TimeControlSeparator gameType={gameType} />
+                <GameSettingsContent
+                    gameHolder={gameHolder}
+                />
             </Box>
         </Page>
     )
 }
 
-export interface TimeControlSeparatorProps {
-    gameType: StandardGameType
-}
-
-export function TimeControlSeparator(props: TimeControlSeparatorProps): JSX.Element {
-    const { gameType } = props
-
-    // Get time control types from standard game container.
-    const timeControlTypeArray: TimeControlType[] = standardGameContainer.getTimeControls(gameType)
-    const [timeControlType, setTimeControlType] = useState<TimeControlType>(timeControlTypeArray[0])
-
-    const gameSupplier: GameSupplier
-        = timeControlTypeArray.includes(timeControlType) ?
-        standardGameContainer.getGameSupplier(gameType, timeControlType as never) :
-        standardGameContainer.getGameSupplier(gameType, timeControlTypeArray[0] as never)
-    // const gameSupplier: GameSupplier = standardGameContainer.getGameSupplier(gameType, timeControlType as never)
-    const game = gameSupplier() as Game
-
-    // Create a game holder.
-    const gameHolder = timeControlTypeArray.includes(timeControlType) ?
-        new StandardGameHolder(gameType, timeControlType, game) :
-        new StandardGameHolder(gameType, timeControlTypeArray[0], game)
-
-    function handleTimeControlChange(newTimeControlType: TimeControlType): void {
-        setTimeControlType(newTimeControlType)
-    }
-
-    return (
-        <Box>
-            <GameSettingsContent
-                gameHolder={gameHolder}
-                onTimeControlChange={handleTimeControlChange}
-            />
-        </Box>
-    )
-}
+// export interface GameSettingContentWrapperProps {
+//     gameHolder: StandardGameHolder
+// }
+//
+// export function GameSettingContentWrapper(props: GameSettingContentWrapperProps): JSX.Element {
+//     return (
+//         <GameSettingsContent
+//             gameHolder={gameHolder}
+//             onTimeControlChange={handleTimeControlChange}
+//         />
+//     )
+// }

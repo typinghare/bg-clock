@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { standardGameContainer } from './GameSettingsPage'
 import { useGameHolder } from '../hook/GameHolder'
 import { PageEnum, switchPage } from '../redux/slice/PageSlice'
-import { gameStart } from '../redux/slice/GameSlice'
+import { gameStart, setTimeControlType } from '../redux/slice/GameSlice'
 import { useEffect, useState } from 'react'
 import {
     Box,
@@ -20,18 +20,17 @@ import {
 
 export interface GameSettingsHeaderProps extends BoxProps {
     gameHolder: StandardGameHolder
-    onTimeControlChange: (newTimeControlName: string) => void
 }
 
 export function GameSettingsHeader(props: GameSettingsHeaderProps): JSX.Element {
-    const { gameHolder, onTimeControlChange, ...otherProps } = props
+    const { gameHolder, ...otherProps } = props
     const dispatch = useDispatch()
     const { gameType, timeControlType, game } = gameHolder
     const timeControlArray = standardGameContainer.getTimeControls(gameType as StandardGameType)
     const [, setGameHolder] = useGameHolder()
 
     function handleTimeControlSelect(newTimeControlName: string): void {
-        onTimeControlChange(newTimeControlName)
+        dispatch(setTimeControlType(newTimeControlName))
     }
 
     function handleGameStart(): void {

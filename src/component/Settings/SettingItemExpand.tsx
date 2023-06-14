@@ -85,12 +85,15 @@ function NumberSettingItemExpand(props: NumberSettingItemExpandProps): JSX.Eleme
         setExpandValueInput(false)
     }
 
-    const styles: MuiStyles<'stack' | 'button'> = {
+    const styles: MuiStyles<'stack' | 'button' | 'customButton'> = {
         stack: {
             width: '100%',
         },
         button: {
-            width: '100px',
+            width: '80px',
+        },
+        customButton: {
+            fontSize: '75%',
         },
     }
 
@@ -114,7 +117,7 @@ function NumberSettingItemExpand(props: NumberSettingItemExpandProps): JSX.Eleme
     buttonList.push(
         <Button
             key={'$custom'}
-            sx={styles.button}
+            sx={styles.customButton}
             variant={!hasSelectedValue ? 'contained' : 'outlined'}
             onClick={handleCustomClick}
             children={'CUSTOM'}
@@ -184,12 +187,17 @@ function TimeSettingItemExpand(props: TimeSettingItemExpandProps): JSX.Element {
         setExpandValueInput(false)
     }
 
-    const styles: MuiStyles<'stack' | 'button'> = {
+    const styles: MuiStyles<'stack' | 'button' | 'customButton'> = {
         stack: {
             width: '100%',
         },
         button: {
-            width: '100px',
+            fontFamily: 'Digital-7',
+            width: '80px',
+        },
+        customButton: {
+            width: '80px',
+            fontSize: '75%',
         },
     }
 
@@ -212,7 +220,7 @@ function TimeSettingItemExpand(props: TimeSettingItemExpandProps): JSX.Element {
     buttonList.push(
         <Button
             key={'$custom'}
-            sx={styles.button}
+            sx={styles.customButton}
             variant={!hasSelectedValue ? 'contained' : 'outlined'}
             onClick={handleCustomClick}
             children={'CUSTOM'}

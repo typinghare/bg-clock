@@ -12,9 +12,7 @@ See [Google TypeScript Style Guide](https://google.github.io/styleguide/tsguide.
 
 ### ReactJS in TypeScript
 
-See [react.dev](https://github.com/reactjs/react.dev)
-
-A complete React component is coded as follows.
+A complete React component should be coded as follows.
 
 ~~~tsx
 import { Box, BoxProps } from '@mui/material'

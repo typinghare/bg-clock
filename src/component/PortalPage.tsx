@@ -3,12 +3,12 @@ import { PageEnum, switchPage } from '../redux/slice/PageSlice'
 import { MuiStyles } from '../common/interfaces'
 import { Box, Button } from '@mui/material'
 import { useAppDispatch } from '../redux/hooks'
-import { AppNavigation } from './Common/AppNavigation'
+import { Navigation } from './Common/Navigation'
 
 export function PortalPage(): JSX.Element {
     const dispatch = useAppDispatch()
 
-    const styles: MuiStyles = {
+    const styles: MuiStyles<'container'> = {
         container: {
             display: 'flex',
             flexDirection: 'column',
@@ -38,7 +38,7 @@ export function PortalPage(): JSX.Element {
 
     return (
         <Page pageIndex={PageEnum.PORTAL}>
-            <AppNavigation
+            <Navigation
                 title='Board Game Clock'
                 titleCenter
             />

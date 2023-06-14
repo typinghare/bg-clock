@@ -10,7 +10,7 @@ export interface AppNavigationProps extends BoxProps {
     titleCenter?: boolean
 }
 
-export function AppNavigation(props: AppNavigationProps): JSX.Element {
+export function Navigation(props: AppNavigationProps): JSX.Element {
     const { previousPage, title, titleCenter = false } = props
     const dispatch = useAppDispatch()
 

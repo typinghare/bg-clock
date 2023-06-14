@@ -2,7 +2,6 @@ import { Page } from './Page'
 import { PageEnum, switchPage } from '../redux/slice/PageSlice'
 import bannerChess from '../assets/images/banner-chess.png'
 import bannerGo from '../assets/images/banner-go.jpg'
-import bannerXiangqi from '../assets/images/banner-xiangqi.webp'
 import { MuiStyles } from '../common/interfaces'
 import { Box, IconButton, Snackbar } from '@mui/material'
 import { useAppDispatch } from '../redux/hooks'
@@ -10,7 +9,7 @@ import { changeGameType } from '../redux/slice/GameSlice'
 import { StandardGameType } from '@typinghare/board-game-clock-core'
 import CloseIcon from '@mui/icons-material/Close'
 import React, { useState } from 'react'
-import { AppNavigation } from './Common/AppNavigation'
+import { Navigation } from './Common/Navigation'
 
 export function GameSelectPage(): JSX.Element {
     const dispatch = useAppDispatch()
@@ -69,7 +68,7 @@ export function GameSelectPage(): JSX.Element {
 
     return (
         <Page pageIndex={PageEnum.GAME_SELECT}>
-            <AppNavigation
+            <Navigation
                 previousPage={PageEnum.PORTAL}
                 title='Game Select'
             />
@@ -87,13 +86,6 @@ export function GameSelectPage(): JSX.Element {
                 >
                     <img src={bannerGo} alt={'Go Banner'} />
                 </Box>
-
-                {/*<Box*/}
-                {/*    sx={styles.bannerXiangqi}*/}
-                {/*    onClick={handleClickProvider('Xiangqi')}*/}
-                {/*>*/}
-                {/*    <img src={bannerXiangqi} alt={'Xiangqi Banner'} />*/}
-                {/*</Box>*/}
 
                 <Snackbar
                     open={snackbarOpen}
