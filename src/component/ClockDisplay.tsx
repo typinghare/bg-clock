@@ -1,5 +1,5 @@
 import { ChessStandardPlayerAttributes, Game } from '@typinghare/board-game-clock-core'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { HourMinuteSecond, SlowHourMinuteSecond } from '@typinghare/hour-minute-second'
 import { Color, GameParameters } from '../common/constant'
 import { Box, BoxProps, SxProps } from '@mui/material'
@@ -8,6 +8,7 @@ import { MuiStyles } from '../common/interfaces'
 import { useAppSettings } from '../hook/AppSettings'
 import { SettingContainer } from '@typinghare/settings'
 import { useToggle } from '../hook/Toggle'
+import soundDi from '../assets/sounds/sound_di.mp3'
 
 export interface ClockDisplayProps extends BoxProps {
     game: Game
@@ -25,7 +26,18 @@ export function ClockDisplay(props: ClockDisplayProps): JSX.Element {
     const clockTimeFontSize = appSettingContainer.getSetting('clockTimeFontSize').value
     const player = game.getPlayer(role)
 
+    const audioRef = useRef<HTMLAudioElement | null>(null)
+
     function handleClockDisplayClick(): void {
+        const audio = audioRef.current as HTMLAudioElement
+        audio.volume = 0.1
+        if (audio.currentTime > audio.duration / 3) {
+            audio.pause()
+            audio.currentTime = 0
+        }
+        audio.play().then(() => {
+        })
+
         game.getPlayer(role).click()
     }
 
@@ -85,6 +97,9 @@ export function ClockDisplay(props: ClockDisplayProps): JSX.Element {
             onClick={handleClockDisplayClick}
             {...otherProps}
         >
+            <audio ref={audioRef}>
+                <source src={soundDi} type='audio/mpeg' />
+            </audio>
             <ClockBubbleGroup
                 sx={styles.bubbleGroup}
                 playerAttributes={player.attributes}
