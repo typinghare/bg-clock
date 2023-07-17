@@ -1,4 +1,4 @@
-import { ChessStandardPlayerAttributes, Game } from '@typinghare/board-game-clock-core'
+import { ChessStandardPlayerAttributes, Game, GameStatus } from '@typinghare/board-game-clock-core'
 import { useEffect, useRef, useState } from 'react'
 import { HourMinuteSecond, SlowHourMinuteSecond } from '@typinghare/hour-minute-second'
 import { Color, GameParameters } from '../common/constant'
@@ -48,7 +48,7 @@ export function ClockDisplay(props: ClockDisplayProps): JSX.Element {
             setTime(time)
 
             // Change Color.
-            if (time.ms === 0) {
+            if (game.gameStatus === GameStatus.STOPPED && time.ms === 0) {
                 setColor(Color.TIME_UP_COLOR)
             } else {
                 if (player.clockController.isClockRunning()) {

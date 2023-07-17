@@ -42,8 +42,8 @@ dependencies:
     specifier: ^18.2.6
     version: 18.2.6
   '@typinghare/board-game-clock-core':
-    specifier: ^1.1.1
-    version: 1.1.1
+    specifier: ^1.1.2
+    version: 1.1.2
   '@typinghare/holder':
     specifier: ^1.0.1
     version: 1.0.1
@@ -3401,8 +3401,8 @@ packages:
       eslint-visitor-keys: 3.4.1
     dev: false
 
-  /@typinghare/board-game-clock-core@1.1.1:
-    resolution: {integrity: sha512-NBD4dtWQFogYHtjrxQm5bL6GFp2V6AAhRcKFNGGKvg6IQ5k8gJHa6puAE6O+dS8M19wx/xeZ8LogVUjTpxp07g==}
+  /@typinghare/board-game-clock-core@1.1.2:
+    resolution: {integrity: sha512-VbTRGx86pSY088XCWRHWRYRZqr506AK+9aSRFY9041nhNnIgHNK7fWHNm4W6qxAszUOhi7elB9by9wp6K7NFBA==}
     dependencies:
       '@types/keypress.js': 2.1.1
       '@typinghare/hour-minute-second': 0.0.5

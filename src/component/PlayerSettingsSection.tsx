@@ -2,6 +2,8 @@ import { SettingGroup } from './Settings/SettingGroup'
 import { Player, StandardGameHolder, TimeControl } from '@typinghare/board-game-clock-core'
 import { SettingItem, SettingItemType } from './Settings/SettingItem'
 import { BoxProps } from '@mui/material'
+import React from 'react'
+import { SlowHourMinuteSecond } from '@typinghare/hour-minute-second'
 
 export interface PlayerSettingsSectionProps extends BoxProps {
     gameHolder: StandardGameHolder
@@ -11,11 +13,19 @@ export interface PlayerSettingsSectionProps extends BoxProps {
     playerSynchronized: boolean
 }
 
-export function PlayerSettingsSection(props: PlayerSettingsSectionProps): JSX.Element {
+export function PlayerSettingsSection(props: PlayerSettingsSectionProps): React.JSX.Element {
     const { gameHolder, player, signal, onSettingChange, playerSynchronized, ...otherProps } = props
     const game = gameHolder.game
     const role = player.role
     const settingContainer = (player.timeControl as TimeControl).settings
+
+    const mainSetting = settingContainer.getSetting('main')
+    if (mainSetting) {
+        const options = mainSetting.getProperty('options')
+        if (options) {
+            options[0] = SlowHourMinuteSecond.ofSeconds(0)
+        }
+    }
 
     function handleValueChangeProvider(settingName: string) {
         return function(newValue: any): void {

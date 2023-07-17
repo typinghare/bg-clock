@@ -15,7 +15,7 @@
     "@types/node": "^16.18.38",
     "@types/react": "^18.2.14",
     "@types/react-dom": "^18.2.6",
-    "@typinghare/board-game-clock-core": "^1.1.1",
+    "@typinghare/board-game-clock-core": "^1.1.2",
     "@typinghare/holder": "^1.0.1",
     "@typinghare/hour-minute-second": "^1.0.2",
     "@typinghare/settings": "^0.1.2",
