@@ -2,15 +2,19 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
 import { store } from './redux/store'
-import App from './App'
+import { App } from './components/App'
 import './index.css'
+import { ChakraProvider } from '@chakra-ui/react'
 
-const rootElement = document.getElementById('root');
+// Add all wrappers in this file
+const rootElement = document.getElementById('root')
 if (rootElement) {
     ReactDOM.createRoot(rootElement).render(
         <React.StrictMode>
             <Provider store={store}>
-                <App />
+                <ChakraProvider>
+                    <App />
+                </ChakraProvider>
             </Provider>
         </React.StrictMode>,
     )

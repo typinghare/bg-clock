@@ -1,20 +1,11 @@
-import logo from './logo.svg'
-import { Counter } from './features/counter/Counter'
 import './App.css'
-import { TimeControl, TwoPlayerBoardGame } from './game'
+import React from 'react'
+import { PortalPage } from '../Page'
 
-function App() {
-    const boardGame = new TwoPlayerBoardGame([new TimeControl()])
-    boardGame.start()
-    console.log(boardGame)
-
+export function App() {
     return (
-        <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <Counter />
-            </header>
-        </div>)
+        <>
+            <PortalPage />
+        </>
+    )
 }
-
-export default App
