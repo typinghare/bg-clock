@@ -40,6 +40,13 @@ export class BoardGame {
     }
 
     /**
+     * Returns time control list.
+     */
+    public getTimeControlList(): TimeControl[] {
+        return this.timeControlList
+    }
+
+    /**
      * Selects a time control.
      * @param timeControl The time control to select.
      */

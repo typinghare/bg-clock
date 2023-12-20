@@ -19,6 +19,13 @@ export class TimeControl {
     }
 
     /**
+     * Returns the name of the time control.
+     */
+    public getName(): string {
+        return 'General'
+    }
+
+    /**
      * The description of this time control.
      */
     public getDescription(): string {

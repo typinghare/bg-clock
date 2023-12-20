@@ -1,10 +1,11 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import pageSlice from './page/PageSlice'
-import  counterSlice from '../features/counter/counterSlice'
 
+/**
+ * Developers register all slices here.
+ */
 export const store = configureStore({
     reducer: {
-        counterSlice,
         pageSlice,
     },
 })

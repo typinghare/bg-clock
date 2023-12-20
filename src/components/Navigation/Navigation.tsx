@@ -13,16 +13,18 @@ export function Navigation(props: NavigationProps) {
     const styles: StyleMap = {
         root: {
             display: 'flex',
-            height: '2.5rem',
             alignItems: 'center',
+            position: 'relative',
+            height: '2.75rem',
             padding: '0.25rem 0',
         },
         iconButton: {
-            display: 'inline-block',
-            float: 'left',
+            position: 'absolute',
+            left: 0,
+            background: 'none',
         },
         title: {
-            display: 'inline',
+            marginLeft: 'auto',
             color: 'black',
             textAlign: 'center',
             fontSize: '1.5rem',
@@ -52,8 +54,8 @@ export function Navigation(props: NavigationProps) {
 
     return (
         <Box sx={styles.root}>
-            {previousPage !== undefined && <PreviousButton />}
             <Box sx={styles.title}>
+                {previousPage !== undefined && <PreviousButton />}
                 {title}
             </Box>
         </Box>

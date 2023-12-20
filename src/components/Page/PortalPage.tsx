@@ -48,7 +48,7 @@ export function PortalPage() {
 
     return (
         <Page page={PageEnum.PORTAL}>
-            <Navigation title={'BG Clock'} previousPage={PageEnum.PORTAL} />
+            <Navigation title={'BG Clock'} />
 
             <Box sx={styles.container}>
                 <PortalButton text={'Settings'} clickHandler={handleSettingsButtonClick} />

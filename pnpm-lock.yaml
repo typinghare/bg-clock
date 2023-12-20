@@ -26,6 +26,9 @@ dependencies:
   '@typinghare/game-core':
     specifier: ^1.0.1
     version: 1.0.1
+  '@typinghare/holder':
+    specifier: ^1.0.1
+    version: 1.0.1
   '@typinghare/hour-minute-second':
     specifier: ^1.1.0
     version: 1.1.0
@@ -3547,6 +3550,10 @@ packages:
     resolution: {integrity: sha512-ueluhquGOlGe9hroZAO4kzGQzRdzhH253oVggah4sw7qWdUDsx8PxgaZFx+TmogHZt3O6JfVsLJXecA2GbtpYQ==}
     dependencies:
       '@typinghare/stack-queue': 0.1.1
+    dev: false
+
+  /@typinghare/holder@1.0.1:
+    resolution: {integrity: sha512-3v/AzmX2lwXi+28g39r6107M6JLPX8DLUmkfz82vmnMbu9U388JxjCJchaiwlYBSMwdkSCR/hyRGoV1rqCWxMA==}
     dev: false
 
   /@typinghare/hour-minute-second@1.1.0:
