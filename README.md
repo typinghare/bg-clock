@@ -16,6 +16,10 @@ pnpm add @chakra-ui/icons
 
 # Game core
 pnpm add @typinghare/game-core
+
+# Screenfull
+# @link https://www.npmjs.com/package/screenfull
+pnpm add screenfull
 ~~~
 
 ## Development

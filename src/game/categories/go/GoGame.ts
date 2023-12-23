@@ -10,8 +10,9 @@ import { YingshiTimeControl } from './YingshiTimeControl'
 export class GoGame extends TwoPlayerBoardGame {
     public constructor() {
         super([
-            new TimeControl(),
             new ByoyomiTimeControl(),
+            new TimeControl(),
+            //  new ByoyomiTimeControl(),
             new YingshiTimeControl(),
         ])
     }

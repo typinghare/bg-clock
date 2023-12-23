@@ -7,8 +7,8 @@ import { HourMinuteSecond } from '@typinghare/hour-minute-second'
  * Byoyomi time control.
  */
 export class ByoyomiTimeControl extends TimeControl {
-    public override createPlayer(role: Role): Player<ByoyomiPlayerSettings> {
-        return new Player<ByoyomiPlayerSettings>(role, {
+    public override createPlayer(role: Role): ByoyomiPlayer {
+        return new ByoyomiPlayer(role, {
             mainTime: Datum.of(HourMinuteSecond.ofMinutes(5)).setMetadata({
                 type: 'time',
                 label: 'Main Time',
@@ -56,7 +56,11 @@ export class ByoyomiTimeControl extends TimeControl {
 /**
  * Byoyomi board game player.
  */
-export class ByoyomiPlayer extends Player {
+export class ByoyomiPlayer extends Player<ByoyomiPlayerSettings> {
+    public override getReady() {
+        console.log(this.getValue('mainTime'))
+        this.setTime(this.getValue('mainTime'))
+    }
 }
 
 /**

@@ -46,7 +46,7 @@ export class PausedState implements BoardGameState {
 /**
  * Ended state.
  */
-export class Ended implements BoardGameState {
+export class EndedState implements BoardGameState {
     handle(request: BoardGameRequest): BoardGameState {
         throw new Error('Method not implemented.')
     }

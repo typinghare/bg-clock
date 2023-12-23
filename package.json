@@ -30,7 +30,8 @@
     "framer-motion": "^10.16.16",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-redux": "^9.0.4"
+    "react-redux": "^9.0.4",
+    "screenfull": "^6.0.2"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.3",

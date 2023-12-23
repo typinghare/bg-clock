@@ -37,6 +37,12 @@ export class BoardGame {
     protected advancedSettings: AdvancedSettings = new AdvancedSettings()
 
     /**
+     * Game.
+     * @protected
+     */
+    protected game?: Game
+
+    /**
      * Creates a board game.
      * @param timeControlList
      * @param roleList
@@ -96,16 +102,15 @@ export class BoardGame {
     /**
      * Starts the board game.
      */
-    public start(): void {
-        const game = new Game((deltaTime: float) => {
-            console.log(deltaTime)
+    public start(): Game {
+        this.game = new Game((deltaTime: float) => {
             this.getPlayerList().forEach((player) => {
                 player.update(deltaTime)
             })
         })
 
         // Register handlers
-        const eventManager = game.getContext().eventManager
+        const eventManager = this.game.getContext().eventManager
         eventManager.addHandler(PlayerTapEvent, (gameEvent) => {
             const role: Role = gameEvent.getValue('role')
             const player: Player | undefined = this.getPlayer(role)
@@ -121,6 +126,10 @@ export class BoardGame {
             const nextPlayer: Player = this.getPlayer(this.getNextRole(role))
             nextPlayer.resume()
         })
+
+        this.game.run()
+
+        return this.game
     }
 
     /**
@@ -156,6 +165,20 @@ export class BoardGame {
      */
     public getAdvancedSettings(): AdvancedSettings {
         return this.advancedSettings
+    }
+
+    /**
+     * Returns the game.
+     */
+    public getGame(): Game | undefined {
+        return this.game
+    }
+
+    /**
+     * Returns board game state.
+     */
+    public getState(): BoardGameState {
+        return this.state
     }
 }
 
