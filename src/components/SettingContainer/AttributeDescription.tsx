@@ -3,10 +3,10 @@ import { QuestionOutlineIcon } from '@chakra-ui/icons'
 import React, { RefObject, useRef } from 'react'
 
 /**
- * Player attribute description.
+ * Attribute description.
  * @constructor
  */
-export function PlayerAttributeDescription(props: PlayerAttributeDescriptionProps) {
+export function AttributeDescription(props: AttributeDescriptionProps) {
     const { description, ...boxProps } = props
     const ref = useRef() as RefObject<never>
     const [isTooltipOpen, setIsTooltipOpen] = useBoolean()
@@ -30,6 +30,9 @@ export function PlayerAttributeDescription(props: PlayerAttributeDescriptionProp
     )
 }
 
-export interface PlayerAttributeDescriptionProps extends BoxProps {
+/**
+ * Attribute description properties.
+ */
+export interface AttributeDescriptionProps extends BoxProps {
     description: string
 }

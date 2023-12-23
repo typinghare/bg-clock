@@ -1,13 +1,14 @@
-import { DataCollection, DataMapping, Datum } from '@typinghare/extrum'
+import { DataCollection, DataMapping } from '@typinghare/extrum'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { float, FrameUpdatable } from '@typinghare/game-core'
+import { BoardGameAttribute, BoardGameSettingsMetadata } from './BoardGame'
 
 /**
  * Board Game player.
  */
 export class Player<
     PS extends PlayerSettings = PlayerSettings
-> extends DataCollection<PS, PlayerSettingsMetadata> implements FrameUpdatable {
+> extends DataCollection<PS, BoardGameSettingsMetadata> implements FrameUpdatable {
     /**
      * Time.
      * @protected
@@ -27,7 +28,7 @@ export class Player<
      */
     public constructor(
         protected readonly role: Role,
-        playerData: DataMapping<PS, PlayerSettingsMetadata>,
+        playerData: DataMapping<PS, BoardGameSettingsMetadata>,
     ) {
         super(playerData)
         this.paused = true
@@ -96,8 +97,8 @@ export class Player<
     /**
      * Returns the attribute list (datum list).
      */
-    public getAttributeList(): PlayerAttribute[] {
-        return super.getDatumList() as PlayerAttribute[]
+    public getAttributeList(): BoardGameAttribute[] {
+        return super.getDatumList() as BoardGameAttribute[]
     }
 }
 
@@ -109,26 +110,6 @@ export type PlayerSettings = {
 };
 
 /**
- * Player settings metadata.
- */
-export interface PlayerSettingsMetadata {
-    type: 'bool' | 'number' | 'time'
-    label: string
-    description: string
-    optionList?: (number | HourMinuteSecond)[]
-}
-
-/**
  * Player role.
  */
 export type Role = string
-
-/**
- * Player attribute value.
- */
-export type PlayerAttributeValue = boolean | number | HourMinuteSecond
-
-/**
- * Player attribute.
- */
-export type PlayerAttribute = Datum<PlayerAttributeValue, PlayerSettingsMetadata>

@@ -1,12 +1,12 @@
-import { StyleMap } from '../../../common/style'
 import { Box, Button, Collapse, Stack } from '@chakra-ui/react'
-import { PlayerAttributeValue, PlayerSettingsMetadata } from '../../../game'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
+import { BoardGameExpandedAttributeValue, BoardGameSettingsMetadata } from '../../game'
+import { StyleMap } from '../../common/style'
 
 /**
  * Attribute expand.
  */
-export function PlayerAttributeExpand(props: PlayerAttributeExpandProps) {
+export function AttributeExpand(props: AttributeExpandProps) {
     if (props.type === 'bool') {
         return ''
     }
@@ -21,7 +21,7 @@ export function PlayerAttributeExpand(props: PlayerAttributeExpandProps) {
         },
     }
 
-    function isEqual(value: ExpandedPlayerAttributeValue, option: ExpandedPlayerAttributeValue): boolean {
+    function isEqual(value: BoardGameExpandedAttributeValue, option: BoardGameExpandedAttributeValue): boolean {
         if (type === 'number') {
             return value === option
         } else if (type === 'time') {
@@ -31,7 +31,7 @@ export function PlayerAttributeExpand(props: PlayerAttributeExpandProps) {
         return false
     }
 
-    function OptionButton(props: { option: ExpandedPlayerAttributeValue }) {
+    function OptionButton(props: { option: BoardGameExpandedAttributeValue }) {
         const { option } = props
 
         function handleClick() {
@@ -63,12 +63,11 @@ export function PlayerAttributeExpand(props: PlayerAttributeExpandProps) {
     )
 }
 
-export type ExpandedPlayerAttributeValue = Exclude<PlayerAttributeValue, boolean>
 
-export interface PlayerAttributeExpandProps {
+export interface AttributeExpandProps {
     expanded: boolean
-    type: PlayerSettingsMetadata['type']
-    value: ExpandedPlayerAttributeValue
-    optionList?: ExpandedPlayerAttributeValue[]
-    onSelect: (newValue: ExpandedPlayerAttributeValue) => void
+    type: BoardGameSettingsMetadata['type']
+    value: BoardGameExpandedAttributeValue
+    optionList?: BoardGameExpandedAttributeValue[]
+    onSelect: (newValue: BoardGameExpandedAttributeValue) => void
 }

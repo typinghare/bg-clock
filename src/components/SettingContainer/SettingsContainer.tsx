@@ -1,0 +1,43 @@
+import { Box, useBoolean } from '@chakra-ui/react'
+import { BoardGameAttribute, BoardGameSettingsMetadata } from '../../game'
+import { ExpandableContainer } from '../ExpandableContainer'
+import { Horizontal } from '../Horizontal'
+import { DataCollection } from '@typinghare/extrum'
+import { AttributeContainer } from './AttributeContainer'
+
+/**
+ * Settings container.
+ * @param props
+ * @constructor
+ */
+export function SettingContainer(props: SettingContainerProps) {
+    const { title, dataCollection } = props
+    const [expanded, setExpanded] = useBoolean()
+    const attributeList = dataCollection.getDatumList() as BoardGameAttribute[]
+
+    return (
+        <ExpandableContainer
+            expanded={expanded}
+            title={title}
+            onExpandButtonClick={setExpanded.toggle}
+        >
+            {attributeList.map(((attribute, index) => (
+                <Box key={index}>
+                    <AttributeContainer attribute={attribute} />
+                    {index == attributeList.length - 1 ? '' :
+                        <Horizontal floatRight margin="0.5rem 0" width="80%" />}
+                </Box>
+            )))}
+        </ExpandableContainer>
+    )
+}
+
+/**
+ * Setting container properties.
+ */
+export interface SettingContainerProps {
+    title: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    dataCollection: DataCollection<any, BoardGameSettingsMetadata>
+}
+

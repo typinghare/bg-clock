@@ -5,8 +5,8 @@ import { useBoardGame } from '../../state/useBoardGame'
 import { changePage, selectSignal, useAppDispatch, useAppSelector } from '../../redux'
 import { Navigation } from '../Navigation'
 import { BoardGame, Player } from '../../game'
-import { PlayerSettingContainer } from './PlayerSettingContainer'
 import { TimeControlSelect } from './TimeControlSelect'
+import { SettingContainer } from '../SettingContainer'
 
 /**
  * Game settings page.
@@ -16,7 +16,7 @@ export function GameSettingsPage() {
     const [boardGame] = useBoardGame()
     const [playerList, setPlayerList] = useState<Player[]>([])
 
-    if (boardGame === undefined) {
+    if (!boardGame) {
         return (
             <Page page={PageEnum.GAME_SETTINGS}>
                 <Navigation title="Game Settings" previousPage={PageEnum.GAME_SELECTION} />
@@ -55,9 +55,19 @@ export function GameSettingsPage() {
 
                 {playerList.map((player, index) => (
                     <Box key={index} mt={3}>
-                        <PlayerSettingContainer player={player} />
+                        <SettingContainer
+                            title={`Player Settings - ${player.getRole()}`}
+                            dataCollection={player}
+                        />
                     </Box>
                 ))}
+
+                <Box mt={3}>
+                    <SettingContainer
+                        title="Advanced Settings"
+                        dataCollection={boardGame.getAdvancedSettings()}
+                    />
+                </Box>
 
                 <StartButton boardGame={boardGame} />
             </Container>
@@ -65,6 +75,9 @@ export function GameSettingsPage() {
     )
 }
 
+/**
+ * Start button
+ */
 export function StartButton(props: StartButtonProps) {
     const { boardGame } = props
     const dispatch = useAppDispatch()
@@ -73,7 +86,7 @@ export function StartButton(props: StartButtonProps) {
         // Start the game
         if (boardGame) {
             console.log(boardGame)
-            boardGame.start()
+            boardGame.getReady()
         }
 
         // The clock panel will retrieve the game from the GameHolder.
@@ -92,6 +105,9 @@ export function StartButton(props: StartButtonProps) {
     )
 }
 
+/**
+ * Start button properties.
+ */
 export interface StartButtonProps {
     boardGame: BoardGame
 }

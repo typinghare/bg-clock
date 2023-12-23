@@ -4,6 +4,9 @@ import { Player, Role } from './Player'
 import { BoardGameState, NotStartedState } from './BoardGameState'
 import { PlayerTapEvent } from './event/PlayerTapEvent'
 import { PlayerTapRequest } from './BoardGameRequest'
+import { HourMinuteSecond } from '@typinghare/hour-minute-second'
+import { AdvancedSettings } from './AdvancedSettings'
+import { Datum } from '@typinghare/extrum'
 
 /**
  * Board game.
@@ -26,6 +29,12 @@ export class BoardGame {
      * @private
      */
     protected state: BoardGameState = new NotStartedState()
+
+    /**
+     * Advanced settings.
+     * @protected
+     */
+    protected advancedSettings: AdvancedSettings = new AdvancedSettings()
 
     /**
      * Creates a board game.
@@ -66,13 +75,6 @@ export class BoardGame {
         for (const role of this.roleList) {
             this.byRole.set(role, timeControl.createPlayer(role))
         }
-    }
-
-    /**
-     * Returns the selected time control.
-     */
-    public getSelectedTimeControl(): TimeControl {
-        return this.timeControl
     }
 
     /**
@@ -148,6 +150,13 @@ export class BoardGame {
 
         return player
     }
+
+    /**
+     * Returns the advanced settings of this game.
+     */
+    public getAdvancedSettings(): AdvancedSettings {
+        return this.advancedSettings
+    }
 }
 
 /**
@@ -158,3 +167,28 @@ export class PlayerNotExistException extends Error {
         super(`${role}.`)
     }
 }
+
+/**
+ * Board game settings metadata.
+ */
+export interface BoardGameSettingsMetadata {
+    type: 'bool' | 'number' | 'time'
+    label: string
+    description: string
+    optionList?: (number | HourMinuteSecond)[]
+}
+
+/**
+ * Board game attribute value.
+ */
+export type BoardGameAttributeValue = boolean | number | HourMinuteSecond
+
+/**
+ * Board Game attribute.
+ */
+export type BoardGameAttribute = Datum<BoardGameAttributeValue, BoardGameSettingsMetadata>
+
+/**
+ * Board game expanded attribute value.
+ */
+export type BoardGameExpandedAttributeValue = Exclude<BoardGameAttributeValue, boolean>
