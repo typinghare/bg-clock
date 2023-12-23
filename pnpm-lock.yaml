@@ -21,17 +21,17 @@ dependencies:
     specifier: ^2.0.1
     version: 2.0.1(react-redux@9.0.4)(react@18.2.0)
   '@typinghare/extrum':
-    specifier: ^2.0.0
-    version: 2.0.0
+    specifier: ^2.0.1
+    version: 2.0.1
   '@typinghare/game-core':
-    specifier: ^1.0.1
-    version: 1.0.1
+    specifier: ^1.0.3
+    version: 1.0.3
   '@typinghare/holder':
     specifier: ^1.0.1
     version: 1.0.1
   '@typinghare/hour-minute-second':
-    specifier: ^1.1.0
-    version: 1.1.0
+    specifier: ^1.1.1
+    version: 1.1.1
   framer-motion:
     specifier: ^10.16.16
     version: 10.16.16(react-dom@18.2.0)(react@18.2.0)
@@ -3542,12 +3542,12 @@ packages:
       eslint-visitor-keys: 3.4.3
     dev: true
 
-  /@typinghare/extrum@2.0.0:
-    resolution: {integrity: sha512-4Ikn9dlPgvuJBYv++tVJy+uSEx5PaAtKNOfVgQklg9Ojr1Wr+ZeNvStllUSZvuQ9J1oblo87KKSwffP6jg0vOA==}
+  /@typinghare/extrum@2.0.1:
+    resolution: {integrity: sha512-JqDmDiT4xKfy6yA7lhcDJSATFISCwt4MLU/t4S6fCysNeyqz7dwx6NpRwwMeAyo2HNg7j0+hZR3tHGlYebHqHQ==}
     dev: false
 
-  /@typinghare/game-core@1.0.1:
-    resolution: {integrity: sha512-ueluhquGOlGe9hroZAO4kzGQzRdzhH253oVggah4sw7qWdUDsx8PxgaZFx+TmogHZt3O6JfVsLJXecA2GbtpYQ==}
+  /@typinghare/game-core@1.0.3:
+    resolution: {integrity: sha512-P4ZEIi4Div/oC4+93obDZYlnKNB+EX6ZsWKnjgf+yKF04+9fnMXKl3gRwc+LDpcCuG+Ds6CTgqBRA0Eqx4vsKQ==}
     dependencies:
       '@typinghare/stack-queue': 0.1.1
     dev: false
@@ -3556,8 +3556,8 @@ packages:
     resolution: {integrity: sha512-3v/AzmX2lwXi+28g39r6107M6JLPX8DLUmkfz82vmnMbu9U388JxjCJchaiwlYBSMwdkSCR/hyRGoV1rqCWxMA==}
     dev: false
 
-  /@typinghare/hour-minute-second@1.1.0:
-    resolution: {integrity: sha512-I40sEj760u6kZ8gzO2ee3QH2HBvO3Jlj88mEXPWJjpiBIxJoBuw/RyGnRU4pJyzAFh5PdTI/lAYTH35GAjWxmA==}
+  /@typinghare/hour-minute-second@1.1.1:
+    resolution: {integrity: sha512-M5rZVFoRqXddOmnHItIOKGJnmDqHKNMc4RXc5Cun+SLTy/vh6Dt28O0acFun/V3C/DXg1ojyaUNplIKreboLcg==}
     dev: false
 
   /@typinghare/stack-queue@0.1.1:

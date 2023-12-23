@@ -11,11 +11,7 @@ export class TimeControl {
      * @param role The role of the player to create.
      */
     public createPlayer(role: Role): Player<DefaultPlayerSettings> {
-        return new Player<DefaultPlayerSettings>(role, {
-            mainTime: Datum.of(HourMinuteSecond.ofMinutes(5)).setMetadata({
-                label: 'Main Time',
-            }),
-        })
+        return new DefaultPlayer(role)
     }
 
     /**
@@ -29,7 +25,26 @@ export class TimeControl {
      * The description of this time control.
      */
     public getDescription(): string {
-        return 'A general time control.'
+        return 'The game concludes when the main time expires, resulting in a loss for the player.'
+    }
+}
+
+/**
+ * Default player.
+ */
+export class DefaultPlayer extends Player<DefaultPlayerSettings> {
+    public constructor(role: Role) {
+        super(role, {
+            mainTime: Datum.of(HourMinuteSecond.ofMinutes(5)).setMetadata({
+                type: 'time',
+                label: 'Main Time',
+                description: '',
+            }),
+        })
+    }
+
+    public override getReady() {
+        this.setTime(this.getValue('mainTime'))
     }
 }
 

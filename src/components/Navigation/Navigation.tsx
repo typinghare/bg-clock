@@ -14,20 +14,22 @@ export function Navigation(props: NavigationProps) {
         root: {
             display: 'flex',
             alignItems: 'center',
-            position: 'relative',
-            height: '2.75rem',
-            padding: '0.25rem 0',
+            justifyContent: 'center',
+            height: '32px',
         },
         iconButton: {
             position: 'absolute',
-            left: 0,
+            left: '0',
             background: 'none',
+            width: '32px !important',
+            height: '32px',
         },
         title: {
             marginLeft: 'auto',
+            marginTop: 'auto',
             color: 'black',
             textAlign: 'center',
-            fontSize: '1.5rem',
+            fontSize: '1.15rem',
             fontWeight: 'bold',
             flexGrow: 1,
             flexShrink: 1,
@@ -35,7 +37,7 @@ export function Navigation(props: NavigationProps) {
     }
 
     function handlePreviousButtonClick() {
-        if (previousPage) {
+        if (previousPage !== undefined) {
             dispatch(changePage(previousPage))
         }
     }
@@ -54,8 +56,8 @@ export function Navigation(props: NavigationProps) {
 
     return (
         <Box sx={styles.root}>
+            {previousPage !== undefined && <PreviousButton />}
             <Box sx={styles.title}>
-                {previousPage !== undefined && <PreviousButton />}
                 {title}
             </Box>
         </Box>

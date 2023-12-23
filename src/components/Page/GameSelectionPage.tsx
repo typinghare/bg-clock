@@ -42,7 +42,7 @@ export function GameSelectionPage() {
 
     return (
         <Page page={PageEnum.GAME_SELECTION}>
-            <Navigation previousPage={PageEnum.PORTAL} title="Select Game" />
+            <Navigation previousPage={PageEnum.PORTAL} title="Game Selection" />
             <Box sx={styles.container}>
                 <Box
                     sx={styles.bannerGo}

@@ -3,6 +3,7 @@
 This is Board Game Clock Simulator web application.
 
 ## Dependencies
+
 ~~~bash
 # React + TypeScript + Redux + Vite 
 # @link: https://react-redux.js.org/introduction/getting-started
@@ -16,3 +17,7 @@ pnpm add @chakra-ui/icons
 # Game core
 pnpm add @typinghare/game-core
 ~~~
+
+## Development
+
+* [Green Palette](https://coolors.co/palette/d8f3dc-b7e4c7-95d5b2-74c69d-52b788-40916c-2d6a4f-1b4332-081c15)

@@ -37,6 +37,7 @@ export class BoardGame {
         protected readonly roleList: Role[],
     ) {
         this.timeControl = timeControlList[0]
+        this.selectTimeControl(timeControlList[0])
     }
 
     /**
@@ -55,6 +56,7 @@ export class BoardGame {
             throw new Error('Time control not in the list')
         }
 
+        // Set time control
         this.timeControl = timeControl
 
         // Reset
@@ -74,38 +76,85 @@ export class BoardGame {
     }
 
     /**
+     * Returns the player list.
+     */
+    public getPlayerList(): Player[] {
+        return [...this.byRole.values()]
+    }
+
+    /**
+     * Players get ready.
+     */
+    public getReady(): void {
+        this.getPlayerList().forEach(player => {
+            player.getReady()
+        })
+    }
+
+    /**
      * Starts the board game.
      */
     public start(): void {
-        const game = new Game(function(deltaTime: float) {
+        const game = new Game((deltaTime: float) => {
             console.log(deltaTime)
+            this.getPlayerList().forEach((player) => {
+                player.update(deltaTime)
+            })
         })
 
+        // Register handlers
         const eventManager = game.getContext().eventManager
         eventManager.addHandler(PlayerTapEvent, (gameEvent) => {
             const role: Role = gameEvent.getValue('role')
-            const player: Player | undefined = this.byRole.get(role)
-            if (player) {
-                this.state.handle(new PlayerTapRequest(player))
+            const player: Player | undefined = this.getPlayer(role)
+
+            this.state.handle(new PlayerTapRequest(player))
+
+            // Pause the player if their time is running
+            if (!player.isPaused()) {
+                player.pause()
             }
+
+            // Resume the next player
+            const nextPlayer: Player = this.getPlayer(this.getNextRole(role))
+            nextPlayer.resume()
         })
+    }
+
+    /**
+     * Returns the next role.
+     * @param role The current role.
+     * @protected
+     */
+    protected getNextRole(role: Role): Role {
+        const roleList: Role[] = [...this.byRole.keys()]
+        if (!roleList.includes(role)) {
+            throw new Error('')
+        }
+
+        const index: number = roleList.indexOf(role)
+        return roleList[(index + 1) % roleList.length]
+    }
+
+    /**
+     * Gets the player by the associated role.
+     * @param role The role of the player.
+     */
+    public getPlayer(role: Role): Player {
+        const player = this.byRole.get(role)
+        if (!player) {
+            throw new PlayerNotExistException(role)
+        }
+
+        return player
     }
 }
 
 /**
- * Board game that includes two players.
+ * Thrown when the player of a specific role does not exist.
  */
-export class TwoPlayerBoardGame extends BoardGame {
-    public static readonly ROLE_A = 'A'
-    public static readonly ROLE_B = 'B'
-
-    /**
-     * Creates a two-player board game.
-     * @param timeControlList
-     */
-    public constructor(
-        protected readonly timeControlList: TimeControl[],
-    ) {
-        super(timeControlList, [TwoPlayerBoardGame.ROLE_A, TwoPlayerBoardGame.ROLE_B])
+export class PlayerNotExistException extends Error {
+    public constructor(role: Role) {
+        super(`${role}.`)
     }
 }

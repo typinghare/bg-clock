@@ -2,16 +2,16 @@ import { GameEvent, GameEventData } from '@typinghare/game-core'
 import { Role } from '../Player'
 
 /**
- * Player click event.
+ * Player tap event.
  */
 export class PlayerTapEvent extends GameEvent<PlayerTapEventData> {
-    public constructor(eventData?: PlayerTapEventData) {
-        super({ role: eventData?.role || '' })
+    public constructor(eventData: Partial<PlayerTapEventData>) {
+        super({ role: eventData.role })
     }
 }
 
 /**
- * Player click event data.
+ * Player tap event data.
  */
 export interface PlayerTapEventData extends GameEventData {
     role: Role
