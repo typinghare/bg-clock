@@ -9,12 +9,14 @@ import { Box, BoxProps, Switch, useBoolean } from '@chakra-ui/react'
 import { StyleMap } from '../../common/style'
 import { useState } from 'react'
 import { AttributeDescription } from './AttributeDescription'
+import { pulse, useAppDispatch } from '../../redux'
 
 /**
  * Attribute container.
  */
 export function AttributeContainer(props: AttributeContainerProps) {
     const { attribute } = props
+    const dispatch = useAppDispatch()
     const [expanded, setExpanded] = useBoolean()
     const styles: StyleMap = {
         line: {
@@ -50,12 +52,18 @@ export function AttributeContainer(props: AttributeContainerProps) {
         attribute.setValue(newValue)
         setValue(newValue)
         setExpanded.off()
+
+        //  Refresh settings UI
+        dispatch(pulse())
     }
 
     function handleBooleanChange(): void {
         const newValue = !attribute.getValue()
         attribute.setValue(newValue)
         setValue(newValue)
+
+        //  Refresh settings UI
+        dispatch(pulse())
     }
 
     return (

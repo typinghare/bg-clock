@@ -28,6 +28,21 @@ export function GameSettingsPage() {
         )
     }
 
+    if (boardGame.getAdvancedSettings().getValue('sync')) {
+        // Synchronize players values
+        const firstPlayer = playerList[0]
+        if (firstPlayer) {
+            // All other players align with the first player
+            const keys = Object.keys(firstPlayer.getData())
+            for (let i = 0; i < playerList.length; ++i) {
+                const player = playerList[i]
+                for (const key of keys) {
+                    player.getDatum(key).setValue(firstPlayer.getValue(key))
+                }
+            }
+        }
+    }
+
     if (!playerList.length) {
         setPlayerList(boardGame.getPlayerList())
     }
@@ -42,6 +57,33 @@ export function GameSettingsPage() {
         }
     }
 
+    function PlayerSettings() {
+        if (!boardGame || !boardGame.getAdvancedSettings().getValue('sync')) {
+            return playerList.map((player, index) => (
+                <Box key={index} mt={3}>
+                    <SettingContainer
+                        title={`Player Settings - ${player.getRole()}`}
+                        dataCollection={player}
+                    />
+                </Box>
+            ))
+        }
+
+        const firstPlayer = playerList[0]
+        if (!firstPlayer) {
+            return <></>
+        }
+
+        return (
+            <Box mt={3}>
+                <SettingContainer
+                    title="Player Settings"
+                    dataCollection={firstPlayer}
+                />
+            </Box>
+        )
+    }
+
     return (
         <Page page={PageEnum.GAME_SETTINGS}>
             <Navigation title="Game Settings" previousPage={PageEnum.GAME_SELECTION} />
@@ -53,14 +95,7 @@ export function GameSettingsPage() {
                     />
                 </Box>
 
-                {playerList.map((player, index) => (
-                    <Box key={index} mt={3}>
-                        <SettingContainer
-                            title={`Player Settings - ${player.getRole()}`}
-                            dataCollection={player}
-                        />
-                    </Box>
-                ))}
+                <PlayerSettings />
 
                 <Box mt={3}>
                     <SettingContainer
