@@ -53,7 +53,7 @@ export function AttributeContainer(props: AttributeContainerProps) {
         setValue(newValue)
         setExpanded.off()
 
-        //  Refresh settings UI
+        // Refresh settings UI
         dispatch(pulse())
     }
 
@@ -62,7 +62,7 @@ export function AttributeContainer(props: AttributeContainerProps) {
         attribute.setValue(newValue)
         setValue(newValue)
 
-        //  Refresh settings UI
+        // Refresh settings UI
         dispatch(pulse())
     }
 

@@ -1,4 +1,10 @@
-import { BoardGameRequest, PlayerTapRequest } from './BoardGameRequest'
+import {
+    BoardGameRequest,
+    PlayerPauseRequest,
+    PlayerResumeRequest,
+    PlayerRunOutTimeRequest,
+    PlayerTapRequest,
+} from './BoardGameRequest'
 
 /**
  * Board game state.
@@ -16,7 +22,7 @@ export interface BoardGameState {
  * Not started state.
  */
 export class NotStartedState implements BoardGameState {
-    handle(request: BoardGameRequest): BoardGameState {
+    public handle(request: BoardGameRequest): BoardGameState {
         if (request instanceof PlayerTapRequest) {
             return new OngoingState()
         }
@@ -29,8 +35,14 @@ export class NotStartedState implements BoardGameState {
  * Ongoing state.
  */
 export class OngoingState implements BoardGameState {
-    handle(request: BoardGameRequest): BoardGameState {
-        throw new Error('Method not implemented.')
+    public handle(request: BoardGameRequest): BoardGameState {
+        if (request instanceof PlayerPauseRequest) {
+            return new PausedState()
+        } else if (request instanceof PlayerRunOutTimeRequest) {
+            return new EndedState()
+        }
+
+        return this
     }
 }
 
@@ -38,8 +50,12 @@ export class OngoingState implements BoardGameState {
  * Paused state.
  */
 export class PausedState implements BoardGameState {
-    handle(request: BoardGameRequest): BoardGameState {
-        throw new Error('Method not implemented.')
+    public handle(request: BoardGameRequest): BoardGameState {
+        if (request instanceof PlayerResumeRequest) {
+            return new OngoingState()
+        }
+
+        return this
     }
 }
 
@@ -47,7 +63,8 @@ export class PausedState implements BoardGameState {
  * Ended state.
  */
 export class EndedState implements BoardGameState {
-    handle(request: BoardGameRequest): BoardGameState {
-        throw new Error('Method not implemented.')
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    public handle(_: BoardGameRequest): BoardGameState {
+        return this
     }
 }

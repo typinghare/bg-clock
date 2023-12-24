@@ -18,7 +18,6 @@ export function AttributeDescription(props: AttributeDescriptionProps) {
     function handleClick(event: React.MouseEvent<HTMLDivElement>) {
         event.stopPropagation()
         setIsTooltipOpen.toggle()
-        console.log(isTooltipOpen)
     }
 
     return (

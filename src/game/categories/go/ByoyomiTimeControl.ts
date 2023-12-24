@@ -1,18 +1,19 @@
 import { TimeControl } from '../../TimeControl'
-import { Player, PlayerSettings, Role } from '../../Player'
+import { Player, PlayerExtraData, PlayerSettings, Role } from '../../Player'
 import { Datum } from '@typinghare/extrum'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
+import { BoardGame } from '../../BoardGame'
 
 /**
  * Byoyomi time control.
  */
 export class ByoyomiTimeControl extends TimeControl {
-    public override createPlayer(role: Role): ByoyomiPlayer {
-        return new ByoyomiPlayer(role, {
-            mainTime: Datum.of(HourMinuteSecond.ofMinutes(5)).setMetadata({
+    public override createPlayer(role: Role, boardGame: BoardGame): ByoyomiPlayer {
+        return new ByoyomiPlayer(role, boardGame, {
+            mainTime: Datum.of(HourMinuteSecond.ofMinutes(0.2)).setMetadata({
                 type: 'time',
                 label: 'Main Time',
-                description: 'Main Time',
+                description: 'The initial allotted time for a player to make moves without any additional constraints.',
                 optionList: [
                     HourMinuteSecond.ofMinutes(1),
                     HourMinuteSecond.ofMinutes(5),
@@ -21,10 +22,12 @@ export class ByoyomiTimeControl extends TimeControl {
                     HourMinuteSecond.ofMinutes(180),
                 ],
             }),
-            timePerPeriod: Datum.of(HourMinuteSecond.ofSeconds(30)).setMetadata({
+            timePerPeriod: Datum.of(HourMinuteSecond.ofSeconds(5)).setMetadata({
                 type: 'time',
                 label: 'Time Per Period',
-                description: 'Time Per Period',
+                description: 'The time given for each subsequent phase after the main time runs out is reduced by ' +
+                    'one period. If a player completes their moves within the time limit of a period, the number ' +
+                    'of periods remains the same and the time for the next period is reset for the next turn.',
                 optionList: [
                     HourMinuteSecond.ofSeconds(20),
                     HourMinuteSecond.ofSeconds(30),
@@ -32,13 +35,21 @@ export class ByoyomiTimeControl extends TimeControl {
                     HourMinuteSecond.ofSeconds(60),
                 ],
             }),
-            periods: Datum.of(5).setMetadata({
+            periods: Datum.of(3).setMetadata({
                 type: 'number',
                 label: 'Periods',
-                description: 'Periods',
+                description: 'The number of periods. The clock will stop running when all the periods are used up.',
                 optionList: [
                     1, 3, 5, 10,
                 ],
+            }),
+        }, {
+            hasEnteredByoyomi: Datum.of(false).setMetadata({
+                isDisplayed: false,
+            }),
+            remainingPeriods: Datum.of(5).setMetadata({
+                isDisplayed: true,
+                getDisplayedContent: (value: number) => (value.toString()),
             }),
         })
     }
@@ -56,10 +67,34 @@ export class ByoyomiTimeControl extends TimeControl {
 /**
  * Byoyomi board game player.
  */
-export class ByoyomiPlayer extends Player<ByoyomiPlayerSettings> {
-    public override getReady() {
-        console.log(this.getValue('mainTime'))
+export class ByoyomiPlayer extends Player<ByoyomiPlayerSettings, ByoyomiPlayerExtraData> {
+    public override getReady(): void {
         this.setTime(this.getValue('mainTime'))
+
+        // Remaining periods
+        this.extraData.getDatum('remainingPeriods').setValue(this.getValue('periods'))
+    }
+
+    public override runOutTime(): void {
+        const remainingPeriods: number = this.extraData.getValue('remainingPeriods')
+        if (remainingPeriods == 1) {
+            return super.runOutTime()
+        }
+
+        this.extraData.getDatum('remainingPeriods').setValue(remainingPeriods - 1)
+        this.extraData.getDatum('hasEnteredByoyomi').setValue(true)
+
+        const timePerPeriod: HourMinuteSecond = this.getValue('timePerPeriod')
+        this.setTime(timePerPeriod)
+    }
+
+    public override resume() {
+        super.resume()
+
+        if (this.extraData.getValue('hasEnteredByoyomi')) {
+            const timePerPeriod: HourMinuteSecond = this.getValue('timePerPeriod')
+            this.setTime(timePerPeriod)
+        }
     }
 }
 
@@ -70,4 +105,12 @@ export interface ByoyomiPlayerSettings extends PlayerSettings {
     mainTime: HourMinuteSecond
     timePerPeriod: HourMinuteSecond
     periods: number
+}
+
+/**
+ * Byoyomi player extra data.
+ */
+export interface ByoyomiPlayerExtraData extends PlayerExtraData {
+    hasEnteredByoyomi: boolean
+    remainingPeriods: number
 }

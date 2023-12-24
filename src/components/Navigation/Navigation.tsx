@@ -15,6 +15,7 @@ export function Navigation(props: NavigationProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            // position: 'sticky',
             height: '32px',
         },
         iconButton: {

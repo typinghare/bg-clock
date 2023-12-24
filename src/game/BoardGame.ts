@@ -1,9 +1,9 @@
 import { TimeControl } from './TimeControl'
-import { float, Game } from '@typinghare/game-core'
+import { Context, float, Game } from '@typinghare/game-core'
 import { Player, Role } from './Player'
 import { BoardGameState, NotStartedState } from './BoardGameState'
 import { PlayerTapEvent } from './event/PlayerTapEvent'
-import { PlayerTapRequest } from './BoardGameRequest'
+import { BoardGameRequest } from './BoardGameRequest'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { AdvancedSettings } from './AdvancedSettings'
 import { Datum } from '@typinghare/extrum'
@@ -79,7 +79,7 @@ export class BoardGame {
 
         // Initialize players
         for (const role of this.roleList) {
-            this.byRole.set(role, timeControl.createPlayer(role))
+            this.byRole.set(role, timeControl.createPlayer(role, this))
         }
     }
 
@@ -113,23 +113,17 @@ export class BoardGame {
         const eventManager = this.game.getContext().eventManager
         eventManager.addHandler(PlayerTapEvent, (gameEvent) => {
             const role: Role = gameEvent.getValue('role')
-            const player: Player | undefined = this.getPlayer(role)
-
-            this.state.handle(new PlayerTapRequest(player))
-
-            // Pause the player if their time is running
-            if (!player.isPaused()) {
-                player.pause()
-            }
-
-            // Resume the next player
-            const nextPlayer: Player = this.getPlayer(this.getNextRole(role))
-            nextPlayer.resume()
+            this.onPlayerTap(role)
         })
 
-        this.game.run()
+        this.game.run(120)
 
         return this.game
+    }
+
+    protected onPlayerTap(role: Role): void {
+        const player: Player = this.getPlayer(role)
+        player.onTap()
     }
 
     /**
@@ -179,6 +173,26 @@ export class BoardGame {
      */
     public getState(): BoardGameState {
         return this.state
+    }
+
+    /**
+     * Returns game context.
+     */
+    public getGameContext(): Context {
+        const context = this.game?.getContext()
+        if (!context) {
+            throw new Error('Fail to get game context.')
+        }
+
+        return context
+    }
+
+    /**
+     * Handles a request.
+     * @param request The request to handle.
+     */
+    public handleRequest(request: BoardGameRequest): void {
+        this.state = this.state.handle(request)
     }
 }
 

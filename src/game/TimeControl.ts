@@ -1,6 +1,7 @@
 import { Player, PlayerSettings, Role } from './Player'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { Datum } from '@typinghare/extrum'
+import { BoardGame } from './BoardGame'
 
 /**
  * Time control.
@@ -9,9 +10,10 @@ export class TimeControl {
     /**
      * Creates a player.
      * @param role The role of the player to create.
+     * @param boardGame The board game creating the player
      */
-    public createPlayer(role: Role): Player<DefaultPlayerSettings> {
-        return new DefaultPlayer(role)
+    public createPlayer(role: Role, boardGame: BoardGame): Player<DefaultPlayerSettings> {
+        return new DefaultPlayer(role, boardGame)
     }
 
     /**
@@ -33,14 +35,14 @@ export class TimeControl {
  * Default player.
  */
 export class DefaultPlayer extends Player<DefaultPlayerSettings> {
-    public constructor(role: Role) {
-        super(role, {
+    public constructor(role: Role, boardGame: BoardGame) {
+        super(role, boardGame, {
             mainTime: Datum.of(HourMinuteSecond.ofMinutes(5)).setMetadata({
                 type: 'time',
                 label: 'Main Time',
                 description: '',
             }),
-        })
+        }, {})
     }
 
     public override getReady() {

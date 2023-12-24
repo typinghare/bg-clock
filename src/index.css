@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'Digital-7';
     src: local(Digital-7),
-    url(assets/fonts/digital-7/digital-7.regular.ttf),
-    url(assets/fonts/digital-7/digital-7.italic.ttf)
+    url(assets/fonts/digital-7/digital-7.mono.ttf),
+    url(assets/fonts/digital-7/digital-7.monoitalic.ttf)
 }
 
 body {
@@ -17,4 +17,14 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+::-webkit-scrollbar {
+    width: 0;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: transparent;
 }

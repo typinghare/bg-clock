@@ -11,8 +11,8 @@ import { AttributeContainer } from './AttributeContainer'
  * @constructor
  */
 export function SettingContainer(props: SettingContainerProps) {
-    const { title, dataCollection } = props
-    const [expanded, setExpanded] = useBoolean()
+    const { title, dataCollection, expanded: defaultExpanded } = props
+    const [expanded, setExpanded] = useBoolean(defaultExpanded || false)
     const attributeList = dataCollection.getDatumList() as BoardGameAttribute[]
 
     return (
@@ -37,7 +37,11 @@ export function SettingContainer(props: SettingContainerProps) {
  */
 export interface SettingContainerProps {
     title: string
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataCollection: DataCollection<any, BoardGameSettingsMetadata>
+
+    // Whether it is expanded by default
+    expanded?: boolean
 }
 

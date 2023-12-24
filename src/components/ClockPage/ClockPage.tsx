@@ -1,4 +1,4 @@
-import { Page, PageEnum } from '../Page/Page'
+import { Page, PageEnum } from '../Page'
 import { selectSignal, useAppSelector } from '../../redux'
 import { useBoardGame } from '../../state/useBoardGame'
 import { Box } from '@chakra-ui/react'

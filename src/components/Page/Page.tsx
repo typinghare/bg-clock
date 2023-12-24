@@ -16,7 +16,8 @@ export function Page(props: pageProps) {
             flexDirection: 'column',
             height: '100vh',
             width: '100vw',
-            overflow: 'hidden',
+            overflowX: 'hidden',
+            overflowY: 'auto',
             ...outerStyle,
         },
         inner: {

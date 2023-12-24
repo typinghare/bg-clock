@@ -2,19 +2,20 @@ import { TimeControl } from '../../TimeControl'
 import { Player, PlayerSettings, Role } from '../../Player'
 import { Datum } from '@typinghare/extrum'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
+import { BoardGame } from '../../BoardGame'
 
 /**
  * Yingshi time control.
  */
 export class YingshiTimeControl extends TimeControl {
-    public override createPlayer(role: Role): Player<YingshiPlayerSettings> {
-        return new Player<YingshiPlayerSettings>(role, {
+    public override createPlayer(role: Role, boardGame: BoardGame): Player<YingshiPlayerSettings> {
+        return new Player<YingshiPlayerSettings>(role, boardGame, {
             mainTime: Datum.of(HourMinuteSecond.ofMinutes(5)).setMetadata({
                 type: 'time',
                 label: 'Main Time',
                 description: '',
             }),
-        })
+        }, {})
     }
 
     public override getName(): string {

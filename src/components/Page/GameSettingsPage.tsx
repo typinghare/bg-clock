@@ -20,7 +20,7 @@ export function GameSettingsPage() {
         return (
             <Page page={PageEnum.GAME_SETTINGS}>
                 <Navigation title="Game Settings" previousPage={PageEnum.GAME_SELECTION} />
-                <Alert margin={2} status="error">
+                <Alert m={2} status="error">
                     <AlertIcon />
                     Fatal Error: Fail to initialize a board game.
                 </Alert>
@@ -64,6 +64,7 @@ export function GameSettingsPage() {
                     <SettingContainer
                         title={`Player Settings - ${player.getRole()}`}
                         dataCollection={player}
+                        expanded={true}
                     />
                 </Box>
             ))
@@ -79,6 +80,7 @@ export function GameSettingsPage() {
                 <SettingContainer
                     title="Player Settings"
                     dataCollection={firstPlayer}
+                    expanded={true}
                 />
             </Box>
         )
@@ -120,8 +122,8 @@ export function StartButton(props: StartButtonProps) {
     function handleGameStart(): void {
         // Start the game
         if (boardGame) {
-            console.log(boardGame)
             boardGame.getReady()
+            console.log(boardGame)
         }
 
         // The clock panel will retrieve the game from the GameHolder.
@@ -132,6 +134,7 @@ export function StartButton(props: StartButtonProps) {
         <Button
             variant="solid"
             mt={3}
+            mb={3}
             w={'100%'}
             onClick={handleGameStart}
         >
