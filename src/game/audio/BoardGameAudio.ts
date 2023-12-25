@@ -1,17 +1,14 @@
-import { BoardGame } from '../BoardGame'
+import { BoardGamePlugin } from '../BoardGame'
+import { PlayerTapEvent } from '../event/PlayerTapEvent'
 
 /**
- * Board game audio controller.
+ * Board game audio plugin.
  */
-export class BoardGameAudio {
-    /**
-     * Creates a board game audio controller.
-     * @param boardGame The board game creating this controller.
-     */
-    public constructor(
-        protected boardGame: BoardGame
-    ) {
+export class BoardGameAudio extends BoardGamePlugin {
+    public override onStart() {
+        const gameContext = this.boardGame.getGameContext()
+        gameContext.eventManager.addHandler(PlayerTapEvent, () => {
+
+        })
     }
-
-
 }

@@ -43,6 +43,12 @@ export class BoardGame {
     protected game?: Game
 
     /**
+     * Plugin list.
+     * @protected
+     */
+    protected pluginList: BoardGamePlugin[] = []
+
+    /**
      * Creates a board game.
      * @param timeControlList
      * @param roleList
@@ -115,6 +121,8 @@ export class BoardGame {
             const role: Role = gameEvent.getValue('role')
             this.onPlayerTap(role)
         })
+
+        this.pluginList.forEach(plugin => plugin.onStart())
 
         this.game.run(120)
 
@@ -193,6 +201,35 @@ export class BoardGame {
      */
     public handleRequest(request: BoardGameRequest): void {
         this.state = this.state.handle(request)
+    }
+
+    /**
+     * Checks whether the state of this board game is the same as the given one.
+     * @param state The given state.
+     */
+    public isState(state: new () => BoardGameState): boolean {
+        return this.state instanceof state
+    }
+}
+
+/**
+ * Board game plugin.
+ */
+export abstract class BoardGamePlugin {
+    /**
+     * Creates a board game plugin
+     * @param boardGame The board game creating this plugin.
+     */
+    public constructor(
+        protected boardGame: BoardGame,
+    ) {
+    }
+
+    /**
+     * This method is called when the board game starts.
+     */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    public onStart(): void {
     }
 }
 
