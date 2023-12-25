@@ -36,7 +36,7 @@ function ChangelogBlock(props: ChangelogBlockProps) {
     const sectionNameList: (keyof ChangelogSections)[] = ['added', 'improved', 'fixed']
 
     return (
-        <Card>
+        <Card mb={3}>
             <CardBody>
                 <Box sx={styles.version}>
                     {changelog.getVersion()}

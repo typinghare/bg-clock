@@ -27,11 +27,22 @@ export function GameSettingsPage() {
     const settingsChangedSignal = useAppSelector(selectSettingsChangedSignal)
     const [boardGame, setBoardGame] = useState<BoardGame | undefined>()
     const [playerList, setPlayerList] = useState<Player[]>([])
+    const [selectedTimeControlIndex, setSelectedTimeControlIndex] = useState<number>(0)
 
     useEffect(() => {
         const currentBoardGame = boardGameHolder.get()
         setBoardGame(currentBoardGame)
         setPlayerList(currentBoardGame ? currentBoardGame.getPlayerList() : [])
+
+        if (currentBoardGame) {
+            const currentSelectedTimeControlIndex: number = (() => {
+                const timeControlList = currentBoardGame.getTimeControlList()
+                const timeControl = currentBoardGame.getTimeControl()
+
+                return timeControlList.indexOf(timeControl)
+            })()
+            setSelectedTimeControlIndex(currentSelectedTimeControlIndex)
+        }
     }, [boardGameChangedSignal, timeControlChangedSignal])
 
     useEffect(() => {
@@ -67,17 +78,12 @@ export function GameSettingsPage() {
 
     const timeControlList = boardGame.getTimeControlList()
 
-    const selectedTimeControlIndex: number = (function() {
-        const timeControlList = boardGame.getTimeControlList()
-        const timeControl = boardGame.getTimeControl()
-
-        return timeControlList.indexOf(timeControl)
-    })()
-
     function handleTimeControlSelect(timeControlIndex: number): void {
         if (boardGame) {
             boardGame.selectTimeControl(timeControlList[timeControlIndex])
         }
+
+        setSelectedTimeControlIndex(timeControlIndex)
 
         dispatch(notifyTimeControlChangedChanged())
     }
@@ -118,7 +124,7 @@ export function GameSettingsPage() {
                 <Box>
                     <TimeControlSelect
                         timeControlList={timeControlList}
-                        defaultSelectedTimeControlIndex={selectedTimeControlIndex}
+                        selectedTimeControlIndex={selectedTimeControlIndex}
                         onTimeControlSelect={handleTimeControlSelect}
                     />
                 </Box>

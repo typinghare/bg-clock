@@ -1,5 +1,6 @@
 import { Changelog } from './Changelog'
-import { C2024_1 } from './C2024_1'
+import { C2024_1_Beta } from './C2024_1_Beta'
+import { C2023_1 } from './C2023_1'
 
 /**
  * Changelog collection.
@@ -29,7 +30,8 @@ export class Changelogs {
 
 // Register all changelog objects here
 [
-    new C2024_1(),
+    new C2023_1(),
+    new C2024_1_Beta(),
 ].forEach(changelog => {
     Changelogs.addChangelog(changelog)
 })

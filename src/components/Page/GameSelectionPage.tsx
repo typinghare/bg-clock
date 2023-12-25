@@ -1,5 +1,5 @@
 import { Page, PageEnum } from './Page'
-import { Box, Container } from '@chakra-ui/react'
+import { Box, Container, Progress } from '@chakra-ui/react'
 import { StyleMap } from '../../common/style'
 import { Navigation } from '../Navigation'
 import { BoardGames, BoardGameType } from '../../game'
@@ -7,12 +7,14 @@ import { changePage, notifyBoardGameChanged, useAppDispatch } from '../../redux'
 import bannerGo from '../../assets/img/banner-go.jpg'
 import bannerChess from '../../assets/img/banner-chess.png'
 import { boardGameHolder } from '../../common/holder'
+import { useState } from 'react'
 
 /**
  * Game selection page.
  */
 export function GameSelectionPage() {
     const dispatch = useAppDispatch()
+    const [progressValue, setProgressValue] = useState(0)
     const styles: StyleMap = {
         container: {
             display: 'flex',
@@ -34,15 +36,30 @@ export function GameSelectionPage() {
             boardGameHolder.assign(BoardGames.get(boardGameType))
             dispatch(notifyBoardGameChanged())
 
+            const interval = setInterval(() => {
+                setProgressValue(progressValue => progressValue + 5)
+            }, 10)
+
             setTimeout(() => {
                 dispatch(changePage(PageEnum.GAME_SETTINGS))
-            }, 250)
+
+                clearInterval(interval)
+                setProgressValue(0)
+            }, 300)
         }
     }
 
     return (
         <Page page={PageEnum.GAME_SELECTION}>
             <Navigation previousPage={PageEnum.PORTAL} title="Game Selection" />
+
+            <Progress
+                value={progressValue}
+                size="xs"
+                colorScheme="green"
+                visibility={progressValue === 0 ? 'hidden' : 'visible'}
+            />
+
             <Container paddingY={5} sx={styles.container}>
                 <Box
                     sx={styles.bannerGo}

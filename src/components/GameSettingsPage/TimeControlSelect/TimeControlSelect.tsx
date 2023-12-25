@@ -1,6 +1,5 @@
 import { Box, useBoolean } from '@chakra-ui/react'
 import { TimeControl } from '../../../game'
-import { useState } from 'react'
 import { ExpandableContainer } from '../../ExpandableContainer'
 import { Horizontal } from '../../Horizontal'
 import { StyleMap } from '../../../common/style'
@@ -9,14 +8,12 @@ import { StyleMap } from '../../../common/style'
  * Time control select.
  */
 export function TimeControlSelect(props: TimeControlSelectProps) {
-    const { timeControlList, defaultSelectedTimeControlIndex, onTimeControlSelect } = props
+    const { timeControlList, selectedTimeControlIndex, onTimeControlSelect } = props
     const [accordionExpanded, setAccordionExpanded] = useBoolean()
-    const [selectedTimeControlIndex, setSelectedTimeControlIndex] = useState(defaultSelectedTimeControlIndex)
 
     function createTimeControlSelectedHandler(index: number) {
         return function() {
             setAccordionExpanded.off()
-            setSelectedTimeControlIndex(index)
             onTimeControlSelect(index)
         }
     }
@@ -83,7 +80,7 @@ export function TimeControlBlock(props: TimeControlBlockProps) {
 
 export interface TimeControlSelectProps {
     timeControlList: TimeControl[]
-    defaultSelectedTimeControlIndex: number
+    selectedTimeControlIndex: number
     onTimeControlSelect: (timeControlIndex: number) => void
 }
 

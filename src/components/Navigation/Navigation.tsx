@@ -12,28 +12,31 @@ export function Navigation(props: NavigationProps) {
     const dispatch = useAppDispatch()
     const styles: StyleMap = {
         root: {
+            width: '100%',
+        },
+        inner: {
             display: 'flex',
+            flex: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            // position: 'sticky',
-            height: '32px',
+            height: '36px',
+            position: 'relative',
+            width: '100%',
         },
         iconButton: {
             position: 'absolute',
             left: '0',
             background: 'none',
-            width: '32px !important',
             height: '32px',
         },
         title: {
             marginLeft: 'auto',
-            marginTop: 'auto',
             color: 'black',
             textAlign: 'center',
             fontSize: '1.15rem',
             fontWeight: 'bold',
             flexGrow: 1,
-            flexShrink: 1,
+            centerContent: 'true',
         },
     }
 
@@ -57,9 +60,11 @@ export function Navigation(props: NavigationProps) {
 
     return (
         <Box sx={styles.root}>
-            {previousPage !== undefined && <PreviousButton />}
-            <Box sx={styles.title}>
-                {title}
+            <Box sx={styles.inner}>
+                {previousPage !== undefined && <PreviousButton />}
+                <Box sx={styles.title}>
+                    {title}
+                </Box>
             </Box>
         </Box>
     )
