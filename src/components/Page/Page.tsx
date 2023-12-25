@@ -53,11 +53,13 @@ export interface pageProps extends BoxProps {
  * Page enumeration.
  */
 export enum PageEnum {
-    PORTAL = 0,
-    GAME_SELECTION = 1,
-    GAME_SETTINGS = 2,
-    CLOCK = 3,
-    APP_SETTINGS = 4
+    PORTAL,
+    SETTINGS,
+    RESUME_GAME,
+    GAME_SELECTION,
+    GAME_SETTINGS,
+    CLOCK,
+    ABOUT
 }
 
 /**

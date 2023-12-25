@@ -9,9 +9,9 @@ import { StyleMap } from '../../../common/style'
  * Time control select.
  */
 export function TimeControlSelect(props: TimeControlSelectProps) {
-    const { timeControlList, onTimeControlSelect } = props
+    const { timeControlList, defaultSelectedTimeControlIndex, onTimeControlSelect } = props
     const [accordionExpanded, setAccordionExpanded] = useBoolean()
-    const [selectedTimeControlIndex, setSelectedTimeControlIndex] = useState(0)
+    const [selectedTimeControlIndex, setSelectedTimeControlIndex] = useState(defaultSelectedTimeControlIndex)
 
     function createTimeControlSelectedHandler(index: number) {
         return function() {
@@ -21,10 +21,12 @@ export function TimeControlSelect(props: TimeControlSelectProps) {
         }
     }
 
+    const timeControlName = timeControlList[selectedTimeControlIndex].getName()
+
     return (
         <ExpandableContainer
             expanded={accordionExpanded}
-            title="Time Control"
+            title={`Time Control (${timeControlName})`}
             onExpandButtonClick={setAccordionExpanded.toggle}
         >
             {timeControlList.map(((timeControl, index) => (
@@ -81,6 +83,7 @@ export function TimeControlBlock(props: TimeControlBlockProps) {
 
 export interface TimeControlSelectProps {
     timeControlList: TimeControl[]
+    defaultSelectedTimeControlIndex: number
     onTimeControlSelect: (timeControlIndex: number) => void
 }
 

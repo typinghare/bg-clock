@@ -8,7 +8,6 @@ import { Navigation } from '../Navigation'
  * Portal Page.
  */
 export function PortalPage() {
-    const dispatch = useAppDispatch()
     const styles: StyleMap = {
         container: {
             display: 'flex',
@@ -25,36 +24,40 @@ export function PortalPage() {
         },
     }
 
-    function handleSettingsButtonClick() {
-        dispatch(changePage(PageEnum.APP_SETTINGS))
-    }
-
-    function handleNewGameButtonClick() {
-        dispatch(changePage(PageEnum.GAME_SELECTION))
-    }
-
-    function handleResumeGameButtonClick() {
-        dispatch(changePage(PageEnum.GAME_SELECTION))
-    }
-
-    function PortalButton(props: { text: string, clickHandler: () => void }) {
-        const { text, clickHandler } = props
-        return (
-            <Button variant="solid" colorScheme="telegram" onClick={clickHandler}>
-                {text}
-            </Button>
-        )
-    }
-
     return (
         <Page page={PageEnum.PORTAL}>
             <Navigation title={'BG Clock'} />
 
             <Box sx={styles.container}>
-                <PortalButton text={'Settings'} clickHandler={handleSettingsButtonClick} />
-                <PortalButton text={'New Game'} clickHandler={handleNewGameButtonClick} />
-                <PortalButton text={'Resume Game'} clickHandler={handleResumeGameButtonClick} />
+                <PortalButton text={'New Game'} page={PageEnum.GAME_SELECTION} />
+                <PortalButton text={'Resume Game'} page={PageEnum.RESUME_GAME} />
+                <PortalButton text={'Settings'} page={PageEnum.SETTINGS} />
+                <PortalButton text={'About'} page={PageEnum.ABOUT} />
             </Box>
         </Page>
     )
+}
+
+function PortalButton(props: PortalButtonProps) {
+    const { text, page } = props
+    const dispatch = useAppDispatch()
+
+    function handleClick() {
+        dispatch(changePage(page))
+    }
+
+    return (
+        <Button
+            variant="solid"
+            colorScheme="green"
+            onClick={handleClick}
+        >
+            {text}
+        </Button>
+    )
+}
+
+interface PortalButtonProps {
+    text: string
+    page: PageEnum
 }

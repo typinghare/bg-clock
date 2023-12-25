@@ -4,7 +4,7 @@ import { CSSProperties } from 'react'
  * Horizontal rule.
  */
 export function Horizontal(props: HorizontalProps) {
-    const { margin, width, floatRight = false } = props
+    const { margin, width = '100%', floatRight = false } = props
 
     return (
         <div style={{

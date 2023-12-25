@@ -5,11 +5,11 @@ import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { BoardGame } from '../../BoardGame'
 
 /**
- * Byoyomi time control.
+ * Go Byoyomi time control.
  */
-export class ByoyomiTimeControl extends TimeControl {
-    public override createPlayer(role: Role, boardGame: BoardGame): ByoyomiPlayer {
-        return new ByoyomiPlayer(role, boardGame, {
+export class GoByoyomiTimeControl extends TimeControl {
+    public override createPlayer(role: Role, boardGame: BoardGame): GoByoyomiPlayer {
+        return new GoByoyomiPlayer(role, boardGame, {
             mainTime: Datum.of(HourMinuteSecond.ofMinutes(0.2)).setMetadata({
                 type: 'time',
                 label: 'Main Time',
@@ -65,9 +65,9 @@ export class ByoyomiTimeControl extends TimeControl {
 }
 
 /**
- * Byoyomi board game player.
+ * Go Byoyomi board game player.
  */
-export class ByoyomiPlayer extends Player<ByoyomiPlayerSettings, ByoyomiPlayerExtraData> {
+export class GoByoyomiPlayer extends Player<GoByoyomiPlayerSettings, GoByoyomiPlayerExtraData> {
     public override getReady(): void {
         this.setTime(this.getValue('mainTime'))
 
@@ -93,24 +93,24 @@ export class ByoyomiPlayer extends Player<ByoyomiPlayerSettings, ByoyomiPlayerEx
 
         if (this.extraData.getValue('hasEnteredByoyomi')) {
             const timePerPeriod: HourMinuteSecond = this.getValue('timePerPeriod')
-            this.setTime(timePerPeriod)
+            this.setTime(timePerPeriod.consume(1))
         }
     }
 }
 
 /**
- * Byoyomi time control player settings.
+ * Go Byoyomi time control player settings.
  */
-export interface ByoyomiPlayerSettings extends PlayerSettings {
+export interface GoByoyomiPlayerSettings extends PlayerSettings {
     mainTime: HourMinuteSecond
     timePerPeriod: HourMinuteSecond
     periods: number
 }
 
 /**
- * Byoyomi player extra data.
+ * Go Byoyomi player extra data.
  */
-export interface ByoyomiPlayerExtraData extends PlayerExtraData {
+export interface GoByoyomiPlayerExtraData extends PlayerExtraData {
     hasEnteredByoyomi: boolean
     remainingPeriods: number
 }

@@ -1,23 +1,20 @@
 import { Page, PageEnum } from './Page'
-import { Box } from '@chakra-ui/react'
+import { Box, Container } from '@chakra-ui/react'
 import { StyleMap } from '../../common/style'
 import { Navigation } from '../Navigation'
 import { BoardGames, BoardGameType } from '../../game'
-import { changePage, pulse, useAppDispatch } from '../../redux'
+import { changePage, notifyBoardGameChanged, useAppDispatch } from '../../redux'
 import bannerGo from '../../assets/img/banner-go.jpg'
-import { useBoardGame } from '../../state/useBoardGame'
+import bannerChess from '../../assets/img/banner-chess.png'
+import { boardGameHolder } from '../../common/holder'
 
 /**
  * Game selection page.
  */
 export function GameSelectionPage() {
     const dispatch = useAppDispatch()
-    const [, setGame] = useBoardGame()
     const styles: StyleMap = {
         container: {
-            height: 'calc(100% - 4em)',
-            width: '100%',
-            padding: '2em 1.5em',
             display: 'flex',
             gap: '1rem',
             flexDirection: 'column',
@@ -32,25 +29,35 @@ export function GameSelectionPage() {
         },
     }
 
-    function provideClickHandler(boardGameType: BoardGameType) {
+    function clickHandlerProvider(boardGameType: BoardGameType) {
         return function() {
-            setGame(BoardGames.get(boardGameType))
-            dispatch(pulse())
-            dispatch(changePage(PageEnum.GAME_SETTINGS))
+            boardGameHolder.assign(BoardGames.get(boardGameType))
+            dispatch(notifyBoardGameChanged())
+
+            setTimeout(() => {
+                dispatch(changePage(PageEnum.GAME_SETTINGS))
+            }, 250)
         }
     }
 
     return (
         <Page page={PageEnum.GAME_SELECTION}>
             <Navigation previousPage={PageEnum.PORTAL} title="Game Selection" />
-            <Box sx={styles.container}>
+            <Container paddingY={5} sx={styles.container}>
                 <Box
                     sx={styles.bannerGo}
-                    onClick={provideClickHandler(BoardGameType.Go)}
+                    onClick={clickHandlerProvider(BoardGameType.Go)}
                 >
                     <img src={bannerGo} alt={'Go Banner'} />
                 </Box>
-            </Box>
+
+                <Box
+                    sx={styles.bannerGo}
+                    onClick={clickHandlerProvider(BoardGameType.Chess)}
+                >
+                    <img src={bannerChess} alt={'Chess Banner'} />
+                </Box>
+            </Container>
         </Page>
     )
 }

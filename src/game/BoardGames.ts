@@ -1,5 +1,6 @@
 import { BoardGame } from './BoardGame'
 import { GoGame } from './categories/go'
+import { ChessGame } from './categories/chess'
 
 export class BoardGames {
     /**
@@ -20,6 +21,7 @@ export class BoardGames {
      */
     private constructor() {
         this.boardGameMap.set(BoardGameType.Go, GoGame)
+        this.boardGameMap.set(BoardGameType.Chess, ChessGame)
     }
 
     /**

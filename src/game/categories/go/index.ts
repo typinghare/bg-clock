@@ -1,2 +1,2 @@
-export * from './ByoyomiTimeControl'
+export * from './GoByoyomiTimeControl'
 export * from './GoGame'

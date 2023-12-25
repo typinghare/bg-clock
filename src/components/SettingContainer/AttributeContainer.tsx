@@ -9,7 +9,7 @@ import { Box, BoxProps, Switch, useBoolean } from '@chakra-ui/react'
 import { StyleMap } from '../../common/style'
 import { useState } from 'react'
 import { AttributeDescription } from './AttributeDescription'
-import { pulse, useAppDispatch } from '../../redux'
+import { notifySettingsChanged, useAppDispatch } from '../../redux'
 
 /**
  * Attribute container.
@@ -54,7 +54,7 @@ export function AttributeContainer(props: AttributeContainerProps) {
         setExpanded.off()
 
         // Refresh settings UI
-        dispatch(pulse())
+        dispatch(notifySettingsChanged())
     }
 
     function handleBooleanChange(): void {
@@ -63,7 +63,7 @@ export function AttributeContainer(props: AttributeContainerProps) {
         setValue(newValue)
 
         // Refresh settings UI
-        dispatch(pulse())
+        dispatch(notifySettingsChanged())
     }
 
     return (

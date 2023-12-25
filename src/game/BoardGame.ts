@@ -129,6 +129,11 @@ export class BoardGame {
         return this.game
     }
 
+    /**
+     * This method is called when a player taps their screen.
+     * @param role The role of the player.
+     * @protected
+     */
     protected onPlayerTap(role: Role): void {
         const player: Player = this.getPlayer(role)
         player.onTap()
@@ -209,6 +214,13 @@ export class BoardGame {
      */
     public isState(state: new () => BoardGameState): boolean {
         return this.state instanceof state
+    }
+
+    /**
+     * Returns the selected time control.
+     */
+    public getTimeControl(): TimeControl {
+        return this.timeControl
     }
 }
 

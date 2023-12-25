@@ -1,60 +1,85 @@
-import { Page, PageEnum } from './Page'
+import { Page, PageEnum } from '../Page'
 import { Alert, AlertIcon, Box, Button, Container } from '@chakra-ui/react'
-import { useState } from 'react'
-import { useBoardGame } from '../../state/useBoardGame'
-import { changePage, selectSignal, useAppDispatch, useAppSelector } from '../../redux'
+import { useEffect, useState } from 'react'
+import {
+    changePage,
+    notifyTimeControlChangedChanged,
+    selectBoardGameChangedSignal,
+    selectSettingsChangedSignal,
+    selectTimeControlChangedSignal,
+    useAppDispatch,
+    useAppSelector,
+} from '../../redux'
 import { Navigation } from '../Navigation'
 import { BoardGame, Player } from '../../game'
 import { TimeControlSelect } from './TimeControlSelect'
 import { SettingContainer } from '../SettingContainer'
+import { useDispatch } from 'react-redux'
+import { boardGameHolder } from '../../common/holder'
 
 /**
  * Game settings page.
  */
 export function GameSettingsPage() {
-    useAppSelector(selectSignal)
-    const [boardGame] = useBoardGame()
+    const dispatch = useDispatch()
+    const boardGameChangedSignal = useAppSelector(selectBoardGameChangedSignal)
+    const timeControlChangedSignal = useAppSelector(selectTimeControlChangedSignal)
+    const settingsChangedSignal = useAppSelector(selectSettingsChangedSignal)
+    const [boardGame, setBoardGame] = useState<BoardGame | undefined>()
     const [playerList, setPlayerList] = useState<Player[]>([])
+
+    useEffect(() => {
+        const currentBoardGame = boardGameHolder.get()
+        setBoardGame(currentBoardGame)
+        setPlayerList(currentBoardGame ? currentBoardGame.getPlayerList() : [])
+    }, [boardGameChangedSignal, timeControlChangedSignal])
+
+    useEffect(() => {
+        if (boardGame && boardGame.getAdvancedSettings().getValue('sync')) {
+            // Synchronize players values
+            const firstPlayer = playerList[0]
+            if (firstPlayer) {
+                // All other players align with the first player
+                const keys = Object.keys(firstPlayer.getData())
+                for (let i = 1; i < playerList.length; ++i) {
+                    const player = playerList[i]
+                    for (const key of keys) {
+                        player.getDatum(key).setValue(firstPlayer.getValue(key))
+                    }
+                }
+            }
+        }
+    }, [settingsChangedSignal])
 
     if (!boardGame) {
         return (
             <Page page={PageEnum.GAME_SETTINGS}>
                 <Navigation title="Game Settings" previousPage={PageEnum.GAME_SELECTION} />
-                <Alert m={2} status="error">
-                    <AlertIcon />
-                    Fatal Error: Fail to initialize a board game.
-                </Alert>
+                <Container pt={5}>
+                    <Alert status="error">
+                        <AlertIcon />
+                        <Box as={'span'} ml={2}> Fatal Error: Fail to initialize a board game. </Box>
+                    </Alert>
+                </Container>
             </Page>
         )
     }
 
-    if (boardGame.getAdvancedSettings().getValue('sync')) {
-        // Synchronize players values
-        const firstPlayer = playerList[0]
-        if (firstPlayer) {
-            // All other players align with the first player
-            const keys = Object.keys(firstPlayer.getData())
-            for (let i = 0; i < playerList.length; ++i) {
-                const player = playerList[i]
-                for (const key of keys) {
-                    player.getDatum(key).setValue(firstPlayer.getValue(key))
-                }
-            }
-        }
-    }
-
-    if (!playerList.length) {
-        setPlayerList(boardGame.getPlayerList())
-    }
-
     const timeControlList = boardGame.getTimeControlList()
 
+    const selectedTimeControlIndex: number = (function() {
+        const timeControlList = boardGame.getTimeControlList()
+        const timeControl = boardGame.getTimeControl()
+
+        return timeControlList.indexOf(timeControl)
+    })()
+
     function handleTimeControlSelect(timeControlIndex: number): void {
-        const timeControl = timeControlList[timeControlIndex]
         if (boardGame) {
-            boardGame.selectTimeControl(timeControl)
-            setPlayerList(boardGame.getPlayerList())
+            boardGame.selectTimeControl(timeControlList[timeControlIndex])
         }
+
+        dispatch(notifyTimeControlChangedChanged())
     }
 
     function PlayerSettings() {
@@ -72,7 +97,7 @@ export function GameSettingsPage() {
 
         const firstPlayer = playerList[0]
         if (!firstPlayer) {
-            return <></>
+            return (<></>)
         }
 
         return (
@@ -89,10 +114,11 @@ export function GameSettingsPage() {
     return (
         <Page page={PageEnum.GAME_SETTINGS}>
             <Navigation title="Game Settings" previousPage={PageEnum.GAME_SELECTION} />
-            <Container pt={3}>
-                <Box mt={3}>
+            <Container paddingY={5}>
+                <Box>
                     <TimeControlSelect
                         timeControlList={timeControlList}
+                        defaultSelectedTimeControlIndex={selectedTimeControlIndex}
                         onTimeControlSelect={handleTimeControlSelect}
                     />
                 </Box>
@@ -113,7 +139,7 @@ export function GameSettingsPage() {
 }
 
 /**
- * Start button
+ * Start button.
  */
 export function StartButton(props: StartButtonProps) {
     const { boardGame } = props
@@ -123,10 +149,9 @@ export function StartButton(props: StartButtonProps) {
         // Start the game
         if (boardGame) {
             boardGame.getReady()
-            console.log(boardGame)
         }
 
-        // The clock panel will retrieve the game from the GameHolder.
+        // The clock panel will retrieve the game from the GameHolder
         dispatch(changePage(PageEnum.CLOCK))
     }
 
@@ -134,7 +159,6 @@ export function StartButton(props: StartButtonProps) {
         <Button
             variant="solid"
             mt={3}
-            mb={3}
             w={'100%'}
             onClick={handleGameStart}
         >

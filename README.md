@@ -20,6 +20,10 @@ pnpm add @typinghare/game-core
 # Screenfull
 # @link https://www.npmjs.com/package/screenfull
 pnpm add screenfull
+
+# MomentJS
+# @link https://momentjs.com/docs/
+pnpm add moment
 ~~~
 
 ## Development

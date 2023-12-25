@@ -1,19 +1,25 @@
 import './App.css'
-import React, { createContext } from 'react'
+import React from 'react'
 import { GameSelectionPage, PortalPage } from '../Page'
-import { GameSettingsPage } from '../Page/GameSettingsPage'
-import { ClockPage } from '../ClockPage/ClockPage'
-import { Game } from '@typinghare/game-core'
+import { GameSettingsPage } from '../GameSettingsPage'
+import { ClockPage } from '../ClockPage'
+import { SettingsPage } from '../SettingsPage'
+import { ResumeGamePage } from '../ResumeGamePage'
+import { AboutPage } from '../AboutPage'
 
-export const GameContext = createContext<Game | undefined>(undefined)
-
+/**
+ * App. Register all pages here.
+ */
 export function App() {
     return (
-        <GameContext.Provider value={undefined}>
+        <>
             <PortalPage />
+            <SettingsPage />
+            <ResumeGamePage />
             <GameSelectionPage />
             <GameSettingsPage />
             <ClockPage />
-        </GameContext.Provider>
+            <AboutPage />
+        </>
     )
 }

@@ -47,6 +47,7 @@ export class DefaultPlayer extends Player<DefaultPlayerSettings> {
 
     public override getReady() {
         this.setTime(this.getValue('mainTime'))
+        console.log(this)
     }
 }
 

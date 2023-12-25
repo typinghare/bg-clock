@@ -1,17 +1,19 @@
 import { Page, PageEnum } from '../Page'
-import { selectSignal, useAppSelector } from '../../redux'
-import { useBoardGame } from '../../state/useBoardGame'
+import { selectBoardGameChangedSignal, selectTimeControlChangedSignal, useAppSelector } from '../../redux'
 import { Box } from '@chakra-ui/react'
 import { StyleMap } from '../../common/style'
 import { ClockDisplay } from './ClockDisplay'
-import { TwoPlayerBoardGame } from '../../game'
+import { BoardGame, TwoPlayerBoardGame } from '../../game'
+import { useEffect, useState } from 'react'
+import { boardGameHolder } from '../../common/holder'
 
 /**
  * Clock page.
  */
 export function ClockPage() {
-    useAppSelector(selectSignal)
-    const [boardGame] = useBoardGame()
+    const boardGameChangedSignal = useAppSelector(selectBoardGameChangedSignal)
+    const timeControlChangedSignal = useAppSelector(selectTimeControlChangedSignal)
+    const [boardGame, setBoardGame] = useState<BoardGame | undefined>(undefined)
     const styles: StyleMap = {
         section: {
             flex: 12,
@@ -26,6 +28,11 @@ export function ClockPage() {
             transform: 'rotate(180deg)',
         },
     }
+
+    useEffect(() => {
+        const currentBoardGame = boardGameHolder.get()
+        setBoardGame(currentBoardGame)
+    }, [boardGameChangedSignal, timeControlChangedSignal])
 
     if (!boardGame) {
         return (<Page page={PageEnum.CLOCK} />)
@@ -44,7 +51,7 @@ export function ClockPage() {
         <Page page={PageEnum.CLOCK}>
             <Box sx={styles.section}>
                 <ClockDisplay
-                    player={boardGame.getPlayer(TwoPlayerBoardGame.ROLE_A)}
+                    role={TwoPlayerBoardGame.ROLE_A}
                     sx={styles.sectionA}
                 />
             </Box>
@@ -53,7 +60,7 @@ export function ClockPage() {
 
             <Box sx={styles.section}>
                 <ClockDisplay
-                    player={boardGame.getPlayer(TwoPlayerBoardGame.ROLE_B)}
+                    role={TwoPlayerBoardGame.ROLE_B}
                 />
             </Box>
         </Page>

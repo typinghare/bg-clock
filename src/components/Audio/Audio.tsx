@@ -8,16 +8,25 @@ export function Audio(props: AudioProps) {
     const ref = useRef() as RefObject<HTMLAudioElement>
 
     useEffect(() => {
-        if (signal >= 0 && ref.current) {
-            const audio = ref.current
-            audio.volume = volume
-            audio.currentTime = 0
-            audio.play().then()
+        const playAudio = async () => {
+            if (signal >= 0 && ref.current) {
+                const audio = ref.current
+                audio.volume = volume
+                audio.currentTime = 0
+
+                try {
+                    await audio.play()
+                } catch (error) {
+                    console.error('Error playing audio:', error)
+                }
+            }
         }
+
+        playAudio().then()
     }, [signal])
 
     return (
-        <audio ref={ref}>
+        <audio ref={ref} preload="auto">
             <source src={src} type="audio/mpeg" />
         </audio>
     )

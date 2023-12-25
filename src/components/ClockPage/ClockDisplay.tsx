@@ -1,11 +1,10 @@
 import { Box, BoxProps } from '@chakra-ui/react'
-import { EndedState, NotStartedState, OngoingState, Player, PlayerTapEvent } from '../../game'
+import { BoardGame, EndedState, NotStartedState, OngoingState, Player, PlayerTapEvent, Role } from '../../game'
 import { useEffect, useState } from 'react'
 import { HourMinuteSecond, SlowHourMinuteSecond } from '@typinghare/hour-minute-second'
 import { Color } from './constants'
 import { StyleMap } from '../../common/style'
 import { TimeDisplay } from './TimeDisplay'
-import { useBoardGame } from '../../state/useBoardGame'
 import { ClockBubbleContainer } from './ClockBubbleContainer'
 import soundBeep from '../../assets/sounds/beep.wav'
 import soundCountdown1 from '../../assets/sounds/countdown/1.mp3'
@@ -18,6 +17,9 @@ import soundCountdown7 from '../../assets/sounds/countdown/7.mp3'
 import soundCountdown8 from '../../assets/sounds/countdown/8.mp3'
 import soundCountdown9 from '../../assets/sounds/countdown/9.mp3'
 import { Audio } from '../Audio'
+import { useSettings } from '../../state/useSettings'
+import { selectBoardGameChangedSignal, selectTimeControlChangedSignal, useAppSelector } from '../../redux'
+import { boardGameHolder } from '../../common/holder'
 
 const soundCountdownList = [
     soundCountdown1,
@@ -35,12 +37,15 @@ const soundCountdownList = [
  * Clock display.
  */
 export function ClockDisplay(props: ClockDisplayProps) {
-    const { player, sx, ...boxProps } = props
-    const [boardGame] = useBoardGame()
+    const { role, sx, ...boxProps } = props
+    const boardGameChangedSignal = useAppSelector(selectBoardGameChangedSignal)
+    const timeControlChangedSignal = useAppSelector(selectTimeControlChangedSignal)
+    const [boardGame, setBoardGame] = useState<BoardGame | undefined>(undefined)
+    const [player, setPlayer] = useState<Player | undefined>(undefined)
     const [time, setTime] = useState<HourMinuteSecond>(SlowHourMinuteSecond.ofSeconds(0))
     const [color, setColor] = useState<string>(Color.TIME_PAUSED_COLOR)
     const [beepSignal, setBeepSignal] = useState(-1)
-    const clockTimeFontSize = 15
+    const settings = useSettings()
     const styles: StyleMap = {
         root: {
             position: 'relative',
@@ -51,7 +56,7 @@ export function ClockDisplay(props: ClockDisplayProps) {
             ...sx,
         },
         timeDisplay: {
-            fontSize: clockTimeFontSize + 'vh',
+            fontSize: (settings.getValue('clockTimeFontSize') / 3) + 'rem',
             fontFamily: 'Digital-7',
             color: color,
             userSelect: 'none',
@@ -70,12 +75,17 @@ export function ClockDisplay(props: ClockDisplayProps) {
                 return
             }
 
-            const time = player.getTime()
-            setTime(time)
+            const player = boardGame.getPlayer(role)
+            if (!player) {
+                return
+            }
+
+            const currentTime = player.getTime()
+            setTime(currentTime)
 
             // Change font color
             const boardGameState = boardGame.getState()
-            if (boardGameState instanceof EndedState && time.ms === 0) {
+            if (boardGameState instanceof EndedState && currentTime.ms === 0) {
                 setColor(Color.TIME_UP_COLOR)
             } else {
                 if (player.isPaused()) {
@@ -86,11 +96,24 @@ export function ClockDisplay(props: ClockDisplayProps) {
             }
         }, SlowHourMinuteSecond.MILLISECONDS_IN_SECOND / 60)
 
-        return (): void => {
-            // Clear time interval.
-            if (intervalHandle) clearInterval(intervalHandle)
+        return () => {
+            if (intervalHandle) {
+                clearInterval(intervalHandle)
+            }
         }
-    }, [])
+    }, [boardGame])
+
+    useEffect(() => {
+        const currentBoardGame = boardGameHolder.get()
+        setBoardGame(currentBoardGame)
+        if (currentBoardGame) {
+            setPlayer(currentBoardGame.getPlayer(role))
+        }
+    }, [boardGameChangedSignal, timeControlChangedSignal])
+
+    if (!player) {
+        return (<Box />)
+    }
 
     function handleClick(): void {
         if (!boardGame) {
@@ -107,7 +130,7 @@ export function ClockDisplay(props: ClockDisplayProps) {
         }
 
         boardGame.getGameContext().eventManager.trigger(new PlayerTapEvent({
-            role: player.getRole(),
+            role,
         }))
     }
 
@@ -134,19 +157,18 @@ export function ClockDisplay(props: ClockDisplayProps) {
 
 /**
  * Clock countdown audios.
+ * @summary This is fucking hard.
  */
 export function ClockCountdownAudio(props: ClockCountdownAudioProps) {
     const { player } = props
-    const [second, setSecond] = useState<number>(player.getTime().second)
     const [signalList, setSignalList] = useState<number[]>(Array(9).fill(-1))
 
     useEffect(() => {
+        let second: number = player.getTime().second
         const intervalHandle = setInterval(() => {
-            const time: HourMinuteSecond = player.getTime()
-            const currentSecond = time.second
-
+            const currentSecond = player.getTime().second
             if (second !== currentSecond) {
-                setSecond(currentSecond)
+                second = currentSecond
 
                 if (currentSecond >= 1 && currentSecond <= 9) {
                     const index = currentSecond - 1
@@ -158,18 +180,23 @@ export function ClockCountdownAudio(props: ClockCountdownAudioProps) {
                     })
                 }
             }
-        }, 10)
+        }, 60)
 
-        return (): void => {
-            // Clear time interval.
-            if (intervalHandle) clearInterval(intervalHandle)
+        return () => {
+            if (intervalHandle) {
+                clearInterval(intervalHandle)
+            }
         }
-    }, [second, player])
+    }, [player])
 
     return (
         <>
             {signalList.map((_, index) => (
-                <Audio key={index} signal={signalList[index]} src={soundCountdownList[index]} />
+                <Audio
+                    key={index}
+                    signal={signalList[index]}
+                    src={soundCountdownList[index]}
+                />
             ))}
         </>
     )
@@ -179,7 +206,7 @@ export function ClockCountdownAudio(props: ClockCountdownAudioProps) {
  * Clock display properties.
  */
 export interface ClockDisplayProps extends BoxProps {
-    player: Player
+    role: Role
 }
 
 /**

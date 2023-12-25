@@ -18,7 +18,7 @@ export function ExpandableContainer(props: ExpandableContainerProps) {
             <AccordionItem>
                 <h2>
                     <AccordionButton onClick={onExpandButtonClick}>
-                        <Box as="b" flex='1' textAlign="left">
+                        <Box as="b" flex="1" textAlign="left">
                             {title}
                         </Box>
                         <AccordionIcon />

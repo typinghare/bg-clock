@@ -2,23 +2,39 @@ import { createSlice } from '@reduxjs/toolkit'
 import { RootState } from '../store'
 
 export type RepeaterState = {
-    signal: boolean
+    boardGameChangedSignal: boolean
+    timeControlChangedSignal: boolean
+    settingsChangedSignal: boolean
 }
 
 export const repeaterSlice = createSlice({
     name: 'repeater',
     initialState: {
-        signal: false,
+        boardGameChangedSignal: false,
+        timeControlChangedSignal: false,
+        settingsChangedSignal: false,
     },
     reducers: {
-        pulse(state: RepeaterState) {
-            state.signal = !state.signal
+        notifyBoardGameChanged(state: RepeaterState) {
+            state.boardGameChangedSignal = !state.boardGameChangedSignal
+        },
+        notifyTimeControlChangedChanged(state: RepeaterState) {
+            state.boardGameChangedSignal = !state.boardGameChangedSignal
+        },
+        notifySettingsChanged(state: RepeaterState) {
+            state.settingsChangedSignal = !state.settingsChangedSignal
         },
     },
 })
 
-export const { pulse } = repeaterSlice.actions
+export const {
+    notifyBoardGameChanged,
+    notifyTimeControlChangedChanged,
+    notifySettingsChanged,
+} = repeaterSlice.actions
 
-export const selectSignal = (state: RootState) => state.repeaterSlice.signal
+export const selectBoardGameChangedSignal = (state: RootState) => state.repeaterSlice.boardGameChangedSignal
+export const selectTimeControlChangedSignal = (state: RootState) => state.repeaterSlice.timeControlChangedSignal
+export const selectSettingsChangedSignal = (state: RootState) => state.repeaterSlice.settingsChangedSignal
 
 export default repeaterSlice.reducer

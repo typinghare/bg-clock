@@ -1,7 +1,7 @@
 import { TwoPlayerBoardGame } from '../../TwoPlayerBoardGame'
-import { ByoyomiTimeControl } from './ByoyomiTimeControl'
+import { GoByoyomiTimeControl } from './GoByoyomiTimeControl'
 import { TimeControl } from '../../TimeControl'
-import { YingshiTimeControl } from './YingshiTimeControl'
+import { GoYingshiTimeControl } from './GoYingshiTimeControl'
 
 /**
  * Game of Go.
@@ -10,10 +10,11 @@ import { YingshiTimeControl } from './YingshiTimeControl'
 export class GoGame extends TwoPlayerBoardGame {
     public constructor() {
         super([
-            new ByoyomiTimeControl(),
             new TimeControl(),
-            //  new ByoyomiTimeControl(),
-            new YingshiTimeControl(),
+            new GoByoyomiTimeControl(),
+            new GoYingshiTimeControl(),
         ])
+
+        this.selectTimeControl(this.timeControlList[1])
     }
 }
