@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "homepage": "bgc",
   "author": {
     "name": "James Chan",
     "email": "jameschan312.cn@gmail.com"
