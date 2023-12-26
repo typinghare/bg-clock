@@ -120,7 +120,6 @@ export function ClockDisplay(props: ClockDisplayProps) {
         }
 
         if (boardGame.isState(NotStartedState) || boardGame.isState(OngoingState)) {
-            console.log(beepSignal)
             setBeepSignal((beepSignal + 1) % 2)
         }
 
@@ -166,25 +165,24 @@ export function ClockCountdownAudio(props: ClockCountdownAudioProps) {
     useEffect(() => {
         let second: number = player.getTime().second
         const intervalHandle = setInterval(() => {
-            const time = player.getTime()
-            if (time.ms > 9 * HourMinuteSecond.MILLISECONDS_IN_SECOND) {
+            const currentSecond = Math.floor(player.getTime().ms / HourMinuteSecond.MILLISECONDS_IN_SECOND)
+            if (second !== currentSecond) {
+                second = currentSecond
+            } else {
                 return
             }
 
-            const currentSecond = player.getTime().second
-            if (second !== currentSecond) {
-                second = currentSecond
-
-                if (currentSecond >= 1 && currentSecond <= 9) {
-                    const index = currentSecond - 1
-                    setSignalList((prevSignalList) => {
-                        const newSignalList = [...prevSignalList]
-                        newSignalList[index] = (1 + newSignalList[index]) % 2
-
-                        return newSignalList
-                    })
-                }
+            if (second > 9 || second <= 0) {
+                return
             }
+
+            const index = currentSecond - 1
+            setSignalList((prevSignalList) => {
+                const newSignalList = [...prevSignalList]
+                newSignalList[index] = (1 + newSignalList[index]) % 2
+
+                return newSignalList
+            })
         }, 60)
 
         return () => {
