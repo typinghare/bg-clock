@@ -15,7 +15,7 @@ import { notifySettingsChanged, useAppDispatch } from '../../redux'
  * Attribute container.
  */
 export function AttributeContainer(props: AttributeContainerProps) {
-    const { attribute } = props
+    const { attribute, onChange } = props
     const dispatch = useAppDispatch()
     const [expanded, setExpanded] = useBoolean()
     const styles: StyleMap = {
@@ -53,6 +53,10 @@ export function AttributeContainer(props: AttributeContainerProps) {
         setValue(newValue)
         setExpanded.off()
 
+        if (onChange) {
+            onChange()
+        }
+
         // Refresh settings UI
         dispatch(notifySettingsChanged())
     }
@@ -61,6 +65,10 @@ export function AttributeContainer(props: AttributeContainerProps) {
         const newValue = !attribute.getValue()
         attribute.setValue(newValue)
         setValue(newValue)
+
+        if (onChange) {
+            onChange()
+        }
 
         // Refresh settings UI
         dispatch(notifySettingsChanged())
@@ -118,8 +126,6 @@ export function AttributeValue(props: AttributeValueProps) {
 export interface AttributeValueProps extends BoxProps {
     type: BoardGameSettingsMetadata['type']
     value: BoardGameAttributeValue
-
-    onChange?: () => void
 }
 
 /**
@@ -127,4 +133,5 @@ export interface AttributeValueProps extends BoxProps {
  */
 export interface AttributeContainerProps {
     attribute: BoardGameAttribute
+    onChange?: () => void
 }

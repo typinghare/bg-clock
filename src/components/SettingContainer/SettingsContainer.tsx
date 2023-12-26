@@ -11,7 +11,7 @@ import { AttributeContainer } from './AttributeContainer'
  * @constructor
  */
 export function SettingContainer(props: SettingContainerProps) {
-    const { title, dataCollection, expanded: defaultExpanded } = props
+    const { title, dataCollection, expanded: defaultExpanded, onSettingChange } = props
     const [expanded, setExpanded] = useBoolean(defaultExpanded || false)
     const attributeList = dataCollection.getDatumList() as BoardGameAttribute[]
 
@@ -23,7 +23,7 @@ export function SettingContainer(props: SettingContainerProps) {
         >
             {attributeList.map(((attribute, index) => (
                 <Box key={index}>
-                    <AttributeContainer attribute={attribute} />
+                    <AttributeContainer attribute={attribute} onChange={onSettingChange} />
                     {index == attributeList.length - 1 ? '' :
                         <Horizontal floatRight margin="0.5rem 0" width="80%" />}
                 </Box>
@@ -43,5 +43,8 @@ export interface SettingContainerProps {
 
     // Whether it is expanded by default
     expanded?: boolean
+
+    // Fired when any setting is changed
+    onSettingChange?: () => void
 }
 

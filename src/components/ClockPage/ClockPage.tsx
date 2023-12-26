@@ -38,15 +38,6 @@ export function ClockPage() {
         return (<Page page={PageEnum.CLOCK} />)
     }
 
-    // Enable full screen.
-    // if (screenfull.isEnabled) {
-    //     screenfull.request().then().catch(e => {
-    //         console.log(e)
-    //         // Here a `TypeError` will be thrown,
-    //         // but it does not hurt the app so just ignore it
-    //     })
-    // }
-
     return (
         <Page page={PageEnum.CLOCK}>
             <Box sx={styles.section}>

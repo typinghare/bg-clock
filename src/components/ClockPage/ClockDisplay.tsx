@@ -17,9 +17,9 @@ import soundCountdown7 from '../../assets/sounds/countdown/7.mp3'
 import soundCountdown8 from '../../assets/sounds/countdown/8.mp3'
 import soundCountdown9 from '../../assets/sounds/countdown/9.mp3'
 import { Audio } from '../Audio'
-import { useSettings } from '../../state/useSettings'
 import { selectBoardGameChangedSignal, selectTimeControlChangedSignal, useAppSelector } from '../../redux'
 import { boardGameHolder } from '../../common/holder'
+import { settings } from '../../common/settings'
 
 const soundCountdownList = [
     soundCountdown1,
@@ -45,7 +45,6 @@ export function ClockDisplay(props: ClockDisplayProps) {
     const [time, setTime] = useState<HourMinuteSecond>(SlowHourMinuteSecond.ofSeconds(0))
     const [color, setColor] = useState<string>(Color.TIME_PAUSED_COLOR)
     const [beepSignal, setBeepSignal] = useState(-1)
-    const settings = useSettings()
     const styles: StyleMap = {
         root: {
             position: 'relative',
@@ -56,7 +55,7 @@ export function ClockDisplay(props: ClockDisplayProps) {
             ...sx,
         },
         timeDisplay: {
-            fontSize: (settings.getValue('clockTimeFontSize') / 3) + 'rem',
+            fontSize: settings.getValue('clockTimeFontSize') + 'vw',
             fontFamily: 'Digital-7',
             color: color,
             userSelect: 'none',
@@ -121,6 +120,7 @@ export function ClockDisplay(props: ClockDisplayProps) {
         }
 
         if (boardGame.isState(NotStartedState) || boardGame.isState(OngoingState)) {
+            console.log(beepSignal)
             setBeepSignal((beepSignal + 1) % 2)
         }
 
@@ -166,6 +166,11 @@ export function ClockCountdownAudio(props: ClockCountdownAudioProps) {
     useEffect(() => {
         let second: number = player.getTime().second
         const intervalHandle = setInterval(() => {
+            const time = player.getTime()
+            if (time.ms > 9 * HourMinuteSecond.MILLISECONDS_IN_SECOND) {
+                return
+            }
+
             const currentSecond = player.getTime().second
             if (second !== currentSecond) {
                 second = currentSecond

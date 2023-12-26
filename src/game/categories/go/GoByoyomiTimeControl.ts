@@ -10,7 +10,7 @@ import { BoardGame } from '../../BoardGame'
 export class GoByoyomiTimeControl extends TimeControl {
     public override createPlayer(role: Role, boardGame: BoardGame): GoByoyomiPlayer {
         return new GoByoyomiPlayer(role, boardGame, {
-            mainTime: Datum.of(HourMinuteSecond.ofMinutes(0.2)).setMetadata({
+            mainTime: Datum.of(HourMinuteSecond.ofMinutes(5)).setMetadata({
                 type: 'time',
                 label: 'Main Time',
                 description: 'The initial allotted time for a player to make moves without any additional constraints.',
@@ -22,7 +22,7 @@ export class GoByoyomiTimeControl extends TimeControl {
                     HourMinuteSecond.ofMinutes(180),
                 ],
             }),
-            timePerPeriod: Datum.of(HourMinuteSecond.ofSeconds(5)).setMetadata({
+            timePerPeriod: Datum.of(HourMinuteSecond.ofSeconds(30)).setMetadata({
                 type: 'time',
                 label: 'Time Per Period',
                 description: 'The time given for each subsequent phase after the main time runs out is reduced by ' +

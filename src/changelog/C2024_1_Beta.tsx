@@ -16,6 +16,6 @@ export class C2024_1_Beta extends Changelog {
         this.add('improved', <span>Redesigned a new UI.</span>)
         this.add('improved', <span>Used game core to refactor the clock system.</span>)
 
-        this.add('fixed', <span>Fixed an issue where two clocks do not runs independently.</span>)
+        this.add('fixed', <span>Fixed an issue where two clocks do not run independently.</span>)
     }
 }

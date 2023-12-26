@@ -16,6 +16,7 @@ import { TimeControlSelect } from './TimeControlSelect'
 import { SettingContainer } from '../SettingContainer'
 import { useDispatch } from 'react-redux'
 import { boardGameHolder } from '../../common/holder'
+import screenfull from 'screenfull'
 
 /**
  * Game settings page.
@@ -159,6 +160,15 @@ export function StartButton(props: StartButtonProps) {
 
         // The clock panel will retrieve the game from the GameHolder
         dispatch(changePage(PageEnum.CLOCK))
+
+        // Enable full screen.
+        if (screenfull.isEnabled) {
+            screenfull.request().then().catch(e => {
+                console.log(e)
+                // Here a `TypeError` will be thrown,
+                // but it does not hurt the app so just ignore it
+            })
+        }
     }
 
     return (

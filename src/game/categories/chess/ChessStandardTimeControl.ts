@@ -18,7 +18,7 @@ export class ChessStandardTimeControl extends TimeControl {
                     HourMinuteSecond.ofMinutes(90),
                 ],
             }),
-            timeIncrement: Datum.of(HourMinuteSecond.ofSeconds(5)).setMetadata({
+            timeIncrement: Datum.of(HourMinuteSecond.ofSeconds(30)).setMetadata({
                 type: 'time',
                 label: 'Time Increment',
                 description: 'An additional amount of time added to a player\'s clock after each move. It provides a ' +
