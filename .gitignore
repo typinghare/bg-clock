@@ -23,8 +23,8 @@ node_modules
 # Testing
 coverage
 
-# Production
-build
+# Production (I cannot build on my server which only has 2G memory!!!)
+# build
 
 # Miscellaneous
 *.local

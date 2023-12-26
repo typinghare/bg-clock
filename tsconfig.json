@@ -19,7 +19,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "types": [
-      "testing-library__jest-dom"
     ]
   },
   "include": [
