@@ -24,6 +24,8 @@ module.exports = [
             ...js.configs.recommended.rules, // ...tsPlugin.configs.recommended.rules,
             // ...reactPlugin.configs.recommended.rules,
             indent: ['error', 4],
+            // Disable this because it's super inaccurate. Let IDE do the job!
+            'no-unused-vars': 'off',
             'react/react-in-jsx-scope': 'off',
         },
         settings: {

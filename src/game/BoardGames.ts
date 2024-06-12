@@ -2,6 +2,9 @@ import { BoardGame } from './BoardGame'
 import { GoGame } from './categories/go'
 import { ChessGame } from './categories/chess'
 
+/**
+ * Singleton board game collection.
+ */
 export class BoardGames {
     /**
      * Singleton instance.
@@ -29,12 +32,22 @@ export class BoardGames {
      * @param boardGameType The specific type of board game.
      */
     public static get(boardGameType: BoardGameType): BoardGame {
-        const boardGameClass = BoardGames.Instance.boardGameMap.get(boardGameType)
+        const boardGameClass = this.Instance.boardGameMap.get(boardGameType)
         if (boardGameClass === undefined) {
             throw new InvalidBoardGameTypeException(boardGameType)
         }
 
         return new boardGameClass()
+    }
+
+    public static getBoardGameType(boardGame: BoardGame): BoardGameType {
+        for (const [boardGameType, boardGameClass] of this.Instance.boardGameMap.entries()) {
+            if (boardGame instanceof boardGameClass) {
+                return boardGameType
+            }
+        }
+
+        return BoardGameType.UNKNOWN
     }
 }
 
@@ -42,8 +55,9 @@ export class BoardGames {
  * Board game type.
  */
 export enum BoardGameType {
-    Go = 0,
-    Chess = 1
+    UNKNOWN = 0,
+    Go = 1,
+    Chess = 2
 }
 
 /**
@@ -55,4 +69,4 @@ export class InvalidBoardGameTypeException extends Error {
     }
 }
 
-type BoardGameClass = new () => BoardGame
+export type BoardGameClass = new () => BoardGame

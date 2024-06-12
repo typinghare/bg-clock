@@ -91,7 +91,7 @@ export function AttributeValue(props: AttributeValueProps) {
     return (
         <Box
             as="span"
-            fontFamily={type === 'time' ? FontFamily.Digital_7 : 'inherit'}
+            fontFamily={type === 'time' ? FontFamily.DIGITAL_7 : 'inherit'}
             {...otherProps}
         >
             {type === 'bool' && (<Switch isChecked={!!value} onChange={onChange} />)}

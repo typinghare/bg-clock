@@ -19,7 +19,7 @@ export class Player<
     protected time: HourMinuteSecond = HourMinuteSecond.ofSeconds(0)
 
     /**
-     * Whether
+     * Whether the player is paused.
      * @protected
      */
     protected paused: boolean
@@ -164,12 +164,9 @@ export interface PlayerExtraData {
 export type PlayerExtraDataMetadata = {
     // Whether to display this item
     isDisplayed: false
-
     getDisplayedContent?: undefined
 } | {
     // Whether to display this item
     isDisplayed: true
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     getDisplayedContent: (value: any) => string
 }

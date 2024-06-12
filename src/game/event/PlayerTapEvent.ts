@@ -11,9 +11,6 @@ export class PlayerTapEvent extends GameEvent<PlayerTapEventData> {
     }
 }
 
-/**
- * Player tap event data.
- */
 export interface PlayerTapEventData extends GameEventData {
     role: Role
 }

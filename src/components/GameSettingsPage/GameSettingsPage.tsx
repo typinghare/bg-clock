@@ -17,6 +17,7 @@ import { SettingContainer } from '../SettingContainer'
 import { useDispatch } from 'react-redux'
 import { boardGameHolder } from '../../common/holder'
 import screenfull from 'screenfull'
+import { settings } from '../../common/settings'
 
 /**
  * Game settings page.
@@ -67,10 +68,12 @@ export function GameSettingsPage() {
         return (
             <Page page={PageEnum.GAME_SETTINGS}>
                 <Navigation title="Game Settings" previousPage={PageEnum.GAME_SELECTION} />
-                <Container pt={5}>
+                <Container paddingTop={5}>
                     <Alert status="error">
                         <AlertIcon />
-                        <Box as={'span'} ml={2}> Fatal Error: Fail to initialize a board game. </Box>
+                        <Box as={'span'} marginLeft={2}>
+                            Fatal Error: Fail to initialize a board game.
+                        </Box>
                     </Alert>
                 </Container>
             </Page>
@@ -162,11 +165,9 @@ export function StartButton(props: StartButtonProps) {
         dispatch(changePage(PageEnum.CLOCK))
 
         // Enable full screen.
-        if (screenfull.isEnabled) {
+        if (settings.getValue('fullScreen') && screenfull.isEnabled) {
             screenfull.request().then().catch(e => {
                 console.log(e)
-                // Here a `TypeError` will be thrown,
-                // but it does not hurt the app so just ignore it
             })
         }
     }
@@ -174,8 +175,8 @@ export function StartButton(props: StartButtonProps) {
     return (
         <Button
             variant="solid"
-            mt={3}
-            w={'100%'}
+            marginTop={3}
+            width={'100%'}
             onClick={handleGameStart}
         >
             Start

@@ -1,19 +1,18 @@
-import { CSSProperties } from 'react'
-import { Box } from '@chakra-ui/react'
+import { Box, BoxProps, Divider } from '@chakra-ui/react'
 
 /**
  * Horizontal rule.
  */
 export function Horizontal(props: HorizontalProps) {
-    const { margin, width = '100%', floatRight = false } = props
+    const { width = '100%', floatRight = false, ...otherProps } = props
 
     return (
         <Box
             display="flex"
             justifyContent={floatRight ? 'flex-end' : 'flex-start'}
-            margin={margin}
+            {...otherProps}
         >
-            <hr style={{ width }} />
+            <Divider width={width} />
         </Box>
     )
 }
@@ -21,8 +20,6 @@ export function Horizontal(props: HorizontalProps) {
 /**
  * Horizontal rule properties.
  */
-export interface HorizontalProps {
-    margin?: CSSProperties['margin']
-    width?: CSSProperties['width']
+export interface HorizontalProps extends BoxProps {
     floatRight?: boolean
 }

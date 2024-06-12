@@ -15,6 +15,7 @@ export function Page(props: PageProps) {
             overflowY="auto"
         >
             <GridItem
+                display="flex"
                 flexDirection="column"
                 height="100%"
                 width="100%"

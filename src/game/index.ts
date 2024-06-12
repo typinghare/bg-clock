@@ -6,6 +6,7 @@ export * from './Player'
 export * from './TimeControl'
 export * from './BoardGames'
 export * from './TwoPlayerBoardGame'
+export * from './BoardGameSave'
 
 // Event
 export * from './event/PlayerTapEvent'

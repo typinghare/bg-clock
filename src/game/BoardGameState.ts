@@ -63,7 +63,6 @@ export class PausedState implements BoardGameState {
  * Ended state.
  */
 export class EndedState implements BoardGameState {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     public handle(_: BoardGameRequest): BoardGameState {
         return this
     }

@@ -35,7 +35,7 @@ export function AttributeExpand(props: AttributeExpandProps) {
                 display="inline-flex"
                 onClick={handleClick}
                 colorScheme={isEqual(value, option) ? 'green' : 'gray'}
-                fontFamily={type === 'time' ? FontFamily.Digital_7 : 'inherit'}
+                fontFamily={type === 'time' ? FontFamily.DIGITAL_7 : 'inherit'}
             >
                 {option.toString()}
             </Button>

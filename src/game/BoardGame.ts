@@ -228,6 +228,10 @@ export class BoardGame {
     public getTimeControl(): TimeControl {
         return this.timeControl
     }
+
+    public addPlugin(boardGamePlugin: BoardGamePlugin): void {
+        this.pluginList.push(boardGamePlugin)
+    }
 }
 
 /**
