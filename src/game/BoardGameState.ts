@@ -53,6 +53,8 @@ export class PausedState implements BoardGameState {
     public handle(request: BoardGameRequest): BoardGameState {
         if (request instanceof PlayerResumeRequest) {
             return new OngoingState()
+        } else if (request instanceof PlayerTapRequest) {
+            return new OngoingState()
         }
 
         return this

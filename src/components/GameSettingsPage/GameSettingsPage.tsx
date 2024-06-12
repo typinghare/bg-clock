@@ -11,13 +11,12 @@ import {
     useAppSelector,
 } from '../../redux'
 import { Navigation } from '../Navigation'
-import { BoardGame, Player } from '../../game'
+import { BoardGame, NotStartedState, Player } from '../../game'
 import { TimeControlSelect } from './TimeControlSelect'
 import { SettingContainer } from '../SettingContainer'
 import { useDispatch } from 'react-redux'
 import { boardGameHolder } from '../../common/holder'
-import screenfull from 'screenfull'
-import { settings } from '../../common/settings'
+import { enableFullScreen } from '../../common/helper'
 
 /**
  * Game settings page.
@@ -156,20 +155,17 @@ export function StartButton(props: StartButtonProps) {
     const dispatch = useAppDispatch()
 
     function handleGameStart(): void {
-        // Start the game
-        if (boardGame) {
-            boardGame.getReady()
+        if (!boardGame || !boardGame.isState(NotStartedState)) {
+            return
         }
 
-        // The clock panel will retrieve the game from the GameHolder
+        boardGame.start()
+
+        // The clock page will retrieve the game from the GameHolder
         dispatch(changePage(PageEnum.CLOCK))
 
-        // Enable full screen.
-        if (settings.getValue('fullScreen') && screenfull.isEnabled) {
-            screenfull.request().then().catch(e => {
-                console.log(e)
-            })
-        }
+        // Enable full screen
+        enableFullScreen()
     }
 
     return (

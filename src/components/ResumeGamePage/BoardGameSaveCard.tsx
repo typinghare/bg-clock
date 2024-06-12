@@ -1,12 +1,12 @@
 import { BoardGameSaveObject } from '../../game'
-import { Card, CardBody, Heading } from '@chakra-ui/react'
+import { Card, CardBody, CardProps, Heading } from '@chakra-ui/react'
 import moment from 'moment'
 
 export function BoardGameSaveCard(props: BoardGameSaveCardProps) {
-    const { saveObject } = props
+    const { saveObject, ...otherProps } = props
 
     return (
-        <Card>
+        <Card {...otherProps}>
             <CardBody>
                 <Heading>
                     Go Game
@@ -17,6 +17,6 @@ export function BoardGameSaveCard(props: BoardGameSaveCardProps) {
     )
 }
 
-export interface BoardGameSaveCardProps {
+export interface BoardGameSaveCardProps extends CardProps {
     saveObject: BoardGameSaveObject
 }

@@ -31,8 +31,6 @@ export class BoardGameAudio extends BoardGamePlugin {
     ]
 
     public override onStart() {
-        const gameContext = this.boardGame.getGameContext()
-
         // Load all audio files
         this.beepAudio.load()
         for (const countdownAudio of this.countdownAudioList) {
@@ -40,15 +38,17 @@ export class BoardGameAudio extends BoardGamePlugin {
         }
 
         // Add handler for PlayerTapEvent
+        const gameContext = this.boardGame.getGameContext()
         gameContext.eventManager.addHandler(PlayerTapEvent, () => {
             // Create a copy of beepSoundEffectAudio and play it
-            this.playAudio(this.beepAudio)
+            this.playAudio(this.beepAudio, true)
         })
 
         // Add handler for countdown
         gameContext.eventManager.addHandler<CountDownEventData>(CountdownEvent, (eventData) => {
             const seconds = eventData.getValue('seconds')
             if (seconds >= 0 && seconds < 10) {
+                console.log(seconds)
                 this.playAudio(this.countdownAudioList[seconds - 1])
             }
         })
@@ -57,12 +57,20 @@ export class BoardGameAudio extends BoardGamePlugin {
     /**
      * Creates a copy of beepSoundEffectAudio and play it
      * @param audio The audio to play.
+     * @param copy
      * @private
      */
-    private playAudio(audio: HTMLAudioElement): void {
-        const clonedAudio = audio.cloneNode() as HTMLAudioElement
-        clonedAudio.play().catch(error => {
-            console.error('Error playing the audio: ', error)
-        })
+    private playAudio(audio: HTMLAudioElement, copy: boolean = false): void {
+        if (copy) {
+            const clonedAudio = audio.cloneNode() as HTMLAudioElement
+            clonedAudio.play().catch(error => {
+                console.error('Error playing the audio: ', error)
+            })
+        } else {
+            audio.currentTime = 0
+            audio.play().catch(error => {
+                console.error('Error playing the audio: ', error)
+            })
+        }
     }
 }

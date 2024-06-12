@@ -36,8 +36,8 @@ dependencies:
     specifier: ^1.0.1
     version: 1.0.1
   '@typinghare/hour-minute-second':
-    specifier: ^1.1.1
-    version: 1.1.1
+    specifier: ^1.2.0
+    version: 1.2.0
   framer-motion:
     specifier: ^10.18.0
     version: 10.18.0(react-dom@18.3.1)(react@18.3.1)
@@ -2266,8 +2266,8 @@ packages:
     resolution: {integrity: sha512-3v/AzmX2lwXi+28g39r6107M6JLPX8DLUmkfz82vmnMbu9U388JxjCJchaiwlYBSMwdkSCR/hyRGoV1rqCWxMA==}
     dev: false
 
-  /@typinghare/hour-minute-second@1.1.1:
-    resolution: {integrity: sha512-M5rZVFoRqXddOmnHItIOKGJnmDqHKNMc4RXc5Cun+SLTy/vh6Dt28O0acFun/V3C/DXg1ojyaUNplIKreboLcg==}
+  /@typinghare/hour-minute-second@1.2.0:
+    resolution: {integrity: sha512-aDS/X/yjz1seB9YJnFaNGOgzqNUMPn0ilp0eGLWMTjwfThwaffmYyEGwfczZQejo+0BFcNHRMvFe8jDNvkJtHw==}
     dev: false
 
   /@typinghare/stack-queue@0.1.1:

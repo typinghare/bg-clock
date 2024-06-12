@@ -1,7 +1,7 @@
 import { TimeControl } from './TimeControl'
 import { Context, ContextData, float, Game } from '@typinghare/game-core'
 import { Player, Role } from './Player'
-import { BoardGameState, NotStartedState } from './BoardGameState'
+import { BoardGameState, NotStartedState, PausedState } from './BoardGameState'
 import { PlayerTapEvent } from './event/PlayerTapEvent'
 import { BoardGameRequest } from './BoardGameRequest'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
@@ -97,19 +97,14 @@ export class BoardGame {
     }
 
     /**
-     * All players get ready. After this method is being called, time control cannot be changed.
-     */
-    public getReady(): void {
-        this.getPlayerList().forEach(player => {
-            player.getReady()
-        })
-    }
-
-    /**
      * Starts the board game.
      * @return The game object.
      */
     public start(): Game {
+        this.getPlayerList().forEach(player => {
+            player.getReady()
+        })
+
         // Create a game
         this.game = new Game((deltaTime: float) => {
             this.updatePlayerDeltaTime(deltaTime)
@@ -126,6 +121,8 @@ export class BoardGame {
         this.pluginList.forEach(plugin => plugin.onStart())
 
         this.game.run(60)
+
+        this.state = new PausedState()
 
         return this.game
     }

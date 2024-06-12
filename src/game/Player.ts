@@ -100,6 +100,7 @@ export class Player<
         if (!context) {
             throw new Error('Context does not exist')
         }
+        console.log('Run out time: ' + this.role)
 
         context.eventManager.trigger(new BoardGameEndEvent({ role: this.role }))
         this.boardGame.handleRequest(new PlayerRunOutTimeRequest())
@@ -139,6 +140,18 @@ export class Player<
      */
     public getExtraData(): DataCollection<PE, PlayerExtraDataMetadata> {
         return this.extraData
+    }
+
+    /**
+     * Sets extra data.
+     * @param extraData
+     */
+    public setExtraData(extraData: PE): void {
+        this.extraData.map((datum, key) => {
+            if (Object.prototype.hasOwnProperty.call(extraData, key)) {
+                datum.setValue(extraData[key])
+            }
+        })
     }
 }
 

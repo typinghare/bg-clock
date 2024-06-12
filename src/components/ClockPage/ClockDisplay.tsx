@@ -35,7 +35,7 @@ export function ClockDisplay(props: ClockDisplayProps) {
 
     useEffect(() => {
         const intervalHandle = setInterval((): void => {
-            if (!boardGame) {
+            if (!boardGame || boardGame.isState(NotStartedState)) {
                 return
             }
 
@@ -44,13 +44,29 @@ export function ClockDisplay(props: ClockDisplayProps) {
                 return
             }
 
-            if (!boardGame.isState(NotStartedState)) {
-                const currentTime = player.getTime()
-                const previousSeconds = time.ms / HourMinuteSecond.MILLISECONDS_IN_SECOND
-                const currentSeconds = currentTime.ms / HourMinuteSecond.MILLISECONDS_IN_SECOND
-                setTime(currentTime)
+            // Change time font color
+            const boardGameState = boardGame.getState()
+            const currentTime = player.getTime()
+            if (boardGameState instanceof EndedState && currentTime.ms === 0) {
+                setColor(TimeColor.TIME_UP_COLOR)
+            } else {
+                if (player.isPaused()) {
+                    setColor(TimeColor.TIME_PAUSED_COLOR)
+                } else {
+                    setColor(TimeColor.TIME_RUNNING_COLOR)
+                }
+            }
+
+            if (player.isPaused()) {
+                setTime(player.getTime())
+                return
+            }
+
+            setTime((time): HourMinuteSecond => {
+                const previousSeconds = time.toSecondsInt()
+                const currentSeconds = currentTime.toSecondsInt()
                 if (previousSeconds != currentSeconds) {
-                    const countDownEvent = new CountdownEvent({ currentSeconds })
+                    const countDownEvent = new CountdownEvent({ seconds: currentSeconds })
                     boardGame.getGameContext().eventManager.trigger(countDownEvent)
 
                     // Save board game to the local storage
@@ -60,24 +76,12 @@ export function ClockDisplay(props: ClockDisplayProps) {
                     )
                 }
 
-                // Change font color
-                const boardGameState = boardGame.getState()
-                if (boardGameState instanceof EndedState && currentTime.ms === 0) {
-                    setColor(TimeColor.TIME_UP_COLOR)
-                } else {
-                    if (player.isPaused()) {
-                        setColor(TimeColor.TIME_PAUSED_COLOR)
-                    } else {
-                        setColor(TimeColor.TIME_RUNNING_COLOR)
-                    }
-                }
-            }
-        }, HourMinuteSecond.MILLISECONDS_IN_SECOND / 60)
+                return currentTime
+            })
+        }, 1000)
 
         return () => {
-            if (intervalHandle) {
-                clearInterval(intervalHandle)
-            }
+            clearInterval(intervalHandle)
         }
     }, [boardGame])
 
