@@ -1,6 +1,5 @@
 import { Badge, BadgeProps, Box, BoxProps, Card, CardBody, List, ListItem, TabPanel } from '@chakra-ui/react'
-import { Changelog, Changelogs, ChangelogSections } from '../../changelog'
-import { StyleMap } from '../../common/style'
+import { Changelog, Changelogs, ChangelogSections } from './Changelog'
 import moment from 'moment'
 import { Horizontal } from '../Horizontal'
 
@@ -11,7 +10,7 @@ export function ChangelogPanel() {
     const changelogList: Changelog[] = Changelogs.getChangelogList()
 
     return (
-        <TabPanel sx={{ padding: '1rem 0' }}>
+        <TabPanel padding="1rem 0">
             {changelogList.map(((changelog, index) => (
                 <ChangelogBlock key={index} changelog={changelog} />
             )))}
@@ -21,28 +20,16 @@ export function ChangelogPanel() {
 
 function ChangelogBlock(props: ChangelogBlockProps) {
     const { changelog } = props
-    const styles: StyleMap = {
-        version: {
-            fontSize: '1.15rem',
-            fontWeight: 'bold',
-        },
-        date: {
-            fontSize: '0.9rem',
-            color: 'grey',
-        },
-
-    }
-
     const sectionNameList: (keyof ChangelogSections)[] = ['added', 'improved', 'fixed']
 
     return (
         <Card mb={3}>
             <CardBody>
-                <Box sx={styles.version}>
+                <Box fontSize="1.15rem" fontWeight="bold">
                     {changelog.getVersion()}
                 </Box>
 
-                <Box sx={styles.date}>
+                <Box fontSize="0.9rem" color="grey">
                     {moment(changelog.getDate()).format('MMM DD, YYYY')}
                 </Box>
 

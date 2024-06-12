@@ -1,7 +1,6 @@
-import { Box, BoxProps, IconButton } from '@chakra-ui/react'
+import { Box, BoxProps, Grid, IconButton } from '@chakra-ui/react'
 import { PageEnum } from '../Page'
 import { changePage, useAppDispatch } from '../../redux'
-import { StyleMap } from '../../common/style'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 
 /**
@@ -10,62 +9,52 @@ import { ArrowBackIcon } from '@chakra-ui/icons'
 export function Navigation(props: NavigationProps) {
     const { previousPage, title } = props
     const dispatch = useAppDispatch()
-    const styles: StyleMap = {
-        root: {
-            width: '100%',
-        },
-        inner: {
-            display: 'flex',
-            flex: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '36px',
-            position: 'relative',
-            width: '100%',
-        },
-        iconButton: {
-            position: 'absolute',
-            left: '0',
-            background: 'none',
-            height: '32px',
-        },
-        title: {
-            marginLeft: 'auto',
-            color: 'black',
-            textAlign: 'center',
-            fontSize: '1.15rem',
-            fontWeight: 'bold',
-            flexGrow: 1,
-            centerContent: 'true',
-        },
-    }
 
     function handlePreviousButtonClick() {
-        if (previousPage !== undefined) {
-            dispatch(changePage(previousPage))
+        if (previousPage === undefined) {
+            return
         }
+
+        dispatch(changePage(previousPage))
     }
 
     function PreviousButton() {
         return (
             <IconButton
-                sx={styles.iconButton}
+                position="absolute"
+                left="0"
+                height="32px"
+                background=""
                 onClick={handlePreviousButtonClick}
                 aria-label="Previous Page"
             >
-                <ArrowBackIcon sx={styles.icon} />
+                <ArrowBackIcon />
             </IconButton>
         )
     }
 
     return (
-        <Box sx={styles.root}>
-            <Box sx={styles.inner}>
+        <Box width="100%">
+            <Grid
+                flexDirection="column"
+                alignItems="center"
+                justifyContent="center"
+                height="36px"
+                width="100%"
+                position="relative"
+            >
                 {previousPage !== undefined && <PreviousButton />}
-                <Box sx={styles.title}>
+                <Box
+                    marginLeft="auto"
+                    color="black"
+                    textAlign="center"
+                    fontSize="1.15rem"
+                    fontWeight="bold"
+                    flexGrow={1}
+                >
                     {title}
                 </Box>
-            </Box>
+            </Grid>
         </Box>
     )
 }

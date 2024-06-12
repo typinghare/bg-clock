@@ -1,4 +1,4 @@
-# BG Clock
+# [BG Clock](https://github.com/typinghare/bg-clock)
 
 This is Board Game Clock Simulator web application.
 
@@ -14,8 +14,11 @@ npx degit reduxjs/redux-templates/packages/vite-template-redux bg-clock
 pnpm add @chakra-ui/react @emotion/react @emotion/styled framer-motion
 pnpm add @chakra-ui/icons
 
-# Game core
+# Game core and other necessary libs for the game module
 pnpm add @typinghare/game-core
+pnpm add @typinghare/extrum
+pnpm add @typinghare/hour-minute-second
+pnpm add @typinghare/holder
 
 # Screenfull
 # @link https://www.npmjs.com/package/screenfull

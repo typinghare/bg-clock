@@ -11,10 +11,10 @@ export function SettingsPage() {
 
     return (
         <Page page={PageEnum.SETTINGS}>
-            <Navigation previousPage={PageEnum.PORTAL} title={'Settings'} />
-            <Container paddingY={5}>
+            <Navigation previousPage={PageEnum.PORTAL} title="Settings" />
+            <Container paddingTop={5}>
                 <SettingContainer
-                    title={'Settings'}
+                    title="Settings"
                     dataCollection={settings}
                     expanded={true}
                     onSettingChange={handleSettingChange}

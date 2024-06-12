@@ -8,10 +8,16 @@ export const settings = new DataCollection<SettingsData, BoardGameSettingsMetada
         description: 'The font size of the clock time.',
         optionList: [12, 15, 18, 20, 24, 28],
     }),
+    fullScreen: Datum.of(true).setMetadata({
+        type: 'bool',
+        label: 'Full Screen',
+        description: 'Whether to enter full screen mode when the game starts.',
+    }),
 })
 
 export interface SettingsData {
     clockTimeFontSize: number
+    fullScreen: boolean
 }
 
 /**
@@ -25,7 +31,6 @@ export function extraSettingsFromLocalStorage() {
 
     const object: SettingsData = JSON.parse(settingsItem)
     for (const key of Object.keys(object)) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         settings.getDatum(key).setValue(object[key])
     }
@@ -40,7 +45,6 @@ export function saveSettingsToLocalStorage() {
     const data = settings.getData()
     const object: Partial<SettingsData> = {}
     for (const key of Object.keys(data)) {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         object[key] = (data[key] as Datum).getValue()
     }

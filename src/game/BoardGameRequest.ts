@@ -1,11 +1,11 @@
 /**
- * Board game request.
+ * An abstract class of board game request.
  */
 export abstract class BoardGameRequest {
 }
 
 /**
- * Player Tap Request.
+ * This request is send to the game event manage when a player taps their section.
  */
 export class PlayerTapRequest extends BoardGameRequest {
 }

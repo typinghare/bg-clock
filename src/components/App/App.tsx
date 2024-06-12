@@ -1,24 +1,22 @@
-import './App.css'
 import React from 'react'
-import { GameSelectionPage, PortalPage } from '../Page'
-import { GameSettingsPage } from '../GameSettingsPage'
-import { ClockPage } from '../ClockPage'
+import { PortalPage } from '../PortalPage'
+import { GameSelectionPage } from '../GameSelectionPage'
 import { SettingsPage } from '../SettingsPage'
-import { ResumeGamePage } from '../ResumeGamePage'
 import { AboutPage } from '../AboutPage'
+import { ResumeGamePage } from '../ResumeGamePage'
+import { GameSettingsPage } from '../GameSettingsPage'
 
 /**
- * App. Register all pages here.
+ * This is the unique index to the application. Put and only put all pages within the empty tag.
  */
 export function App() {
     return (
         <>
             <PortalPage />
-            <SettingsPage />
-            <ResumeGamePage />
             <GameSelectionPage />
             <GameSettingsPage />
-            <ClockPage />
+            <ResumeGamePage />
+            <SettingsPage />
             <AboutPage />
         </>
     )

@@ -1,11 +1,10 @@
-import { Page, PageEnum } from './Page'
-import { Box, Container, Progress } from '@chakra-ui/react'
-import { StyleMap } from '../../common/style'
+import { Page, PageEnum } from '../Page'
+import { Box, Container, Image, Progress } from '@chakra-ui/react'
 import { Navigation } from '../Navigation'
 import { BoardGames, BoardGameType } from '../../game'
 import { changePage, notifyBoardGameChanged, useAppDispatch } from '../../redux'
-import bannerGo from '../../assets/img/banner-go.jpg'
 import bannerChess from '../../assets/img/banner-chess.png'
+import bannerGo from '../../assets/img/banner-go.jpg'
 import { boardGameHolder } from '../../common/holder'
 import { useState } from 'react'
 
@@ -15,37 +14,25 @@ import { useState } from 'react'
 export function GameSelectionPage() {
     const dispatch = useAppDispatch()
     const [progressValue, setProgressValue] = useState(0)
-    const styles: StyleMap = {
-        container: {
-            display: 'flex',
-            gap: '1rem',
-            flexDirection: 'column',
-        },
-        bannerGo: {
-            flex: 2,
-            cursor: 'pointer',
-            '& img': {
-                maxWidth: 'calc(100% - 3em)',
-                maxHeight: '100%',
-            },
-        },
-    }
 
     function clickHandlerProvider(boardGameType: BoardGameType) {
+        // Simulate a 200ms loading
+        const loadingTime = 200
+        const dt = 20
+        const dp = 100 / (loadingTime / dt)
         return function() {
+            const interval = setInterval(() => {
+                setProgressValue(progressValue => progressValue + dp)
+            }, dt)
+
             boardGameHolder.assign(BoardGames.get(boardGameType))
             dispatch(notifyBoardGameChanged())
 
-            const interval = setInterval(() => {
-                setProgressValue(progressValue => progressValue + 5)
-            }, 10)
-
             setTimeout(() => {
                 dispatch(changePage(PageEnum.GAME_SETTINGS))
-
                 clearInterval(interval)
                 setProgressValue(0)
-            }, 300)
+            }, loadingTime * 1.5)
         }
     }
 
@@ -60,19 +47,36 @@ export function GameSelectionPage() {
                 visibility={progressValue === 0 ? 'hidden' : 'visible'}
             />
 
-            <Container paddingY={5} sx={styles.container}>
+            <Container
+                display="flex"
+                gap="1rem"
+                flexDirection="column"
+                paddingTop={5}
+            >
                 <Box
-                    sx={styles.bannerGo}
+                    flex={2}
+                    cursor="pointer"
                     onClick={clickHandlerProvider(BoardGameType.Go)}
                 >
-                    <img src={bannerGo} alt={'Go Banner'} />
+                    <Image
+                        maxWidth="calc(100% - 3em)"
+                        maxHeight="100%"
+                        src={bannerGo}
+                        alt="Go Banner"
+                    />
                 </Box>
 
                 <Box
-                    sx={styles.bannerGo}
+                    flex={2}
+                    cursor="pointer"
                     onClick={clickHandlerProvider(BoardGameType.Chess)}
                 >
-                    <img src={bannerChess} alt={'Chess Banner'} />
+                    <Image
+                        maxWidth="calc(100% - 3em)"
+                        maxHeight="100%"
+                        src={bannerChess}
+                        alt="Chess Banner"
+                    />
                 </Box>
             </Container>
         </Page>

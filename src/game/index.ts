@@ -12,3 +12,4 @@ export * from './event/PlayerTapEvent'
 
 // Categories
 export * from './categories/go'
+export * from './categories/chess'

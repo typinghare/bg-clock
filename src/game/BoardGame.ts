@@ -1,5 +1,5 @@
 import { TimeControl } from './TimeControl'
-import { Context, float, Game } from '@typinghare/game-core'
+import { Context, ContextData, float, Game } from '@typinghare/game-core'
 import { Player, Role } from './Player'
 import { BoardGameState, NotStartedState } from './BoardGameState'
 import { PlayerTapEvent } from './event/PlayerTapEvent'
@@ -19,10 +19,10 @@ export class BoardGame {
     protected timeControl: TimeControl
 
     /**
-     * Mapping from roles to players.
+     * A store containing players and associated roles.
      * @private
      */
-    protected byRole: Map<Role, Player> = new Map()
+    protected playerStore: Map<Role, Player> = new Map()
 
     /**
      * Board game current state.
@@ -37,7 +37,7 @@ export class BoardGame {
     protected advancedSettings: AdvancedSettings = new AdvancedSettings()
 
     /**
-     * Game.
+     * Game object from @typinghare/game-core.
      * @protected
      */
     protected game?: Game
@@ -50,8 +50,8 @@ export class BoardGame {
 
     /**
      * Creates a board game.
-     * @param timeControlList
-     * @param roleList
+     * @param timeControlList A list of available time controls.
+     * @param roleList A list of roles in the board game.
      */
     public constructor(
         protected readonly timeControlList: TimeControl[],
@@ -81,23 +81,23 @@ export class BoardGame {
         this.timeControl = timeControl
 
         // Reset
-        this.byRole.clear()
+        this.playerStore.clear()
 
         // Initialize players
         for (const role of this.roleList) {
-            this.byRole.set(role, timeControl.createPlayer(role, this))
+            this.playerStore.set(role, timeControl.createPlayer(role, this))
         }
     }
 
     /**
-     * Returns the player list.
+     * Returns a shallow copy of the player list.
      */
     public getPlayerList(): Player[] {
-        return [...this.byRole.values()]
+        return [...this.playerStore.values()]
     }
 
     /**
-     * Players get ready.
+     * All players get ready. After this method is being called, time control cannot be changed.
      */
     public getReady(): void {
         this.getPlayerList().forEach(player => {
@@ -107,13 +107,14 @@ export class BoardGame {
 
     /**
      * Starts the board game.
+     * @return The game object.
      */
     public start(): Game {
+        // Create a game
         this.game = new Game((deltaTime: float) => {
-            this.getPlayerList().forEach((player) => {
-                player.update(deltaTime)
-            })
+            this.updatePlayerDeltaTime(deltaTime)
         })
+        this.game.getContext<BoardGameContextData>().setValue('boardGame', this)
 
         // Register handlers
         const eventManager = this.game.getContext().eventManager
@@ -124,9 +125,15 @@ export class BoardGame {
 
         this.pluginList.forEach(plugin => plugin.onStart())
 
-        this.game.run(120)
+        this.game.run(60)
 
         return this.game
+    }
+
+    protected updatePlayerDeltaTime(deltaTime: float) {
+        this.getPlayerList().forEach((player) => {
+            player.update(deltaTime)
+        })
     }
 
     /**
@@ -135,8 +142,7 @@ export class BoardGame {
      * @protected
      */
     protected onPlayerTap(role: Role): void {
-        const player: Player = this.getPlayer(role)
-        player.onTap()
+        this.getPlayer(role).onTap()
     }
 
     /**
@@ -145,7 +151,7 @@ export class BoardGame {
      * @protected
      */
     protected getNextRole(role: Role): Role {
-        const roleList: Role[] = [...this.byRole.keys()]
+        const roleList: Role[] = [...this.playerStore.keys()]
         if (!roleList.includes(role)) {
             throw new Error('')
         }
@@ -159,7 +165,7 @@ export class BoardGame {
      * @param role The role of the player.
      */
     public getPlayer(role: Role): Player {
-        const player = this.byRole.get(role)
+        const player = this.playerStore.get(role)
         if (!player) {
             throw new PlayerNotExistException(role)
         }
@@ -240,7 +246,6 @@ export abstract class BoardGamePlugin {
     /**
      * This method is called when the board game starts.
      */
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onStart(): void {
     }
 }
@@ -278,3 +283,7 @@ export type BoardGameAttribute = Datum<BoardGameAttributeValue, BoardGameSetting
  * Board game expanded attribute value.
  */
 export type BoardGameExpandedAttributeValue = Exclude<BoardGameAttributeValue, boolean>
+
+export interface BoardGameContextData extends ContextData {
+    boardGame: BoardGame
+}

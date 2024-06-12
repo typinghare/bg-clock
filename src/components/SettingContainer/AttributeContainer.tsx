@@ -6,10 +6,10 @@ import {
 } from '../../game'
 import { AttributeExpand } from './AttributeExpand'
 import { Box, BoxProps, Switch, useBoolean } from '@chakra-ui/react'
-import { StyleMap } from '../../common/style'
 import { useState } from 'react'
 import { AttributeDescription } from './AttributeDescription'
 import { notifySettingsChanged, useAppDispatch } from '../../redux'
+import { FontFamily } from '../../common/constants'
 
 /**
  * Attribute container.
@@ -18,35 +18,12 @@ export function AttributeContainer(props: AttributeContainerProps) {
     const { attribute, onChange } = props
     const dispatch = useAppDispatch()
     const [expanded, setExpanded] = useBoolean()
-    const styles: StyleMap = {
-        line: {
-            display: 'flex',
-            alignItems: 'center',
-            height: '2.5em',
-        },
-        label: {
-            display: 'inline',
-            fontWeight: 'bold',
-            marginLeft: '0.5em',
-        },
-        description: {
-            marginLeft: '0.5em',
-        },
-        value: {
-            marginLeft: 'auto',
-            marginRight: '0.75em',
-        },
-    }
 
     const [value, setValue] = useState(attribute.getValue())
     const type = attribute.getMeta('type')
     const label: string = attribute.getMeta('label')
     const description: string = attribute.getMeta('description')
     const optionList = attribute.getMeta('optionList')
-
-    function handleLineClick() {
-        setExpanded.toggle()
-    }
 
     function handleSelect(newValue: BoardGameExpandedAttributeValue): void {
         attribute.setValue(newValue)
@@ -76,13 +53,19 @@ export function AttributeContainer(props: AttributeContainerProps) {
 
     return (
         <>
-            <Box sx={styles.line} onClick={handleLineClick}>
-                <Box sx={styles.label}>{label}</Box>
-                <AttributeDescription description={description} sx={styles.description} />
+            <Box
+                display="flex"
+                alignItems="center"
+                height="2.5em"
+                onClick={setExpanded.toggle}
+            >
+                <Box display="inline" fontWeight="bold" marginLeft="0.5em">{label}</Box>
+                <AttributeDescription description={description} marginLeft="0.5em" />
                 <AttributeValue
                     type={type}
                     value={value}
-                    sx={styles.value}
+                    marginLeft="auto"
+                    marginRight="0.5em"
                     onChange={handleBooleanChange}
                 />
             </Box>
@@ -103,16 +86,14 @@ export function AttributeContainer(props: AttributeContainerProps) {
  * Setting value.
  */
 export function AttributeValue(props: AttributeValueProps) {
-    const { type, value, sx, onChange } = props
-    const styles: StyleMap = {
-        root: {
-            fontFamily: type === 'time' ? 'Digital-7' : 'inherit',
-            ...sx,
-        },
-    }
+    const { type, value, onChange, ...otherProps } = props
 
     return (
-        <Box display="inline" sx={styles.root}>
+        <Box
+            as="span"
+            fontFamily={type === 'time' ? FontFamily.Digital_7 : 'inherit'}
+            {...otherProps}
+        >
             {type === 'bool' && (<Switch isChecked={!!value} onChange={onChange} />)}
             {type === 'number' && (<Box>{value.toString()}</Box>)}
             {type === 'time' && (<Box>{value.toString()}</Box>)}

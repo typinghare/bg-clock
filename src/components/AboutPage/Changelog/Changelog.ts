@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 /**
  * Changelog object.
  */
-export class Changelog {
+export abstract class Changelog {
     /**
      * Sections.
      * @private
@@ -19,8 +19,10 @@ export class Changelog {
      * @param version The version label.
      * @param date The release date.
      */
-    public constructor(
+    protected constructor(
+        // eslint-disable-next-line no-unused-vars
         private readonly version: ChangelogVersion,
+        // eslint-disable-next-line no-unused-vars
         private readonly date: Date,
     ) {
     }
@@ -32,6 +34,18 @@ export class Changelog {
      */
     public add<K extends keyof ChangelogSections>(sectionName: K, item: ReactNode): void {
         this.sections[sectionName].push(item)
+    }
+
+    public added(item: ReactNode): void {
+        this.add('added', item)
+    }
+
+    public improved(item: ReactNode): void {
+        this.add('improved', item)
+    }
+
+    public fixed(item: ReactNode): void {
+        this.add('fixed', item)
     }
 
     /**

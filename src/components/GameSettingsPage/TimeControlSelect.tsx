@@ -1,8 +1,7 @@
 import { Box, useBoolean } from '@chakra-ui/react'
-import { TimeControl } from '../../../game'
-import { ExpandableContainer } from '../../ExpandableContainer'
-import { Horizontal } from '../../Horizontal'
-import { StyleMap } from '../../../common/style'
+import { TimeControl } from '../../game'
+import { ExpandableContainer } from '../ExpandableContainer'
+import { Horizontal } from '../Horizontal'
 
 /**
  * Time control select.
@@ -47,28 +46,17 @@ export function TimeControlSelect(props: TimeControlSelectProps) {
  */
 export function TimeControlBlock(props: TimeControlBlockProps) {
     const { index, timeControl, selected, onTimeControlSelected } = props
-    const styles: StyleMap = {
-        root: {
-            padding: '0.5rem',
-            borderRadius: '0.25rem',
-            cursor: 'pointer',
-            backgroundColor: selected ? '#d8f3dc' : '#f3f3f3',
-            ':hover': {
-                backgroundColor: selected ? '#d8f3dc' : '#eeeeee',
-            },
-        },
-        title: {
-            fontSize: '1.15rem', fontWeight: 'bold',
-        },
-    }
-
-    function handleClick() {
-        onTimeControlSelected(index)
-    }
 
     return (
-        <Box onClick={handleClick} sx={styles.root}>
-            <Box sx={styles.title}>
+        <Box
+            padding="0.5rem"
+            borderRadius="0.25rem"
+            cursor="pointer"
+            backgroundColor={selected ? '#d8f3dc' : '#f3f3f3'}
+            sx={{ ':hover': { backgroundColor: selected ? '#d8f3dc' : '#eeeeee' } }}
+            onClick={() => onTimeControlSelected(index)}
+        >
+            <Box fontSize="1.15em" fontWeight="bold">
                 {timeControl.getName()}
             </Box>
             <p>
@@ -81,6 +69,7 @@ export function TimeControlBlock(props: TimeControlBlockProps) {
 export interface TimeControlSelectProps {
     timeControlList: TimeControl[]
     selectedTimeControlIndex: number
+    // eslint-disable-next-line no-unused-vars
     onTimeControlSelect: (timeControlIndex: number) => void
 }
 
@@ -91,4 +80,5 @@ export interface TimeControlBlockProps {
     onTimeControlSelected: TimeControlSelectedHandler
 }
 
+// eslint-disable-next-line no-unused-vars
 export type TimeControlSelectedHandler = (index: number) => void

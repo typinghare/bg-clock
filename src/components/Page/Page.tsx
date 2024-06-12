@@ -1,51 +1,37 @@
-import { Box, BoxProps, SystemStyleObject } from '@chakra-ui/react'
-import { StyleMap } from '../../common/style'
+import { BoxProps, Grid, GridItem, SystemStyleObject } from '@chakra-ui/react'
 import { selectPage, useAppSelector } from '../../redux'
 
-/**
- * Page.
- */
-export function Page(props: pageProps) {
-    const { children, page, outerStyle, innerStyle } = props
+export function Page(props: PageProps) {
+    const { children, page } = props
     const currentPage: PageEnum = useAppSelector(selectPage)
-    const styles: StyleMap = {
-        outer: {
-            display: currentPage === page ? 'flex' : 'none',
-            margin: '0 !important',
-            padding: '0 !important',
-            flexDirection: 'column',
-            height: '100vh',
-            width: '100vw',
-            overflowX: 'hidden',
-            overflowY: 'auto',
-            ...outerStyle,
-        },
-        inner: {
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            maxWidth: '75vh',
-            height: '100%',
-            margin: '0 auto',
-            ...innerStyle,
-        },
-    }
 
     return (
-        <Box sx={styles.outer}>
-            <Box sx={styles.inner}>
+        <Grid
+            flexDirection="column"
+            display={currentPage === page ? 'flex' : 'none'}
+            height="100vh"
+            width="100vw"
+            overflowX="hidden"
+            overflowY="auto"
+        >
+            <GridItem
+                flexDirection="column"
+                height="100%"
+                width="100%"
+                maxWidth="75vh"
+                margin="0 auto"
+            >
                 {children}
-            </Box>
-        </Box>
+            </GridItem>
+        </Grid>
     )
 }
 
 /**
  * Page properties.
  */
-export interface pageProps extends BoxProps {
+export interface PageProps extends BoxProps {
     page: PageEnum
-    outerStyle?: SystemStyleObject
     innerStyle?: SystemStyleObject
 }
 
@@ -53,13 +39,20 @@ export interface pageProps extends BoxProps {
  * Page enumeration.
  */
 export enum PageEnum {
-    PORTAL,
-    SETTINGS,
-    RESUME_GAME,
-    GAME_SELECTION,
-    GAME_SETTINGS,
-    CLOCK,
-    ABOUT
+    // eslint-disable-next-line no-unused-vars
+    PORTAL = 0,
+    // eslint-disable-next-line no-unused-vars
+    SETTINGS = 1,
+    // eslint-disable-next-line no-unused-vars
+    RESUME_GAME = 2,
+    // eslint-disable-next-line no-unused-vars
+    GAME_SELECTION = 3,
+    // eslint-disable-next-line no-unused-vars
+    GAME_SETTINGS = 4,
+    // eslint-disable-next-line no-unused-vars
+    CLOCK = 5,
+    // eslint-disable-next-line no-unused-vars
+    ABOUT = 6
 }
 
 /**

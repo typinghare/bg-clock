@@ -1,25 +1,17 @@
 import { Box, Button, Collapse, Stack } from '@chakra-ui/react'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { BoardGameExpandedAttributeValue, BoardGameSettingsMetadata } from '../../game'
-import { StyleMap } from '../../common/style'
+import { FontFamily } from '../../common/constants'
 
 /**
  * Attribute expand.
  */
 export function AttributeExpand(props: AttributeExpandProps) {
     if (props.type === 'bool') {
-        return ''
+        return <></>
     }
 
     const { expanded, type, value, optionList, onSelect } = props
-    const styles: StyleMap = {
-        container: {
-            padding: '0.25em',
-        },
-        optionButton: {
-            fontFamily: type === 'time' ? 'Digital-7' : 'inherit',
-        },
-    }
 
     function isEqual(value: BoardGameExpandedAttributeValue, option: BoardGameExpandedAttributeValue): boolean {
         if (type === 'number') {
@@ -43,7 +35,7 @@ export function AttributeExpand(props: AttributeExpandProps) {
                 display="inline-flex"
                 onClick={handleClick}
                 colorScheme={isEqual(value, option) ? 'green' : 'gray'}
-                sx={styles.optionButton}
+                fontFamily={type === 'time' ? FontFamily.Digital_7 : 'inherit'}
             >
                 {option.toString()}
             </Button>
@@ -52,7 +44,7 @@ export function AttributeExpand(props: AttributeExpandProps) {
 
     return (
         <Collapse in={expanded} animateOpacity>
-            <Box sx={styles.container}>
+            <Box padding="0.25em">
                 <Stack spacing="0.5em" direction="row" flexWrap="wrap">
                     {optionList?.map(((option, index) => (
                         <OptionButton key={index} option={option} />
@@ -63,11 +55,11 @@ export function AttributeExpand(props: AttributeExpandProps) {
     )
 }
 
-
 export interface AttributeExpandProps {
     expanded: boolean
     type: BoardGameSettingsMetadata['type']
     value: BoardGameExpandedAttributeValue
     optionList?: BoardGameExpandedAttributeValue[]
+    // eslint-disable-next-line no-unused-vars
     onSelect: (newValue: BoardGameExpandedAttributeValue) => void
 }

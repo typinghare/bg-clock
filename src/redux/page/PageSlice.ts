@@ -19,7 +19,5 @@ export const pageSlice = createSlice({
 })
 
 export const { changePage } = pageSlice.actions
-
 export const selectPage = (state: RootState) => state.pageSlice.page
-
 export default pageSlice.reducer

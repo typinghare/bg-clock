@@ -1,4 +1,5 @@
 import { CSSProperties } from 'react'
+import { Box } from '@chakra-ui/react'
 
 /**
  * Horizontal rule.
@@ -7,13 +8,13 @@ export function Horizontal(props: HorizontalProps) {
     const { margin, width = '100%', floatRight = false } = props
 
     return (
-        <div style={{
-            margin,
-            display: 'flex',
-            justifyContent: floatRight ? 'flex-end' : 'flex-start',
-        }}>
+        <Box
+            display="flex"
+            justifyContent={floatRight ? 'flex-end' : 'flex-start'}
+            margin={margin}
+        >
             <hr style={{ width }} />
-        </div>
+        </Box>
     )
 }
 

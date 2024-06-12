@@ -2,7 +2,8 @@ import { GameEvent, GameEventData } from '@typinghare/game-core'
 import { Role } from '../Player'
 
 /**
- * Player tap event.
+ * This even is triggered when one player taps their section. The role of the player should be
+ * provided to trigger this event.
  */
 export class PlayerTapEvent extends GameEvent<PlayerTapEventData> {
     public constructor(eventData: Partial<PlayerTapEventData>) {

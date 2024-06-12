@@ -38,7 +38,6 @@ export function SettingContainer(props: SettingContainerProps) {
 export interface SettingContainerProps {
     title: string
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     dataCollection: DataCollection<any, BoardGameSettingsMetadata>
 
     // Whether it is expanded by default
@@ -47,4 +46,3 @@ export interface SettingContainerProps {
     // Fired when any setting is changed
     onSettingChange?: () => void
 }
-

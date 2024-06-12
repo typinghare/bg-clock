@@ -1,5 +1,4 @@
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box } from '@chakra-ui/react'
-import { StyleMap } from '../../common/style'
 import { ReactNode } from 'react'
 
 /**
@@ -7,11 +6,6 @@ import { ReactNode } from 'react'
  */
 export function ExpandableContainer(props: ExpandableContainerProps) {
     const { expanded, title, onExpandButtonClick, children } = props
-    const styles: StyleMap = {
-        panel: {
-            padding: '0.5rem',
-        },
-    }
 
     return (
         <Accordion index={expanded ? [0] : []}>
@@ -24,7 +18,7 @@ export function ExpandableContainer(props: ExpandableContainerProps) {
                         <AccordionIcon />
                     </AccordionButton>
                 </h2>
-                <AccordionPanel sx={styles.panel}>
+                <AccordionPanel padding="0.5em">
                     {children}
                 </AccordionPanel>
             </AccordionItem>
