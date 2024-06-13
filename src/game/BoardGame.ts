@@ -226,8 +226,12 @@ export class BoardGame {
         return this.timeControl
     }
 
-    public addPlugin(boardGamePlugin: BoardGamePlugin): void {
-        this.pluginList.push(boardGamePlugin)
+    /**
+     * Adds a plugin.
+     * @param boardGamePluginClass
+     */
+    public addPlugin(boardGamePluginClass: BoardGamePluginClass): void {
+        this.pluginList.push(new boardGamePluginClass(this))
     }
 }
 
@@ -288,3 +292,5 @@ export type BoardGameExpandedAttributeValue = Exclude<BoardGameAttributeValue, b
 export interface BoardGameContextData extends ContextData {
     boardGame: BoardGame
 }
+
+export type BoardGamePluginClass = new (boardGame: BoardGame) => BoardGamePlugin

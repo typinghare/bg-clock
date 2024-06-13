@@ -6,6 +6,8 @@ export interface SettingsData {
     clockTimeFontSize: number
     bubbleSize: number
     fullScreen: boolean
+    tapAudio: boolean
+    countdownAudio: boolean
 }
 
 export const settings = new DataCollection<SettingsData, BoardGameSettingsMetadata>({
@@ -25,6 +27,16 @@ export const settings = new DataCollection<SettingsData, BoardGameSettingsMetada
         type: 'bool',
         label: 'Clock Page Full Screen',
         description: 'Whether to enter full screen mode when the game starts.',
+    }),
+    tapAudio: Datum.of(true).setMetadata({
+        type: 'bool',
+        label: 'Tap Audio',
+        description: 'Play a tap audio when players tap.',
+    }),
+    countdownAudio: Datum.of(true).setMetadata({
+        type: 'bool',
+        label: 'Countdown Audio',
+        description: 'Plays countdown audios when the remaining time is less than 10 seconds.',
     }),
 })
 

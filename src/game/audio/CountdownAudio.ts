@@ -1,7 +1,5 @@
 import { BoardGamePlugin } from '../BoardGame'
-import { PlayerTapEvent } from '../event/PlayerTapEvent'
 
-import beep from '../../assets/sounds/beep.wav'
 import countdown1 from '../../assets/sounds/countdown/1.mp3'
 import countdown2 from '../../assets/sounds/countdown/2.mp3'
 import countdown3 from '../../assets/sounds/countdown/3.mp3'
@@ -16,8 +14,7 @@ import { CountdownEvent, CountDownEventData } from '../event/CountdownEvent'
 /**
  * Board game audio plugin.
  */
-export class BoardGameAudio extends BoardGamePlugin {
-    private readonly beepAudio: HTMLAudioElement = new Audio(beep)
+export class CountdownAudio extends BoardGamePlugin {
     private readonly countdownAudioList: HTMLAudioElement[] = [
         new Audio(countdown1),
         new Audio(countdown2),
@@ -31,47 +28,20 @@ export class BoardGameAudio extends BoardGamePlugin {
     ]
 
     public override onStart() {
-        // Load all audio files
-        this.beepAudio.load()
         for (const countdownAudio of this.countdownAudioList) {
             countdownAudio.load()
         }
 
-        // Add handler for PlayerTapEvent
         const gameContext = this.boardGame.getGameContext()
-        gameContext.eventManager.addHandler(PlayerTapEvent, () => {
-            // Create a copy of beepSoundEffectAudio and play it
-            this.playAudio(this.beepAudio, true)
-        })
-
-        // Add handler for countdown
         gameContext.eventManager.addHandler<CountDownEventData>(CountdownEvent, (eventData) => {
             const seconds = eventData.getValue('seconds')
             if (seconds > 0 && seconds < 10) {
-                this.playAudio(this.countdownAudioList[seconds - 1])
+                const audio = this.countdownAudioList[seconds - 1]
+                audio.currentTime = 0
+                audio.play().catch(error => {
+                    console.error('Error playing the audio: ', error)
+                })
             }
         })
-    }
-
-    /**
-     * Creates a copy of beepSoundEffectAudio and play it
-     * @param audio The audio to play.
-     * @param copy
-     * @private
-     */
-    private playAudio(audio: HTMLAudioElement, copy: boolean = false): void {
-        if (!audio) return
-
-        if (copy) {
-            const clonedAudio = audio.cloneNode() as HTMLAudioElement
-            clonedAudio.play().catch(error => {
-                console.error('Error playing the audio: ', error)
-            })
-        } else {
-            audio.currentTime = 0
-            audio.play().catch(error => {
-                console.error('Error playing the audio: ', error)
-            })
-        }
     }
 }

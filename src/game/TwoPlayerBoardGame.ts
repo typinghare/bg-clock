@@ -2,7 +2,6 @@ import { BoardGame } from './BoardGame'
 import { TimeControl } from './TimeControl'
 import { Player, Role } from './Player'
 import { OngoingState } from './BoardGameState'
-import { BoardGameAudio } from './audio/BoardGameAudio'
 
 /**
  * Board game that includes two players.
@@ -19,7 +18,6 @@ export class TwoPlayerBoardGame extends BoardGame {
         protected readonly timeControlList: TimeControl[],
     ) {
         super(timeControlList, [TwoPlayerBoardGame.ROLE_A, TwoPlayerBoardGame.ROLE_B])
-        this.addPlugin(new BoardGameAudio(this))
     }
 
     protected override onPlayerTap(role: Role) {
