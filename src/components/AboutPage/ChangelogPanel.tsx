@@ -1,4 +1,14 @@
-import { Badge, BadgeProps, Box, BoxProps, Card, CardBody, List, ListItem, TabPanel } from '@chakra-ui/react'
+import {
+    Badge,
+    BadgeProps,
+    Box,
+    BoxProps,
+    Card,
+    CardBody,
+    List,
+    ListItem,
+    TabPanel,
+} from '@chakra-ui/react'
 import { Changelog, Changelogs, ChangelogSections } from './Changelog'
 import moment from 'moment'
 import { Horizontal } from '../Horizontal'
@@ -40,7 +50,7 @@ function ChangelogBlock(props: ChangelogBlockProps) {
                         key={index}
                         sectionName={name}
                         section={changelog.getSection(name)}
-                        mb="1"
+                        marginBlock="2"
                     />
                 ))}
             </CardBody>

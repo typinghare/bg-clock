@@ -11,7 +11,12 @@ import { AttributeContainer } from './AttributeContainer'
  * @constructor
  */
 export function SettingContainer(props: SettingContainerProps) {
-    const { title, dataCollection, expanded: defaultExpanded, onSettingChange } = props
+    const {
+        title,
+        dataCollection,
+        defaultExpanded: defaultExpanded,
+        onSettingChange,
+    } = props
     const [expanded, setExpanded] = useBoolean(defaultExpanded || false)
     const attributeList = dataCollection.getDatumList() as BoardGameAttribute[]
 
@@ -41,7 +46,7 @@ export interface SettingContainerProps {
     dataCollection: DataCollection<any, BoardGameSettingsMetadata>
 
     // Whether it is expanded by default
-    expanded?: boolean
+    defaultExpanded?: boolean
 
     // Fired when any setting is changed
     onSettingChange?: () => void

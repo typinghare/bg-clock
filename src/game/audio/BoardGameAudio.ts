@@ -47,8 +47,7 @@ export class BoardGameAudio extends BoardGamePlugin {
         // Add handler for countdown
         gameContext.eventManager.addHandler<CountDownEventData>(CountdownEvent, (eventData) => {
             const seconds = eventData.getValue('seconds')
-            if (seconds >= 0 && seconds < 10) {
-                console.log(seconds)
+            if (seconds > 0 && seconds < 10) {
                 this.playAudio(this.countdownAudioList[seconds - 1])
             }
         })
@@ -61,6 +60,8 @@ export class BoardGameAudio extends BoardGamePlugin {
      * @private
      */
     private playAudio(audio: HTMLAudioElement, copy: boolean = false): void {
+        if (!audio) return
+
         if (copy) {
             const clonedAudio = audio.cloneNode() as HTMLAudioElement
             clonedAudio.play().catch(error => {

@@ -8,7 +8,6 @@ import { AttributeExpand } from './AttributeExpand'
 import { Box, BoxProps, Switch, useBoolean } from '@chakra-ui/react'
 import { useState } from 'react'
 import { AttributeDescription } from './AttributeDescription'
-import { notifySettingsChanged, useAppDispatch } from '../../redux'
 import { FontFamily } from '../../common/constants'
 
 /**
@@ -16,9 +15,7 @@ import { FontFamily } from '../../common/constants'
  */
 export function AttributeContainer(props: AttributeContainerProps) {
     const { attribute, onChange } = props
-    const dispatch = useAppDispatch()
     const [expanded, setExpanded] = useBoolean()
-
     const [value, setValue] = useState(attribute.getValue())
     const type = attribute.getMeta('type')
     const label: string = attribute.getMeta('label')
@@ -33,9 +30,6 @@ export function AttributeContainer(props: AttributeContainerProps) {
         if (onChange) {
             onChange()
         }
-
-        // Refresh settings UI
-        dispatch(notifySettingsChanged())
     }
 
     function handleBooleanChange(): void {
@@ -46,9 +40,6 @@ export function AttributeContainer(props: AttributeContainerProps) {
         if (onChange) {
             onChange()
         }
-
-        // Refresh settings UI
-        dispatch(notifySettingsChanged())
     }
 
     return (

@@ -3,20 +3,24 @@ import { SettingContainer } from '../SettingContainer'
 import { Navigation } from '../Navigation'
 import { Container } from '@chakra-ui/react'
 import { saveSettingsToLocalStorage, settings } from '../../common/settings'
+import { notifySettingsChanged, useAppDispatch } from '../../redux'
 
 export function SettingsPage() {
+    const dispatch = useAppDispatch()
+
     function handleSettingChange() {
         saveSettingsToLocalStorage()
+        dispatch(notifySettingsChanged())
     }
 
     return (
         <Page page={PageEnum.SETTINGS}>
             <Navigation previousPage={PageEnum.PORTAL} title="Settings" />
-            <Container paddingTop={5}>
+            <Container paddingTop="1em">
                 <SettingContainer
                     title="Settings"
                     dataCollection={settings}
-                    expanded={true}
+                    defaultExpanded={true}
                     onSettingChange={handleSettingChange}
                 />
             </Container>

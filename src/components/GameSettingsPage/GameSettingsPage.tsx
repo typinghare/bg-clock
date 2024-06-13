@@ -5,7 +5,6 @@ import {
     changePage,
     notifyTimeControlChangedChanged,
     selectBoardGameChangedSignal,
-    selectSettingsChangedSignal,
     selectTimeControlChangedSignal,
     useAppDispatch,
     useAppSelector,
@@ -25,7 +24,6 @@ export function GameSettingsPage() {
     const dispatch = useDispatch()
     const boardGameChangedSignal = useAppSelector(selectBoardGameChangedSignal)
     const timeControlChangedSignal = useAppSelector(selectTimeControlChangedSignal)
-    const settingsChangedSignal = useAppSelector(selectSettingsChangedSignal)
     const [boardGame, setBoardGame] = useState<BoardGame | undefined>()
     const [playerList, setPlayerList] = useState<Player[]>([])
     const [selectedTimeControlIndex, setSelectedTimeControlIndex] = useState<number>(0)
@@ -46,22 +44,24 @@ export function GameSettingsPage() {
         }
     }, [boardGameChangedSignal, timeControlChangedSignal])
 
-    useEffect(() => {
-        if (boardGame && boardGame.getAdvancedSettings().getValue('sync')) {
-            // Synchronize players values
-            const firstPlayer = playerList[0]
-            if (firstPlayer) {
-                // All other players align with the first player
-                const keys = Object.keys(firstPlayer.getData())
-                for (let i = 1; i < playerList.length; ++i) {
-                    const player = playerList[i]
-                    for (const key of keys) {
-                        player.getDatum(key).setValue(firstPlayer.getValue(key))
-                    }
+    function syncPlayerSettings(): void {
+        if (!boardGame || !boardGame.getAdvancedSettings().getValue('sync')) {
+            return
+        }
+
+        // Synchronize players values
+        const firstPlayer = playerList[0]
+        if (firstPlayer) {
+            // All other players align with the first player
+            const keys = Object.keys(firstPlayer.getData())
+            for (let i = 1; i < playerList.length; ++i) {
+                const player = playerList[i]
+                for (const key of keys) {
+                    player.getDatum(key).setValue(firstPlayer.getValue(key))
                 }
             }
         }
-    }, [settingsChangedSignal])
+    }
 
     if (!boardGame) {
         return (
@@ -87,7 +87,6 @@ export function GameSettingsPage() {
         }
 
         setSelectedTimeControlIndex(timeControlIndex)
-
         dispatch(notifyTimeControlChangedChanged())
     }
 
@@ -98,7 +97,8 @@ export function GameSettingsPage() {
                     <SettingContainer
                         title={`Player Settings - ${player.getRole()}`}
                         dataCollection={player}
-                        expanded={true}
+                        defaultExpanded={true}
+                        onSettingChange={syncPlayerSettings}
                     />
                 </Box>
             ))
@@ -106,15 +106,17 @@ export function GameSettingsPage() {
 
         const firstPlayer = playerList[0]
         if (!firstPlayer) {
+            console.error('No players found in the board game.')
             return (<></>)
         }
 
         return (
-            <Box mt={3}>
+            <Box marginBottom="1em">
                 <SettingContainer
                     title="Player Settings"
                     dataCollection={firstPlayer}
-                    expanded={true}
+                    defaultExpanded={true}
+                    onSettingChange={syncPlayerSettings}
                 />
             </Box>
         )
@@ -123,8 +125,8 @@ export function GameSettingsPage() {
     return (
         <Page page={PageEnum.GAME_SETTINGS}>
             <Navigation title="Game Settings" previousPage={PageEnum.GAME_SELECTION} />
-            <Container paddingY={5}>
-                <Box>
+            <Container paddingTop="1em">
+                <Box marginBottom="1em">
                     <TimeControlSelect
                         timeControlList={timeControlList}
                         selectedTimeControlIndex={selectedTimeControlIndex}
@@ -171,7 +173,7 @@ export function StartButton(props: StartButtonProps) {
     return (
         <Button
             variant="solid"
-            marginTop={3}
+            marginTop="1em"
             width={'100%'}
             onClick={handleGameStart}
         >

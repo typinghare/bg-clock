@@ -100,7 +100,6 @@ export class Player<
         if (!context) {
             throw new Error('Context does not exist')
         }
-        console.log('Run out time: ' + this.role)
 
         context.eventManager.trigger(new BoardGameEndEvent({ role: this.role }))
         this.boardGame.handleRequest(new PlayerRunOutTimeRequest())

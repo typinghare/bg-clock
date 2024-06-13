@@ -20,9 +20,7 @@ export abstract class Changelog {
      * @param date The release date.
      */
     protected constructor(
-        // eslint-disable-next-line no-unused-vars
         private readonly version: ChangelogVersion,
-        // eslint-disable-next-line no-unused-vars
         private readonly date: Date,
     ) {
     }

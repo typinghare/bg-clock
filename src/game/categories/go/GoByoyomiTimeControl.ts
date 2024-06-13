@@ -3,6 +3,7 @@ import { Player, PlayerExtraData, PlayerSettings, Role } from '../../Player'
 import { Datum } from '@typinghare/extrum'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { BoardGame } from '../../BoardGame'
+import { loadSourceMapUtils } from 'vitest/utils'
 
 /**
  * Go Byoyomi time control.
@@ -10,7 +11,7 @@ import { BoardGame } from '../../BoardGame'
 export class GoByoyomiTimeControl extends TimeControl {
     public override createPlayer(role: Role, boardGame: BoardGame): GoByoyomiPlayer {
         return new GoByoyomiPlayer(role, boardGame, {
-            mainTime: Datum.of(HourMinuteSecond.ofMinutes(5)).setMetadata({
+            mainTime: Datum.of(HourMinuteSecond.ofSeconds(10)).setMetadata({
                 type: 'time',
                 label: 'Main Time',
                 description: 'The initial allotted time for a player to make moves without any additional constraints.',
