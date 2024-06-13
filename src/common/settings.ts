@@ -4,6 +4,7 @@ import { LocalStorageKey } from './constants'
 
 export interface SettingsData {
     clockTimeFontSize: number
+    bubbleSize: number
     fullScreen: boolean
 }
 
@@ -14,9 +15,15 @@ export const settings = new DataCollection<SettingsData, BoardGameSettingsMetada
         description: 'The font size of the clock time.',
         optionList: [12, 15, 18, 20, 24, 28],
     }),
+    bubbleSize: Datum.of(18).setMetadata({
+        type: 'number',
+        label: 'Clock Bubble Size',
+        description: 'The size of the bubbles in the clock page.',
+        optionList: [12, 15, 18, 20, 24, 28],
+    }),
     fullScreen: Datum.of(false).setMetadata({
         type: 'bool',
-        label: 'Full Screen',
+        label: 'Clock Page Full Screen',
         description: 'Whether to enter full screen mode when the game starts.',
     }),
 })

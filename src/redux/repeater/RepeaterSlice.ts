@@ -35,6 +35,6 @@ export const {
 
 export const selectBoardGameChangedSignal = (state: RootState) => state.repeaterSlice.boardGameChangedSignal
 export const selectTimeControlChangedSignal = (state: RootState) => state.repeaterSlice.timeControlChangedSignal
-export const selectSettingsChangedSignal = (state: RootState) => state.repeaterSlice.settingsChangedSignal
+// export const selectSettingsChangedSignal = (state: RootState) => state.repeaterSlice.settingsChangedSignal
 
 export default repeaterSlice.reducer

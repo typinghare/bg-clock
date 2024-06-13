@@ -9,7 +9,8 @@ export function InstructionPanel() {
         <TabPanel>
             <Alert status="warning">
                 <WarningIcon />
-                <Box as="span" paddingLeft={3}> Will accomplish it when my procrastination is cured.</Box>
+                <Box as="span" paddingLeft={3}> Will accomplish it when my procrastination is
+                    cured.</Box>
             </Alert>
         </TabPanel>
     )

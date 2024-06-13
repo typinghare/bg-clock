@@ -3,7 +3,6 @@ import { Player, PlayerExtraData, PlayerSettings, Role } from '../../Player'
 import { Datum } from '@typinghare/extrum'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { BoardGame } from '../../BoardGame'
-import { loadSourceMapUtils } from 'vitest/utils'
 
 /**
  * Go Byoyomi time control.

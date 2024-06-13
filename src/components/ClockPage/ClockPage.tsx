@@ -1,5 +1,9 @@
 import { Page, PageEnum } from '../Page'
-import { selectBoardGameChangedSignal, selectTimeControlChangedSignal, useAppSelector } from '../../redux'
+import {
+    selectBoardGameChangedSignal,
+    selectTimeControlChangedSignal,
+    useAppSelector,
+} from '../../redux'
 import { Box } from '@chakra-ui/react'
 import { ClockDisplay } from './ClockDisplay'
 import { BoardGame, TwoPlayerBoardGame } from '../../game'

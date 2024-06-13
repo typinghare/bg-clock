@@ -69,7 +69,6 @@ export function TimeControlBlock(props: TimeControlBlockProps) {
 export interface TimeControlSelectProps {
     timeControlList: TimeControl[]
     selectedTimeControlIndex: number
-    // eslint-disable-next-line no-unused-vars
     onTimeControlSelect: (timeControlIndex: number) => void
 }
 
@@ -80,5 +79,4 @@ export interface TimeControlBlockProps {
     onTimeControlSelected: TimeControlSelectedHandler
 }
 
-// eslint-disable-next-line no-unused-vars
 export type TimeControlSelectedHandler = (index: number) => void

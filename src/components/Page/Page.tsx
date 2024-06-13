@@ -40,19 +40,12 @@ export interface PageProps extends BoxProps {
  * Page enumeration.
  */
 export enum PageEnum {
-    // eslint-disable-next-line no-unused-vars
     PORTAL = 0,
-    // eslint-disable-next-line no-unused-vars
     SETTINGS = 1,
-    // eslint-disable-next-line no-unused-vars
     RESUME_GAME = 2,
-    // eslint-disable-next-line no-unused-vars
     GAME_SELECTION = 3,
-    // eslint-disable-next-line no-unused-vars
     GAME_SETTINGS = 4,
-    // eslint-disable-next-line no-unused-vars
     CLOCK = 5,
-    // eslint-disable-next-line no-unused-vars
     ABOUT = 6
 }
 

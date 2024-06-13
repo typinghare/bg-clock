@@ -4,8 +4,6 @@ import {
     EndedState,
     NotStartedState,
     Player,
-    PlayerExtraData,
-    PlayerExtraDataMetadata,
     PlayerTapEvent,
     Role,
 } from '../../game'
@@ -21,8 +19,8 @@ import { FontFamily, LocalStorageKey, TimeColor } from '../../common/constants'
 import { settings } from '../../common/settings'
 import { boardGameHolder } from '../../common/holder'
 import { TimeDisplay } from './TimeDisplay'
-import { DataCollection } from '@typinghare/extrum'
 import { CountdownEvent } from '../../game/event/CountdownEvent'
+import { ClockBubbleContainer } from './ClockBubbleContainer'
 
 export function ClockDisplay(props: ClockDisplayProps) {
     const { role, ...boxProps } = props
@@ -145,17 +143,4 @@ export function ClockDisplay(props: ClockDisplayProps) {
  */
 export interface ClockDisplayProps extends BoxProps {
     role: Role
-}
-
-function ClockBubbleContainer(props: ClockBubbleContainerProps) {
-    const { playerExtraData, ...otherProps } = props
-
-    return (
-        <Box {...otherProps}>
-        </Box>
-    )
-}
-
-interface ClockBubbleContainerProps extends BoxProps {
-    playerExtraData: DataCollection<PlayerExtraData, PlayerExtraDataMetadata>
 }

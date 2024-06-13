@@ -1,4 +1,11 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box } from '@chakra-ui/react'
+import {
+    Accordion,
+    AccordionButton,
+    AccordionIcon,
+    AccordionItem,
+    AccordionPanel,
+    Box,
+} from '@chakra-ui/react'
 import { ReactNode } from 'react'
 
 /**
