@@ -119,6 +119,7 @@ function CustomizeModal(props: CustomizeModalProps) {
 
     function handleClose(): void {
         onClose(value)
+        console.log(value)
     }
 
     function handleCancel(): void {
@@ -131,7 +132,6 @@ function CustomizeModal(props: CustomizeModalProps) {
         <Modal onClose={handleClose} size={modalSize} {...otherProps}>
             <ModalOverlay />
             <ModalContent padding="1em">
-
                 {type === 'number' && (
                     <>
                         <Box fontSize="1.25em" fontWeight="bold" marginBottom="0.75em">
@@ -140,7 +140,6 @@ function CustomizeModal(props: CustomizeModalProps) {
                         <NumberInput
                             defaultValue={currentValue as number}
                             width="100%"
-                            marginBottom="0.75em"
                             onChange={(_, value) => {
                                 setValue(value)
                             }}
@@ -154,17 +153,72 @@ function CustomizeModal(props: CustomizeModalProps) {
                     </>
                 )}
 
-                {
-                    type === 'time' && (
-                        <>
-                            <Box fontSize="1.25em" fontWeight="bold" marginBottom="0.75em">
-                                Select a time
-                            </Box>
-                        </>
-                    )
-                }
+                {type === 'time' && (
+                    <>
+                        <Box fontSize="1.25em" fontWeight="bold" marginBottom="0.75em">
+                            Custom a time:
+                        </Box>
+                        <Box marginBottom="0.5em">
+                            <NumberInput
+                                display="inline"
+                                size="xs"
+                                marginRight="0.25em"
+                                defaultValue={(value as HourMinuteSecond).hour}
+                                onChange={(_, value) => {
+                                    if (isNaN(value)) return
+                                    setValue((time) => {
+                                        return HourMinuteSecond.ofHours(value)
+                                            .extendMinute((time as HourMinuteSecond).minute)
+                                            .extendSecond((time as HourMinuteSecond).second)
+                                    })
+                                }}
+                            >
+                                <NumberInputField width="25%" />
+                            </NumberInput>
+                            <Box as="span"> Hours </Box>
+                        </Box>
+                        <Box marginBottom="0.5em">
+                            <NumberInput
+                                display="inline"
+                                size="xs"
+                                marginRight="0.25em"
+                                defaultValue={(value as HourMinuteSecond).minute}
+                                onChange={(_, value) => {
+                                    if (isNaN(value)) return
+                                    setValue((time) => {
+                                        return HourMinuteSecond.ofMinutes(value)
+                                            .extendHour((time as HourMinuteSecond).hour)
+                                            .extendSecond((time as HourMinuteSecond).second)
+                                    })
+                                }}
+                            >
+                                <NumberInputField width="25%" />
+                            </NumberInput>
+                            <Box as="span"> Minutes </Box>
+                        </Box>
+                        <Box>
+                            <NumberInput
+                                display="inline"
+                                size="xs"
+                                marginRight="0.25em"
+                                defaultValue={(value as HourMinuteSecond).second}
+                                onChange={(_, value) => {
+                                    if (isNaN(value)) return
+                                    setValue((time) => {
+                                        return HourMinuteSecond.ofSeconds(value)
+                                            .extendHour((time as HourMinuteSecond).hour)
+                                            .extendMinute((time as HourMinuteSecond).minute)
+                                    })
+                                }}
+                            >
+                                <NumberInputField width="25%" />
+                            </NumberInput>
+                            <Box as="span"> Seconds </Box>
+                        </Box>
+                    </>
+                )}
 
-                <Box display="flex" justifyContent="flex-end">
+                <Box display="flex" justifyContent="flex-end" marginTop="0.75em">
                     <Wrap spacing={2}>
                         <WrapItem>
                             <Button colorScheme="green" onClick={handleClose}>

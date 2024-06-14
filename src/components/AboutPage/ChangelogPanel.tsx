@@ -5,9 +5,9 @@ import {
     BoxProps,
     Card,
     CardBody,
-    List,
     ListItem,
     TabPanel,
+    UnorderedList,
 } from '@chakra-ui/react'
 import { Changelog, Changelogs, ChangelogSections } from './Changelog'
 import moment from 'moment'
@@ -76,11 +76,11 @@ function ChangelogSection(props: ChangelogSectionProps) {
             <Badge colorScheme={sectionNameColorSchemeMap[sectionName]}>
                 {sectionName}
             </Badge>
-            <List>
+            <UnorderedList marginLeft="1.5em">
                 {section.map((item, index) => (
                     <ListItem key={index}>{item}</ListItem>
                 ))}
-            </List>
+            </UnorderedList>
         </Box>
     )
 }

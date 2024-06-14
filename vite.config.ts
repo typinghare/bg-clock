@@ -7,7 +7,8 @@ export default defineConfig({
     base: '/bgc/',
     plugins: [react()],
     server: {
-        open: true,
+        port: 3000,
+        strictPort: true,
         host: '0.0.0.0',
     },
     build: {

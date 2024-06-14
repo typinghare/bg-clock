@@ -30,7 +30,7 @@ export function ClockDisplay(props: ClockDisplayProps) {
     const [player, setPlayer] = useState<Player | undefined>(undefined)
     const [time, setTime] = useState<HourMinuteSecond>(HourMinuteSecond.ofSeconds(0))
     const [color, setColor] = useState<string>(TimeColor.TIME_PAUSED_COLOR)
-    const clockTimeFontSize = settings.getValue('clockTimeFontSize') * 1.15
+    const clockTimeFontSize = settings.getValue('clockTimeFontSize') * 0.75
 
     useEffect(() => {
         const intervalHandle = setInterval((): void => {
@@ -77,7 +77,7 @@ export function ClockDisplay(props: ClockDisplayProps) {
 
                 return currentTime
             })
-        }, 1000)
+        }, HourMinuteSecond.MILLISECONDS_IN_SECOND / 60)
 
         return () => {
             clearInterval(intervalHandle)
@@ -130,7 +130,7 @@ export function ClockDisplay(props: ClockDisplayProps) {
             <TimeDisplay
                 time={time}
                 color={color}
-                fontSize={clockTimeFontSize + 'vw'}
+                fontSize={clockTimeFontSize + 'vh'}
                 fontFamily={FontFamily.DIGITAL_7}
                 userSelect="none"
                 cursor="default"

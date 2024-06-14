@@ -34,7 +34,7 @@ export function ClockBubbleContainer(props: ClockBubbleContainerProps) {
 
 export function ClockBubble(props: ClockBubbleProps) {
     const { index, content } = props
-    const colors = ['skyblue']
+    const colors = ['skyblue', 'pink']
     const clockBubbleSize = settings.getValue('bubbleSize')
 
     return (
@@ -44,7 +44,7 @@ export function ClockBubble(props: ClockBubbleProps) {
             justifyContent="center"
             backgroundColor={colors[index % colors.length]}
             height={(clockBubbleSize / 6) + 'rem'}
-            width={(clockBubbleSize / 6) * (1 + (content.length - 1) / 2) + 'rem'}
+            width={(clockBubbleSize / 6) * ((content.length + 1) / 2) + 'rem'}
             borderRadius={(clockBubbleSize / 12) + 'rem'}
         >
             <Box fontWeight="bold" fontSize={clockBubbleSize / 10 + 'rem'}>

@@ -7,19 +7,21 @@ export function Page(props: PageProps) {
 
     return (
         <Grid
-            flexDirection="column"
             display={currentPage === page ? 'flex' : 'none'}
+            flexDirection="column"
+            margin="0 auto"
             height="100vh"
-            width="100vw"
+            width="100vh"
+            maxWidth="60vh"
             overflowX="hidden"
             overflowY="auto"
+            backgroundColor="white"
         >
             <GridItem
                 display="flex"
                 flexDirection="column"
                 height="100%"
                 width="100%"
-                maxWidth="75vh"
                 margin="0 auto"
             >
                 {children}

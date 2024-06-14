@@ -3,17 +3,30 @@ import { BoardGamePlugin } from '../BoardGame'
 import { PlayerTapEvent } from '../event/PlayerTapEvent'
 
 export class TapAudioPlugin extends BoardGamePlugin {
-    private readonly tapAudio: HTMLAudioElement = new Audio(tapAudio)
+    private audioContext: AudioContext = new AudioContext()
+    private audioBuffer: AudioBuffer | null = null
 
-    public override onStart() {
-        this.tapAudio.load()
+    public override async onStart() {
+        // Load the audio file and decode it
+        const response = await fetch(tapAudio)
+        const arrayBuffer = await response.arrayBuffer()
+        this.audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer)
 
         const gameContext = this.boardGame.getGameContext()
         gameContext.eventManager.addHandler(PlayerTapEvent, () => {
-            const clonedAudio = this.tapAudio.cloneNode() as HTMLAudioElement
-            clonedAudio.play().catch(error => {
-                console.error('Error playing the audio: ', error)
-            })
+            this.playAudio()
         })
+    }
+
+    private playAudio() {
+        if (!this.audioBuffer) {
+            console.error('Audio buffer is not loaded yet.')
+            return
+        }
+
+        const source = this.audioContext.createBufferSource()
+        source.buffer = this.audioBuffer
+        source.connect(this.audioContext.destination)
+        source.start()
     }
 }

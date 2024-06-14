@@ -51,7 +51,7 @@ export function GameSelectionPage() {
                 display="flex"
                 gap="1rem"
                 flexDirection="column"
-                paddingTop={5}
+                padding="1em 2em"
             >
                 <Box
                     flex={2}
@@ -59,8 +59,7 @@ export function GameSelectionPage() {
                     onClick={clickHandlerProvider(BoardGameType.Go)}
                 >
                     <Image
-                        maxWidth="calc(100% - 3em)"
-                        maxHeight="100%"
+                        maxWidth="100%"
                         src={bannerGo}
                         alt="Go Banner"
                     />
@@ -72,8 +71,7 @@ export function GameSelectionPage() {
                     onClick={clickHandlerProvider(BoardGameType.Chess)}
                 >
                     <Image
-                        maxWidth="calc(100% - 3em)"
-                        maxHeight="100%"
+                        maxWidth="100%"
                         src={bannerChess}
                         alt="Chess Banner"
                     />

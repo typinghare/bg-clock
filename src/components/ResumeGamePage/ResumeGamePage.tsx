@@ -29,7 +29,7 @@ export function ResumeGamePage() {
     return (
         <Page page={PageEnum.RESUME_GAME}>
             <Navigation previousPage={PageEnum.PORTAL} title="Resume Game" />
-            <Container>
+            <Container padding="1em 2em">
                 {gameSaveObjectList.map(((gameSaveObject, index) => {
                     return <BoardGameSaveCard
                         key={index}

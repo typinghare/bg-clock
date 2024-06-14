@@ -5,11 +5,12 @@ export class C2024_2_Beta extends Changelog {
     public constructor() {
         super('2024.2 Beta', moment('06-13-2024', 'MM-DD-YYYY').toDate())
 
-        this.added(<span>The functionality of pausing and resuming the game.</span>)
+        this.added(<span>Implemented the functionality to pause and resume the game.</span>)
         this.added(
-            <span>The functionality of customizing settings (including game settings) values.</span>)
-        this.improved(<span>Now all audios are loaded once.</span>)
-        this.improved(<span>Better the tap audio.</span>)
-        this.fixed(<span>Fixed an issue where audios were not played sometimes.</span>)
+            <span>Added customizable settings, including various game settings.</span>)
+        this.added(<span>Introduced multiple new app settings items.</span>)
+        this.improved(<span>All audio files are now preloaded for better performance.</span>)
+        this.improved(<span>Enhanced the quality of tap sound effects.</span>)
+        this.fixed(<span>Resolved an issue where audio would sometimes not play.</span>)
     }
 }
