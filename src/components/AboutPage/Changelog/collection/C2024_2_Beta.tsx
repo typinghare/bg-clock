@@ -12,6 +12,7 @@ export class C2024_2_Beta extends Changelog {
         this.added(<span>Allow users to enable the screen wake lock function.</span>)
         this.improved(<span>All audio files are now preloaded for better performance.</span>)
         this.improved(<span>Enhanced the quality of tap sound effects.</span>)
-        this.fixed(<span>Resolved an issue where audio would sometimes not play.</span>)
+        this.improved(<span>Improved the changelog interface.</span>)
+        this.fixed(<span>Resolved an issue where audios would sometimes not play.</span>)
     }
 }
