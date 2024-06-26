@@ -7,7 +7,7 @@ import { ReusableAudio } from './ReusableAudio'
 export class TapAudioPlugin extends BoardGamePlugin {
     private audio = new ReusableAudio()
 
-    public override async onStart() {
+    public override async onStart(): Promise<void> {
         await this.audio.fetch(tapAudio)
         const gameContext = this.boardGame.getGameContext()
         gameContext.eventManager.addHandler(PlayerTapEvent, () => {

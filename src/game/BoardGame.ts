@@ -107,15 +107,13 @@ export class BoardGame {
      * Starts the board game.
      * @return The game object.
      */
-    public start(): Game {
+    public async start(): Promise<void> {
         this.getPlayerList().forEach(player => {
             player.getReady()
         })
 
         // Create a game
-        this.game = new Game((deltaTime: float) => {
-            this.updatePlayerDeltaTime(deltaTime)
-        })
+        this.game = new Game((deltaTime: float) => this.updatePlayerDeltaTime(deltaTime))
         this.game.getContext<BoardGameContextData>().setValue('boardGame', this)
 
         // Register handlers
@@ -125,19 +123,18 @@ export class BoardGame {
             this.onPlayerTap(role)
         })
 
+        // this.pluginList.forEach(plugin => plugin.onStart())
+        // this.game.run(60)
+
         // Initialize all plugins
-        this.pluginList.forEach(plugin => plugin.onStart())
+        for (const plugin of this.pluginList) {
+            await plugin.onStart()
+        }
 
-        // Start the game core
         this.game.run(60)
-
-        // Initialize the game state
-        this.state = new OngoingState()
-
-        return this.game
     }
 
-    protected updatePlayerDeltaTime(deltaTime: float) {
+    protected updatePlayerDeltaTime(deltaTime: float): void {
         this.getPlayerList().forEach((player) => {
             player.update(deltaTime)
         })
@@ -149,9 +146,6 @@ export class BoardGame {
      * @protected
      */
     protected onPlayerTap(role: Role): void {
-        if (this.isState(OngoingState)) {
-            this.getPlayer(role).onTap()
-        }
     }
 
     /**
@@ -162,7 +156,7 @@ export class BoardGame {
     protected getNextRole(role: Role): Role {
         const roleList: Role[] = [...this.playerStore.keys()]
         if (!roleList.includes(role)) {
-            throw new Error('')
+            throw new Error('No such role: ' + role)
         }
 
         const index: number = roleList.indexOf(role)
@@ -290,15 +284,13 @@ export abstract class BoardGamePlugin {
      * Creates a board game plugin
      * @param boardGame The board game creating this plugin.
      */
-    public constructor(
-        protected boardGame: BoardGame,
-    ) {
+    public constructor(protected boardGame: BoardGame) {
     }
 
     /**
      * This method is called when the board game starts.
      */
-    public onStart(): void {
+    public async onStart(): Promise<void> {
     }
 }
 

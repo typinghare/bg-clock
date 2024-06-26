@@ -24,7 +24,7 @@ export abstract class BoardGameState {
  * Not started state.
  */
 export class NotStartedState extends BoardGameState {
-    public handle(_: BoardGame, request: BoardGameRequest): BoardGameState {
+    public override handle(_: BoardGame, request: BoardGameRequest): BoardGameState {
         if (request instanceof PlayerTapRequest) {
             return new OngoingState()
         }
@@ -37,7 +37,7 @@ export class NotStartedState extends BoardGameState {
  * Ongoing state.
  */
 export class OngoingState extends BoardGameState {
-    public handle(boardGame: BoardGame, request: BoardGameRequest): BoardGameState {
+    public override handle(boardGame: BoardGame, request: BoardGameRequest): BoardGameState {
         if (request instanceof PlayerPauseRequest) {
             boardGame.pause()
             return new PausedState()
@@ -53,7 +53,7 @@ export class OngoingState extends BoardGameState {
  * Paused state.
  */
 export class PausedState extends BoardGameState {
-    public handle(boardGame: BoardGame, request: BoardGameRequest): BoardGameState {
+    public override handle(boardGame: BoardGame, request: BoardGameRequest): BoardGameState {
         if (request instanceof PlayerResumeRequest) {
             boardGame.resume()
             return new OngoingState()

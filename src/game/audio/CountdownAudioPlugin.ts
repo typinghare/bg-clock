@@ -24,28 +24,25 @@ const countDownAudioUrls: string[] = [
     countdown9,
 ]
 
-/**
- * Board game audio plugin.
- */
 export class CountdownAudioPlugin extends BoardGamePlugin {
     private readonly countdownAudioList: ReusableAudio[] = []
 
-    public override onStart() {
-        for (let i = 1; i < 10; i++) {
-            const reusableAudio = new ReusableAudio()
-            this.countdownAudioList.push(reusableAudio)
-            reusableAudio.fetch(countDownAudioUrls[i - 1]).then()
+    public override async onStart(): Promise<void> {
+        for (let i = 0; i < 9; i++) {
+            this.countdownAudioList.push(new ReusableAudio())
+            await this.countdownAudioList[i].fetch(countDownAudioUrls[i])
         }
 
         const gameContext = this.boardGame.getGameContext()
         gameContext.eventManager.addHandler<CountDownEventData>(CountdownEvent, (eventData) => {
             const seconds = eventData.getValue('seconds')
-            if (seconds > 0 && seconds < 10) {
-                const reusableAudio = this.countdownAudioList[seconds - 1]
-                if (reusableAudio) {
-                    reusableAudio.play()
-                }
-            }
+            this.playAudio(seconds)
         })
+    }
+
+    public playAudio(seconds: number) {
+        if (seconds > 0 && seconds < 10) {
+            this.countdownAudioList[seconds - 1].play()
+        }
     }
 }

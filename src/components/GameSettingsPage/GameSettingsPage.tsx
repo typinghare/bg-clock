@@ -183,15 +183,15 @@ export function StartButton(props: StartButtonProps) {
         if (settings.getValue('tapAudio')) boardGame.addPlugin(TapAudioPlugin)
         if (settings.getValue('countdownAudio')) boardGame.addPlugin(CountdownAudioPlugin)
 
-        boardGame.start()
+        boardGame.start().then(() => {
+            // The clock page will retrieve the game from the GameHolder
+            dispatch(changePage(PageEnum.CLOCK))
 
-        // The clock page will retrieve the game from the GameHolder
-        dispatch(changePage(PageEnum.CLOCK))
-
-        // Enable full screen
-        if (settings.getValue('fullScreen')) {
-            enableFullScreen()
-        }
+            // Enable full screen
+            if (settings.getValue('fullScreen')) {
+                enableFullScreen()
+            }
+        })
     }
 
     return (

@@ -106,14 +106,6 @@ export class Player<
     }
 
     /**
-     * Player taps the touch screen.
-     */
-    public onTap(): void {
-        this.pause()
-        this.boardGame.handleRequest(new PlayerTapRequest())
-    }
-
-    /**
      * Whether this player is paused.
      */
     public isPaused(): boolean {

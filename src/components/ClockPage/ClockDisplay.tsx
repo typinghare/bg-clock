@@ -101,11 +101,6 @@ export function ClockDisplay(props: ClockDisplayProps) {
             return
         }
 
-        if (boardGame.isState(NotStartedState)) {
-            // Start the board game
-            boardGame.start()
-        }
-
         const playerTapEvent = new PlayerTapEvent({ role })
         boardGame.getGameContext().eventManager.trigger(playerTapEvent)
     }

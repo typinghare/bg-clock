@@ -46,7 +46,7 @@ export class BoardGameSave {
             player.setExtraData(playerSaveObject.extraData)
         }
 
-        boardGame.start()
+        // boardGame.start()
         enableFullScreen()
 
         return boardGame

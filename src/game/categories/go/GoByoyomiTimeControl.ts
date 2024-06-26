@@ -11,7 +11,7 @@ import { OngoingState } from '../../BoardGameState'
 export class GoByoyomiTimeControl extends TimeControl {
     public override createPlayer(role: Role, boardGame: BoardGame): GoByoyomiPlayer {
         return new GoByoyomiPlayer(role, boardGame, {
-            mainTime: Datum.of(HourMinuteSecond.ofMinutes(5)).setMetadata({
+            mainTime: Datum.of(HourMinuteSecond.ofMinutes(0.25)).setMetadata({
                 type: 'time',
                 label: 'Main Time',
                 description: 'The initial allotted time for a player to make moves without any additional constraints.',
