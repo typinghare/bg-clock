@@ -12,7 +12,7 @@ export function Page(props: PageProps) {
             margin="0 auto"
             height="100vh"
             width="100vw"
-            maxWidth="60vh"
+            maxWidth="75vh"
             overflowX="hidden"
             overflowY="auto"
             backgroundColor="white"
