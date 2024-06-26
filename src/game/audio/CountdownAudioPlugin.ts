@@ -14,7 +14,7 @@ import { CountdownEvent, CountDownEventData } from '../event/CountdownEvent'
 /**
  * Board game audio plugin.
  */
-export class CountdownAudio extends BoardGamePlugin {
+export class CountdownAudioPlugin extends BoardGamePlugin {
     private readonly countdownAudioList: HTMLAudioElement[] = [
         new Audio(countdown1),
         new Audio(countdown2),

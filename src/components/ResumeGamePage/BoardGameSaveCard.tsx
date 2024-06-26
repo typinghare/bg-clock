@@ -20,10 +20,10 @@ export function BoardGameSaveCard(props: BoardGameSaveCardProps) {
             />
             <CardBody padding="0.5em !important" fontSize="0.875rem">
                 <Box fontWeight="bold">
-                    {moment(saveObject.timestamp).format('MMMo DD, YYYY')}
+                    {moment(saveObject.timestamp).format('MMM DD, YYYY')}
                 </Box>
-                {saveObject.players.map(player => (
-                    <div>
+                {saveObject.players.map((player, index) => (
+                    <div key={index}>
                         &lt;{player.role}&gt;&nbsp;
                         {HourMinuteSecond.of(player.remainingTime).toString()}
                     </div>

@@ -17,7 +17,7 @@ import { useDispatch } from 'react-redux'
 import { boardGameHolder } from '../../common/holder'
 import { enableFullScreen } from '../../common/helper'
 import { TapAudioPlugin } from '../../game/audio/TapAudioPlugin'
-import { CountdownAudio } from '../../game/audio/CountdownAudio'
+import { CountdownAudioPlugin } from '../../game/audio/CountdownAudioPlugin'
 import { settings } from '../../common/settings'
 
 /**
@@ -164,9 +164,9 @@ export function StartButton(props: StartButtonProps) {
             return
         }
 
-        // plugins
+        // Add plugins
         if (settings.getValue('tapAudio')) boardGame.addPlugin(TapAudioPlugin)
-        if (settings.getValue('countdownAudio')) boardGame.addPlugin(CountdownAudio)
+        if (settings.getValue('countdownAudio')) boardGame.addPlugin(CountdownAudioPlugin)
 
         boardGame.start()
 

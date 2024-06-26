@@ -5,24 +5,26 @@ import {
     PlayerRunOutTimeRequest,
     PlayerTapRequest,
 } from './BoardGameRequest'
+import { BoardGame } from './BoardGame'
 
 /**
  * Board game state.
  */
-export interface BoardGameState {
+export abstract class BoardGameState {
     /**
      * Handles a board game request.
+     * @param boardGame
      * @param request The request to handle.
      * @return the new state.
      */
-    handle(request: BoardGameRequest): BoardGameState
+    public abstract handle(boardGame: BoardGame, request: BoardGameRequest): BoardGameState
 }
 
 /**
  * Not started state.
  */
-export class NotStartedState implements BoardGameState {
-    public handle(request: BoardGameRequest): BoardGameState {
+export class NotStartedState extends BoardGameState {
+    public handle(_: BoardGame, request: BoardGameRequest): BoardGameState {
         if (request instanceof PlayerTapRequest) {
             return new OngoingState()
         }
@@ -34,9 +36,10 @@ export class NotStartedState implements BoardGameState {
 /**
  * Ongoing state.
  */
-export class OngoingState implements BoardGameState {
-    public handle(request: BoardGameRequest): BoardGameState {
+export class OngoingState extends BoardGameState {
+    public handle(boardGame: BoardGame, request: BoardGameRequest): BoardGameState {
         if (request instanceof PlayerPauseRequest) {
+            boardGame.pause()
             return new PausedState()
         } else if (request instanceof PlayerRunOutTimeRequest) {
             return new EndedState()
@@ -49,9 +52,10 @@ export class OngoingState implements BoardGameState {
 /**
  * Paused state.
  */
-export class PausedState implements BoardGameState {
-    public handle(request: BoardGameRequest): BoardGameState {
+export class PausedState extends BoardGameState {
+    public handle(boardGame: BoardGame, request: BoardGameRequest): BoardGameState {
         if (request instanceof PlayerResumeRequest) {
+            boardGame.resume()
             return new OngoingState()
         } else if (request instanceof PlayerTapRequest) {
             return new OngoingState()
@@ -64,8 +68,8 @@ export class PausedState implements BoardGameState {
 /**
  * Ended state.
  */
-export class EndedState implements BoardGameState {
-    public handle(_: BoardGameRequest): BoardGameState {
+export class EndedState extends BoardGameState {
+    public override handle(): BoardGameState {
         return this
     }
 }

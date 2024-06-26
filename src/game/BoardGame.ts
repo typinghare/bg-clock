@@ -1,7 +1,7 @@
 import { TimeControl } from './TimeControl'
 import { Context, ContextData, float, Game } from '@typinghare/game-core'
 import { Player, Role } from './Player'
-import { BoardGameState, NotStartedState, PausedState } from './BoardGameState'
+import { BoardGameState, NotStartedState, OngoingState, PausedState } from './BoardGameState'
 import { PlayerTapEvent } from './event/PlayerTapEvent'
 import { BoardGameRequest } from './BoardGameRequest'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
@@ -47,6 +47,13 @@ export class BoardGame {
      * @protected
      */
     protected pluginList: BoardGamePlugin[] = []
+
+    /**
+     * This list saves all ongoing playing when the game is paused, and will be cleared after the
+     * game is resumed.
+     * @protected
+     */
+    protected ongoingPlayersBeforePause: Role[] = []
 
     /**
      * Creates a board game.
@@ -118,11 +125,14 @@ export class BoardGame {
             this.onPlayerTap(role)
         })
 
+        // Initialize all plugins
         this.pluginList.forEach(plugin => plugin.onStart())
 
+        // Start the game core
         this.game.run(60)
 
-        this.state = new PausedState()
+        // Initialize the game state
+        this.state = new OngoingState()
 
         return this.game
     }
@@ -139,7 +149,9 @@ export class BoardGame {
      * @protected
      */
     protected onPlayerTap(role: Role): void {
-        this.getPlayer(role).onTap()
+        if (this.isState(OngoingState)) {
+            this.getPlayer(role).onTap()
+        }
     }
 
     /**
@@ -208,7 +220,7 @@ export class BoardGame {
      * @param request The request to handle.
      */
     public handleRequest(request: BoardGameRequest): void {
-        this.state = this.state.handle(request)
+        this.state = this.state.handle(this, request)
     }
 
     /**
@@ -232,6 +244,41 @@ export class BoardGame {
      */
     public addPlugin(boardGamePluginClass: BoardGamePluginClass): void {
         this.pluginList.push(new boardGamePluginClass(this))
+    }
+
+    /**
+     * Pauses this game.
+     */
+    public pause(): void {
+        if (!this.isState(OngoingState)) {
+            return
+        }
+
+        const playerList = this.getPlayerList()
+        playerList.forEach(player => {
+            if (!player.isPaused()) {
+                this.ongoingPlayersBeforePause.push(player.getRole())
+                player.pause()
+            }
+        })
+    }
+
+    /**
+     * Resumes the game.
+     */
+    public resume(): void {
+        if (!this.isState(PausedState)) {
+            return
+        }
+
+        const playerList = this.getPlayerList()
+        playerList.forEach(player => {
+            if (this.ongoingPlayersBeforePause.includes(player.getRole())) {
+                player.resume()
+            }
+        })
+
+        this.ongoingPlayersBeforePause = []
     }
 }
 

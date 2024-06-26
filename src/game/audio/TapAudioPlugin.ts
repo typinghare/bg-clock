@@ -1,6 +1,7 @@
 import tapAudio from '../../assets/sounds/beep.wav'
 import { BoardGamePlugin } from '../BoardGame'
 import { PlayerTapEvent } from '../event/PlayerTapEvent'
+import { OngoingState } from '../BoardGameState'
 
 export class TapAudioPlugin extends BoardGamePlugin {
     private audioContext: AudioContext = new AudioContext()
@@ -14,7 +15,9 @@ export class TapAudioPlugin extends BoardGamePlugin {
 
         const gameContext = this.boardGame.getGameContext()
         gameContext.eventManager.addHandler(PlayerTapEvent, () => {
-            this.playAudio()
+            if (this.boardGame.isState(OngoingState)) {
+                this.playAudio()
+            }
         })
     }
 
