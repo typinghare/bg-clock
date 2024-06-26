@@ -4,12 +4,27 @@ import {
     selectTimeControlChangedSignal,
     useAppSelector,
 } from '../../redux'
-import { Box, Button, Modal, ModalContent, ModalOverlay, useBoolean } from '@chakra-ui/react'
+import {
+    Box,
+    BoxProps,
+    Button,
+    Modal,
+    ModalContent,
+    ModalOverlay,
+    useBoolean,
+} from '@chakra-ui/react'
 import { ClockDisplay } from './ClockDisplay'
-import { BoardGame, PlayerPauseRequest, PlayerResumeRequest, TwoPlayerBoardGame } from '../../game'
+import {
+    BoardGame,
+    OngoingState,
+    PlayerPauseRequest,
+    PlayerResumeRequest,
+    TwoPlayerBoardGame,
+} from '../../game'
 import { useEffect, useState } from 'react'
 import { boardGameHolder } from '../../common/holder'
 import { TimeColor } from '../../common/constants'
+import { Horizontal } from '../Horizontal'
 
 /**
  * Clock page.
@@ -45,6 +60,42 @@ export function ClockPage() {
         setModal.off()
     }
 
+    function OperationBox(props: BoxProps) {
+        const isOngoing: boolean = boardGame?.isState(OngoingState) || false
+
+        return (
+            <Box
+                display="flex"
+                flexDirection="column"
+                {...props}
+            >
+                <Button
+                    marginBottom="1rem"
+                    colorScheme={isOngoing ? 'orange' : 'gray'}
+                    cursor={isOngoing ? 'pointer' : 'not-allowed'}
+                    variant={isOngoing ? 'solid' : 'outline'}
+                    onClick={handlePause}
+                >
+                    Pause
+                </Button>
+
+                <Button
+                    marginBottom="1rem"
+                    colorScheme="teal"
+                    variant={isOngoing ? 'outline' : 'solid'}
+                    cursor={isOngoing ? 'not-allowed' : 'pointer'}
+                    onClick={handleResume}
+                >
+                    Resume
+                </Button>
+
+                <Button onClick={setModal.off}>
+                    Cancel
+                </Button>
+            </Box>
+        )
+    }
+
     return (
         <Page page={PageEnum.CLOCK}>
             <Box flex={12} userSelect="none">
@@ -59,13 +110,9 @@ export function ClockPage() {
                 <Modal isOpen={isModalOpen} onClose={setModal.off}>
                     <ModalOverlay />
                     <ModalContent padding="1rem">
-                        <Button marginBottom="1rem" colorScheme="yellow" onClick={handlePause}>
-                            Pause
-                        </Button>
-
-                        <Button colorScheme="teal" onClick={handleResume}>
-                            Resume
-                        </Button>
+                        <OperationBox transform="rotate(180deg)" />
+                        <Horizontal marginTop="1.5rem" marginBottom="1.5rem" />
+                        <OperationBox />
                     </ModalContent>
                 </Modal>
             </Box>
