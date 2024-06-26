@@ -6,6 +6,7 @@ export interface SettingsData {
     clockTimeFontSize: number
     bubbleSize: number
     fullScreen: boolean
+    screenAlwaysOn: boolean
     tapAudio: boolean
     countdownAudio: boolean
 }
@@ -27,6 +28,11 @@ export const settings = new DataCollection<SettingsData, BoardGameSettingsMetada
         type: 'bool',
         label: 'Clock Page Full Screen',
         description: 'Whether to enter full screen mode when the game starts.',
+    }),
+    screenAlwaysOn: Datum.of(true).setMetadata({
+        type: 'bool',
+        label: 'Screen Always On',
+        description: 'When turned on, the screen is always on when the clock is running',
     }),
     tapAudio: Datum.of(true).setMetadata({
         type: 'bool',

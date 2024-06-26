@@ -9,6 +9,7 @@ import {
     ModalContent,
     ModalOverlay,
     useBoolean,
+    useBreakpointValue,
     Wrap,
     WrapItem,
 } from '@chakra-ui/react'
@@ -27,7 +28,7 @@ import { TimeControlSelect } from './TimeControlSelect'
 import { SettingContainer } from '../SettingContainer'
 import { useDispatch } from 'react-redux'
 import { boardGameHolder } from '../../common/holder'
-import { enableFullScreen } from '../../common/helper'
+import { enableFullScreen, noSleep } from '../../common/helper'
 import { TapAudioPlugin } from '../../game/audio/TapAudioPlugin'
 import { CountdownAudioPlugin } from '../../game/audio/CountdownAudioPlugin'
 import { settings } from '../../common/settings'
@@ -44,6 +45,7 @@ export function GameSettingsPage() {
     const [playerList, setPlayerList] = useState<Player[]>([])
     const [selectedTimeControlIndex, setSelectedTimeControlIndex] = useState<number>(0)
     const [isRequestWakeLockModalOpen, setRequestWakeLockModal] = useBoolean()
+    const modalSize = useBreakpointValue({ base: 'xs', sm: 'sm', md: 'md', lg: 'lg', xl: 'xl' })
 
     useEffect(() => {
         const currentBoardGame = boardGameHolder.get()
@@ -139,11 +141,23 @@ export function GameSettingsPage() {
         )
     }
 
+    function startBoardGameCallback(): void {
+        if (settings.getValue('screenAlwaysOn')) {
+            document.addEventListener('click',
+                function enableNoSleep() {
+                    document.removeEventListener('click', enableNoSleep)
+                    noSleep.enable()
+                },
+            )
+        }
+    }
+
     function WakeLockRequestModal() {
         return (
             <Modal
                 isOpen={isRequestWakeLockModalOpen}
                 onClose={setRequestWakeLockModal.off}
+                size={modalSize}
             >
                 <ModalOverlay />
                 <ModalContent padding="1rem">
@@ -200,11 +214,7 @@ export function GameSettingsPage() {
                     />
                 </Box>
 
-                <StartButton boardGame={boardGame} callback={(): void => {
-                    setRequestWakeLockModal.on()
-                }} />
-
-                <WakeLockRequestModal />
+                <StartButton boardGame={boardGame} callback={startBoardGameCallback} />
             </Container>
         </Page>
     )
