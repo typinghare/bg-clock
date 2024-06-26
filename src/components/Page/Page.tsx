@@ -11,7 +11,7 @@ export function Page(props: PageProps) {
             flexDirection="column"
             margin="0 auto"
             height="100vh"
-            width="100vh"
+            width="100vw"
             maxWidth="60vh"
             overflowX="hidden"
             overflowY="auto"
