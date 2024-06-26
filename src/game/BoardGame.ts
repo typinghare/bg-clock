@@ -3,7 +3,7 @@ import { Context, ContextData, float, Game } from '@typinghare/game-core'
 import { Player, Role } from './Player'
 import { BoardGameState, NotStartedState, OngoingState, PausedState } from './BoardGameState'
 import { PlayerTapEvent } from './event/PlayerTapEvent'
-import { BoardGameRequest } from './BoardGameRequest'
+import { BoardGameRequest, PlayerTapRequest } from './BoardGameRequest'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { AdvancedSettings } from './AdvancedSettings'
 import { Datum } from '@typinghare/extrum'
@@ -84,13 +84,10 @@ export class BoardGame {
             throw new Error('Time control not in the list')
         }
 
-        // Set time control
         this.timeControl = timeControl
-
-        // Reset
         this.playerStore.clear()
 
-        // Initialize players
+        // Initialize all players
         for (const role of this.roleList) {
             this.playerStore.set(role, timeControl.createPlayer(role, this))
         }
@@ -105,6 +102,10 @@ export class BoardGame {
 
     /**
      * Starts the board game.
+     *
+     * This function invokes the getReady method for each player. Create a game (game core) and
+     * set the context. Register handlers and initialize all plugins.
+     *
      * @return The game object.
      */
     public async start(): Promise<void> {
@@ -122,9 +123,6 @@ export class BoardGame {
             const role: Role = gameEvent.getValue('role')
             this.onPlayerTap(role)
         })
-
-        // this.pluginList.forEach(plugin => plugin.onStart())
-        // this.game.run(60)
 
         // Initialize all plugins
         for (const plugin of this.pluginList) {
@@ -146,6 +144,17 @@ export class BoardGame {
      * @protected
      */
     protected onPlayerTap(role: Role): void {
+        const player: Player = this.getPlayer(role)
+        const nextPlayer: Player = this.getPlayer(this.getNextRole(role))
+        if (this.isState(OngoingState)) {
+            if (!player.isPaused()) {
+                player.pause()
+                nextPlayer.resume()
+            }
+        } else if (this.isState(NotStartedState)) {
+            nextPlayer.resume()
+            this.handleRequest(new PlayerTapRequest())
+        }
     }
 
     /**

@@ -1,4 +1,4 @@
-import tapAudio from '../../assets/sounds/beep.wav'
+import tapAudio from '../../assets/sounds/beep.mp3'
 import { BoardGamePlugin } from '../BoardGame'
 import { PlayerTapEvent } from '../event/PlayerTapEvent'
 import { OngoingState } from '../BoardGameState'

@@ -18,7 +18,7 @@ export const settings = new DataCollection<SettingsData, BoardGameSettingsMetada
         description: 'The font size of the clock time.',
         optionList: [12, 15, 18, 20, 24, 28],
     }),
-    bubbleSize: Datum.of(18).setMetadata({
+    bubbleSize: Datum.of(20).setMetadata({
         type: 'number',
         label: 'Clock Bubble Size',
         description: 'The size of the bubbles in the clock page.',

@@ -34,12 +34,19 @@ export function ClockDisplay(props: ClockDisplayProps) {
 
     useEffect(() => {
         const intervalHandle = setInterval((): void => {
-            if (!boardGame || boardGame.isState(NotStartedState)) {
+            // Check board game
+            if (!boardGame) {
                 return
             }
 
+            // Check player
             const player = boardGame.getPlayer(role)
             if (!player) {
+                return
+            }
+
+            if (boardGame.isState(NotStartedState)) {
+                setTime(player.getTime())
                 return
             }
 

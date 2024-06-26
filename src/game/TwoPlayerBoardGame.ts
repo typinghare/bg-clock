@@ -1,8 +1,6 @@
 import { BoardGame } from './BoardGame'
 import { TimeControl } from './TimeControl'
-import { Player, Role } from './Player'
-import { NotStartedState, OngoingState } from './BoardGameState'
-import { PlayerTapRequest } from './BoardGameRequest'
+import { Role } from './Player'
 
 /**
  * Board game that includes two players.
@@ -25,21 +23,5 @@ export class TwoPlayerBoardGame extends BoardGame {
         return role == TwoPlayerBoardGame.ROLE_A ?
             TwoPlayerBoardGame.ROLE_B :
             TwoPlayerBoardGame.ROLE_A
-    }
-
-    protected override onPlayerTap(role: Role) {
-        super.onPlayerTap(role)
-
-        const player: Player = this.getPlayer(role)
-        const nextPlayer: Player = this.getPlayer(this.getNextRole(role))
-        if (this.isState(OngoingState)) {
-            if (!player.isPaused()) {
-                player.pause()
-                nextPlayer.resume()
-            }
-        } else if (this.isState(NotStartedState)) {
-            nextPlayer.resume()
-            this.handleRequest(new PlayerTapRequest())
-        }
     }
 }
