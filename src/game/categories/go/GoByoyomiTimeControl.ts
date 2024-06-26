@@ -3,6 +3,7 @@ import { Player, PlayerExtraData, PlayerSettings, Role } from '../../Player'
 import { Datum } from '@typinghare/extrum'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { BoardGame } from '../../BoardGame'
+import { OngoingState } from '../../BoardGameState'
 
 /**
  * Go Byoyomi time control.
@@ -90,6 +91,10 @@ export class GoByoyomiPlayer extends Player<GoByoyomiPlayerSettings, GoByoyomiPl
 
     public override resume() {
         super.resume()
+
+        if (!this.boardGame.isState(OngoingState)) {
+            return
+        }
 
         if (this.extraData.getValue('hasEnteredByoyomi')) {
             const timePerPeriod: HourMinuteSecond = this.getValue('timePerPeriod')

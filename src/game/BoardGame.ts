@@ -264,7 +264,7 @@ export class BoardGame {
     }
 
     /**
-     * Resumes the game.
+     * Resumes the board game.
      */
     public resume(): void {
         if (!this.isState(PausedState)) {
