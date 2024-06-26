@@ -27,6 +27,9 @@ pnpm add screenfull
 # MomentJS
 # @link https://momentjs.com/docs/
 pnpm add moment
+
+# @link https://github.com/zakj/no-sleep
+pnpm add @zakj/no-sleep
 ~~~
 
 ## Development

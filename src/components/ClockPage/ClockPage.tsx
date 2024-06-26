@@ -98,7 +98,7 @@ export function ClockPage() {
 
     return (
         <Page page={PageEnum.CLOCK}>
-            <Box flex={12} userSelect="none">
+            <Box flex={9} userSelect="none">
                 <ClockDisplay role={TwoPlayerBoardGame.ROLE_A} transform="rotate(180deg)" />
             </Box>
             <Box
@@ -116,7 +116,7 @@ export function ClockPage() {
                     </ModalContent>
                 </Modal>
             </Box>
-            <Box flex={12} userSelect="none">
+            <Box flex={9} userSelect="none">
                 <ClockDisplay role={TwoPlayerBoardGame.ROLE_B} />
             </Box>
         </Page>

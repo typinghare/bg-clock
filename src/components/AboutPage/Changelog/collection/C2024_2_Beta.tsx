@@ -9,6 +9,7 @@ export class C2024_2_Beta extends Changelog {
         this.added(
             <span>Added customizable settings, including various game settings.</span>)
         this.added(<span>Introduced multiple new app settings items.</span>)
+        this.added(<span>Allow users to enable the screen wake lock function.</span>)
         this.improved(<span>All audio files are now preloaded for better performance.</span>)
         this.improved(<span>Enhanced the quality of tap sound effects.</span>)
         this.fixed(<span>Resolved an issue where audio would sometimes not play.</span>)

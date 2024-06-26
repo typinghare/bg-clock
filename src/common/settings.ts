@@ -23,7 +23,7 @@ export const settings = new DataCollection<SettingsData, BoardGameSettingsMetada
         description: 'The size of the bubbles in the clock page.',
         optionList: [12, 15, 18, 20, 24, 28],
     }),
-    fullScreen: Datum.of(false).setMetadata({
+    fullScreen: Datum.of(true).setMetadata({
         type: 'bool',
         label: 'Clock Page Full Screen',
         description: 'Whether to enter full screen mode when the game starts.',

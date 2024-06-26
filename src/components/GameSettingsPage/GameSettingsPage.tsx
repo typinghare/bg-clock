@@ -1,5 +1,17 @@
 import { Page, PageEnum } from '../Page'
-import { Alert, AlertIcon, Box, Button, Container } from '@chakra-ui/react'
+import {
+    Alert,
+    AlertIcon,
+    Box,
+    Button,
+    Container,
+    Modal,
+    ModalContent,
+    ModalOverlay,
+    useBoolean,
+    Wrap,
+    WrapItem,
+} from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import {
     changePage,
@@ -19,6 +31,7 @@ import { enableFullScreen } from '../../common/helper'
 import { TapAudioPlugin } from '../../game/audio/TapAudioPlugin'
 import { CountdownAudioPlugin } from '../../game/audio/CountdownAudioPlugin'
 import { settings } from '../../common/settings'
+import NoSleep from '@zakj/no-sleep'
 
 /**
  * Game settings page.
@@ -30,6 +43,7 @@ export function GameSettingsPage() {
     const [boardGame, setBoardGame] = useState<BoardGame | undefined>()
     const [playerList, setPlayerList] = useState<Player[]>([])
     const [selectedTimeControlIndex, setSelectedTimeControlIndex] = useState<number>(0)
+    const [isRequestWakeLockModalOpen, setRequestWakeLockModal] = useBoolean()
 
     useEffect(() => {
         const currentBoardGame = boardGameHolder.get()
@@ -125,6 +139,46 @@ export function GameSettingsPage() {
         )
     }
 
+    function WakeLockRequestModal() {
+        return (
+            <Modal
+                isOpen={isRequestWakeLockModalOpen}
+                onClose={setRequestWakeLockModal.off}
+            >
+                <ModalOverlay />
+                <ModalContent padding="1rem">
+                    <p>
+                        Do you want to keep the screen always on while the clock is running?
+                    </p>
+                    <Box display="flex" justifyContent="flex-end" marginTop="0.75em">
+                        <Wrap spacing={2}>
+                            <WrapItem>
+                                <Button
+                                    colorScheme="green"
+                                    onClick={() => {
+                                        const noSleep = new NoSleep()
+                                        noSleep.enable()
+                                        setRequestWakeLockModal.off()
+                                    }}
+                                >
+                                    Ok
+                                </Button>
+                            </WrapItem>
+                            <WrapItem>
+                                <Button
+                                    colorScheme="blackAlpha"
+                                    onClick={setRequestWakeLockModal.off}
+                                >
+                                    Cancel
+                                </Button>
+                            </WrapItem>
+                        </Wrap>
+                    </Box>
+                </ModalContent>
+            </Modal>
+        )
+    }
+
     return (
         <Page page={PageEnum.GAME_SETTINGS}>
             <Navigation title="Game Settings" previousPage={PageEnum.GAME_SELECTION} />
@@ -146,7 +200,11 @@ export function GameSettingsPage() {
                     />
                 </Box>
 
-                <StartButton boardGame={boardGame} />
+                <StartButton boardGame={boardGame} callback={(): void => {
+                    setRequestWakeLockModal.on()
+                }} />
+
+                <WakeLockRequestModal />
             </Container>
         </Page>
     )
@@ -156,10 +214,14 @@ export function GameSettingsPage() {
  * Start button.
  */
 export function StartButton(props: StartButtonProps) {
-    const { boardGame } = props
+    const { boardGame, callback } = props
     const dispatch = useAppDispatch()
 
     function handleGameStart(): void {
+        if (callback) {
+            callback()
+        }
+
         if (!boardGame || !boardGame.isState(NotStartedState)) {
             return
         }
@@ -174,7 +236,9 @@ export function StartButton(props: StartButtonProps) {
         dispatch(changePage(PageEnum.CLOCK))
 
         // Enable full screen
-        enableFullScreen()
+        if (settings.getValue('fullScreen')) {
+            enableFullScreen()
+        }
     }
 
     return (
@@ -194,4 +258,5 @@ export function StartButton(props: StartButtonProps) {
  */
 export interface StartButtonProps {
     boardGame: BoardGame
+    callback?: () => void
 }

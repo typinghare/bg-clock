@@ -29,6 +29,7 @@
     "@typinghare/game-core": "^1.0.3",
     "@typinghare/holder": "^1.0.1",
     "@typinghare/hour-minute-second": "^1.2.0",
+    "@zakj/no-sleep": "^0.13.5",
     "framer-motion": "^10.18.0",
     "globals": "^15.6.0",
     "moment": "^2.30.1",

@@ -17,7 +17,7 @@ export class C2024_1_Beta extends Changelog {
         </span>)
         this.improved(<span>Redesigned the user interface with a fresh, new look.</span>)
         this.improved(
-            <span>Introduced a <b>Game core</b> module to overhaul the clock system.</span>)
+            <span>Introduced a <b>game core</b> module to overhaul the clock system.</span>)
         this.fixed(<span>Resolved an issue where the two clocks did not run independently.</span>)
     }
 }
