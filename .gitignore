@@ -24,7 +24,8 @@ node_modules
 coverage
 
 # Production (I cannot build on my server which only has 2G memory!!!)
-# build
+# Now I can because I used Vite
+build
 
 # Miscellaneous
 *.local
