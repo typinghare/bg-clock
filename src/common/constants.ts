@@ -8,6 +8,13 @@ export const TimeColor = {
     TIME_UP_COLOR: 'red',
 } as const
 
+export const StateThemeColor = {
+    NOT_STARTED: 'whitesmoke',
+    ONGOING: '#3dccc7',
+    PAUSED: '#ff9f1c',
+    ENDED: 'red',
+} as const
+
 export const LocalStorageKey = {
     SETTINGS: 'SETTINGS',
     GAME_SAVE: 'GAME_SAVE',
