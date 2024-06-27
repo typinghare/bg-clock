@@ -15,6 +15,7 @@ export default defineConfig({
         outDir: 'build',
         sourcemap: true,
     },
+    publicDir: 'public',
     test: {
         globals: true,
         environment: 'jsdom',
