@@ -3,10 +3,17 @@ import { Context, ContextData, float, Game } from '@typinghare/game-core'
 import { Player, Role } from './Player'
 import { BoardGameState, NotStartedState, OngoingState, PausedState } from './BoardGameState'
 import { PlayerTapEvent } from './event/PlayerTapEvent'
-import { BoardGameRequest, PlayerTapRequest } from './BoardGameRequest'
+import {
+    BoardGameRequest,
+    PlayerPauseRequest,
+    PlayerResumeRequest,
+    PlayerTapRequest,
+} from './BoardGameRequest'
 import { HourMinuteSecond } from '@typinghare/hour-minute-second'
 import { AdvancedSettings } from './AdvancedSettings'
 import { Datum } from '@typinghare/extrum'
+import { PauseEvent } from './event/PauseEvent'
+import { ResumeEvent } from './event/ResumeEvent'
 
 /**
  * Board game.
@@ -122,6 +129,12 @@ export class BoardGame {
         eventManager.addHandler(PlayerTapEvent, (gameEvent) => {
             const role: Role = gameEvent.getValue('role')
             this.onPlayerTap(role)
+        })
+        eventManager.addHandler(PauseEvent, () => {
+            this.handleRequest(new PlayerPauseRequest())
+        })
+        eventManager.addHandler(ResumeEvent, () => {
+            this.handleRequest(new PlayerResumeRequest())
         })
 
         // Initialize all plugins

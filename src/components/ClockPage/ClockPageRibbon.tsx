@@ -1,30 +1,26 @@
 import { Box, BoxProps, Button, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
-import {
-    BoardGame,
-    OngoingState,
-    PausedState,
-    PlayerPauseRequest,
-    PlayerResumeRequest,
-} from '../../game'
+import { BoardGame, OngoingState, PausedState } from '../../game'
 import { Horizontal } from '../Horizontal'
+import { PauseEvent } from '../../game/event/PauseEvent'
+import { ResumeEvent } from '../../game/event/ResumeEvent'
 
 export function ClockPageRibbon(props: ClockPageRibbonProps) {
     const { boardGame, isOpen, onClose, label, ...otherProps } = props
 
     function handlePause() {
-        if (boardGame) {
-            boardGame.handleRequest(new PlayerPauseRequest())
+        if (boardGame && boardGame.isState(OngoingState)) {
+            const pauseEvent = new PauseEvent({ role: '' })
+            boardGame.getGameContext().eventManager.trigger(pauseEvent)
+            onClose()
         }
-
-        onClose()
     }
 
     function handleResume() {
-        if (boardGame) {
-            boardGame.handleRequest(new PlayerResumeRequest())
+        if (boardGame && boardGame.isState(PausedState)) {
+            const resumeEvent = new ResumeEvent({ role: '' })
+            boardGame.getGameContext().eventManager.trigger(resumeEvent)
+            onClose()
         }
-
-        onClose()
     }
 
     function OperationBox(props: BoxProps) {

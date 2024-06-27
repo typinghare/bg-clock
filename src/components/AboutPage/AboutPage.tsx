@@ -1,7 +1,7 @@
 import { Page, PageEnum } from '../Page'
 import { Navigation } from '../Navigation'
 import { Container, Tab, TabList, TabPanels, Tabs } from '@chakra-ui/react'
-import { InstructionPanel } from './InstructionPanel'
+import { GuidePanel } from './GuidePanel'
 import { ChangelogPanel } from './ChangelogPanel'
 
 /**
@@ -19,7 +19,7 @@ export function AboutPage() {
                     </TabList>
 
                     <TabPanels>
-                        <InstructionPanel />
+                        <GuidePanel />
                         <ChangelogPanel />
                     </TabPanels>
                 </Tabs>
