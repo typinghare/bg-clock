@@ -9,7 +9,7 @@ import {
 import { Horizontal } from '../Horizontal'
 
 export function ClockPageRibbon(props: ClockPageRibbonProps) {
-    const { boardGame, isOpen, onClose } = props
+    const { boardGame, isOpen, onClose, label, ...otherProps } = props
 
     function handlePause() {
         if (boardGame) {
@@ -65,7 +65,14 @@ export function ClockPageRibbon(props: ClockPageRibbonProps) {
     }
 
     return (
-        <Box>
+        <Box height="100%" display="flex" fontSize="1.25rem" {...otherProps}>
+            <Box height="100%" flex={1}>
+                <RibbonLabel label={label} transform="rotate(180deg)" />
+            </Box>
+            <Box height="100%" flex={1}>
+                <RibbonLabel label={label} />
+            </Box>
+
             <Modal
                 isOpen={isOpen}
                 onClose={onClose}
@@ -86,4 +93,29 @@ export interface ClockPageRibbonProps extends BoxProps {
     boardGame?: BoardGame
     isOpen: boolean
     onClose: () => void
+    label: string
+}
+
+function RibbonLabel(props: RibbonLabelProps) {
+    const { label, ...otherProps } = props
+
+    return (
+        <Box
+            height="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            userSelect="none"
+            cursor="default"
+            {...otherProps}
+        >
+            <div>
+                {label}
+            </div>
+        </Box>
+    )
+}
+
+interface RibbonLabelProps extends BoxProps {
+    label: string
 }

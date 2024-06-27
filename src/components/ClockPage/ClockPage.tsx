@@ -6,10 +6,17 @@ import {
 } from '../../redux'
 import { Box, useBoolean } from '@chakra-ui/react'
 import { ClockDisplay } from './ClockDisplay'
-import { BoardGame, TwoPlayerBoardGame } from '../../game'
+import {
+    BoardGame,
+    EndedState,
+    NotStartedState,
+    OngoingState,
+    PausedState,
+    TwoPlayerBoardGame,
+} from '../../game'
 import { useEffect, useState } from 'react'
 import { boardGameHolder } from '../../common/holder'
-import { TimeColor } from '../../common/constants'
+import { StateThemeColor, TimeColor } from '../../common/constants'
 import { ClockPageRibbon } from './ClockPageRibbon'
 
 /**
@@ -20,16 +27,45 @@ export function ClockPage() {
     const timeControlChangedSignal = useAppSelector(selectTimeControlChangedSignal)
     const [boardGame, setBoardGame] = useState<BoardGame | undefined>(undefined)
     const [isRibbonOpen, setRibbon] = useBoolean()
+    const [ribbonLabel, setRibbonLabel] = useState<string>('Not Started')
+    const [ribbonColor, setRibbonColor] = useState<string>(StateThemeColor.NOT_STARTED)
 
     useEffect(() => {
         const currentBoardGame = boardGameHolder.get()
         setBoardGame(currentBoardGame)
     }, [boardGameChangedSignal, timeControlChangedSignal])
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!boardGame) {
+                return
+            }
+
+            if (boardGame.isState(NotStartedState)) {
+                setRibbonLabel('Not Started')
+                setRibbonColor(StateThemeColor.NOT_STARTED)
+            } else if (boardGame.isState(OngoingState)) {
+                setRibbonLabel('Ongoing')
+                setRibbonColor(StateThemeColor.ONGOING)
+            } else if (boardGame.isState(PausedState)) {
+                setRibbonLabel('Paused')
+                setRibbonColor(StateThemeColor.PAUSED)
+            } else if (boardGame.isState(EndedState)) {
+                setRibbonLabel('Ended')
+                setRibbonColor(StateThemeColor.ENDED)
+            }
+        }, 60)
+
+        return () => {
+            if (interval) {
+                clearInterval(interval)
+            }
+        }
+    }, [boardGame])
+
     if (!boardGame) {
         return (<Page page={PageEnum.CLOCK} />)
     }
-
 
     return (
         <Page page={PageEnum.CLOCK}>
@@ -46,6 +82,8 @@ export function ClockPage() {
                     boardGame={boardGame}
                     isOpen={isRibbonOpen}
                     onClose={setRibbon.off}
+                    label={ribbonLabel}
+                    color={ribbonColor}
                 />
             </Box>
             <Box flex={9} userSelect="none">
