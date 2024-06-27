@@ -119,7 +119,6 @@ function CustomizeModal(props: CustomizeModalProps) {
 
     function handleClose(): void {
         onClose(value)
-        console.log(value)
     }
 
     function handleCancel(): void {
