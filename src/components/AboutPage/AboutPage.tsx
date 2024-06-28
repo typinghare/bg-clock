@@ -14,7 +14,7 @@ export function AboutPage() {
             <Container paddingY={5}>
                 <Tabs>
                     <TabList>
-                        <Tab>Instruction</Tab>
+                        <Tab>Guide</Tab>
                         <Tab>Changelog</Tab>
                     </TabList>
 
