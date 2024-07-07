@@ -82,11 +82,14 @@ export class GoByoyomiPlayer extends Player<GoByoyomiPlayerSettings, GoByoyomiPl
             return super.runOutTime()
         }
 
-        this.extraData.getDatum('remainingPeriods').setValue(remainingPeriods - 1)
-        this.extraData.getDatum('hasEnteredByoyomi').setValue(true)
+        const hasEnteredByoyomi = this.extraData.getDatum('hasEnteredByoyomi');
+        if (!hasEnteredByoyomi.getValue()) {
+            hasEnteredByoyomi.setValue(true);
+        } else {
+            this.extraData.getDatum('remainingPeriods').setValue(remainingPeriods - 1)
+        }
 
-        const timePerPeriod: HourMinuteSecond = this.getValue('timePerPeriod')
-        this.setTime(timePerPeriod)
+        this.setTime(this.getValue('timePerPeriod'))
     }
 
     public override resume() {

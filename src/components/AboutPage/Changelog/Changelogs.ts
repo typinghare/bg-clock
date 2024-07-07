@@ -3,6 +3,7 @@ import { C2024_1_Beta } from './collection/C2024_1_Beta'
 import { C2023_1 } from './collection/C2023_1'
 import { C2024_2_Beta } from './collection/C2024_2_Beta'
 import { C2024_2 } from './collection/C2024_2'
+import { C2024_3 } from './collection/C2024_3'
 
 // Register all changelog objects here
 export const changelogs = [
@@ -10,6 +11,7 @@ export const changelogs = [
     new C2024_1_Beta(),
     new C2024_2_Beta(),
     new C2024_2(),
+    new C2024_3(),
 ] as const
 
 /**
