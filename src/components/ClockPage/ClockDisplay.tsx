@@ -21,6 +21,8 @@ import { boardGameHolder } from '../../common/holder'
 import { TimeDisplay } from './TimeDisplay'
 import { CountdownEvent } from '../../game/event/CountdownEvent'
 import { ClockBubbleContainer } from './ClockBubbleContainer'
+import { LongPressBox } from '../LongPressBox/LongPressBox'
+import { enableFullScreen } from '../../common/helper'
 
 export function ClockDisplay(props: ClockDisplayProps) {
     const { role, ...boxProps } = props
@@ -112,14 +114,19 @@ export function ClockDisplay(props: ClockDisplayProps) {
         boardGame.getGameContext().eventManager.trigger(playerTapEvent)
     }
 
+    function handleLongPressTimeout(): void {
+        enableFullScreen()
+    }
+
     return (
-        <Box
+        <LongPressBox
             display="flex"
             position="relative"
             alignItems="center"
             justifyContent="center"
             height="100%"
             onClick={handleClick}
+            timeoutCallback={handleLongPressTimeout}
             {...boxProps}
         >
             <ClockBubbleContainer
@@ -137,7 +144,7 @@ export function ClockDisplay(props: ClockDisplayProps) {
                 userSelect="none"
                 cursor="default"
             />
-        </Box>
+        </LongPressBox>
     )
 }
 

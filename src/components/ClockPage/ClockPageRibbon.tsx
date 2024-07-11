@@ -1,117 +1,173 @@
-import { Box, BoxProps, Button, Modal, ModalContent, ModalOverlay } from '@chakra-ui/react'
-import { BoardGame, OngoingState, PausedState } from '../../game'
-import { Horizontal } from '../Horizontal'
+import { Box, BoxProps } from '@chakra-ui/react'
+import {
+    BoardGame,
+    EndedState,
+    NotStartedState,
+    OngoingState,
+    PausedState,
+    TwoPlayerBoardGame,
+} from '../../game'
 import { PauseEvent } from '../../game/event/PauseEvent'
 import { ResumeEvent } from '../../game/event/ResumeEvent'
+import { LongPressBox } from '../LongPressBox/LongPressBox'
+import { useEffect, useState } from 'react'
+import { StateLabel, StateThemeColor } from '../../common/constants'
 
 export function ClockPageRibbon(props: ClockPageRibbonProps) {
-    const { boardGame, isOpen, onClose, label, ...otherProps } = props
+    const { boardGame, ...otherProps } = props
+    const [progress, setProgress] = useState<number>(0)
+    const [labelA, setLabelA] = useState<string>(StateLabel.NOT_STARTED)
+    const [labelB, setLabelB] = useState<string>(StateLabel.NOT_STARTED)
+    const [labelColorA, setLabelColorA] = useState<string>(StateThemeColor.NOT_STARTED)
+    const [labelColorB, setLabelColorB] = useState<string>(StateThemeColor.NOT_STARTED)
 
-    function handlePause() {
-        if (boardGame && boardGame.isState(OngoingState)) {
-            const pauseEvent = new PauseEvent({ role: '' })
-            boardGame.getGameContext().eventManager.trigger(pauseEvent)
-            onClose()
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (!boardGame) {
+                return
+            }
+
+
+            if (boardGame.isState(OngoingState)) {
+                const playerA = boardGame.getPlayer(TwoPlayerBoardGame.ROLE_A)
+                const playerB = boardGame.getPlayer(TwoPlayerBoardGame.ROLE_B)
+                if (playerA.isPaused()) {
+                    setLabelA(StateLabel.PAUSED)
+                    setLabelColorA(StateThemeColor.PAUSED)
+                } else {
+                    setLabelA(StateLabel.ONGOING)
+                    setLabelColorA(StateThemeColor.ONGOING)
+                }
+
+                if (playerB.isPaused()) {
+                    setLabelB(StateLabel.PAUSED)
+                    setLabelColorB(StateThemeColor.PAUSED)
+                } else {
+                    setLabelB(StateLabel.ONGOING)
+                    setLabelColorB(StateThemeColor.ONGOING)
+                }
+            } else if (boardGame.isState(NotStartedState)) {
+                setLabelA(StateLabel.NOT_STARTED)
+                setLabelB(StateLabel.NOT_STARTED)
+                setLabelColorA(StateThemeColor.NOT_STARTED)
+                setLabelColorB(StateThemeColor.NOT_STARTED)
+            } else if (boardGame.isState(PausedState)) {
+                setLabelA(StateLabel.PAUSED)
+                setLabelB(StateLabel.PAUSED)
+                setLabelColorA(StateThemeColor.PAUSED)
+                setLabelColorB(StateThemeColor.PAUSED)
+            } else if (boardGame.isState(EndedState)) {
+                setLabelA(StateLabel.ENDED)
+                setLabelB(StateLabel.ENDED)
+                setLabelColorA(StateThemeColor.ENDED)
+                setLabelColorB(StateThemeColor.ENDED)
+            }
+        }, 60)
+
+        return () => {
+            if (interval) {
+                clearInterval(interval)
+            }
+        }
+    }, [boardGame])
+
+    function handleInterval(duration: number, timeout: number) {
+        setProgress(duration / timeout)
+    }
+
+    function handleTimeout() {
+        setProgress(0)
+
+        if (boardGame) {
+            if (boardGame.isState(OngoingState)) {
+                const pauseEvent = new PauseEvent({ role: '' })
+                boardGame.getGameContext().eventManager.trigger(pauseEvent)
+            } else if (boardGame.isState(PausedState)) {
+                const resumeEvent = new ResumeEvent({ role: '' })
+                boardGame.getGameContext().eventManager.trigger(resumeEvent)
+            }
         }
     }
 
-    function handleResume() {
-        if (boardGame && boardGame.isState(PausedState)) {
-            const resumeEvent = new ResumeEvent({ role: '' })
-            boardGame.getGameContext().eventManager.trigger(resumeEvent)
-            onClose()
-        }
-    }
-
-    function OperationBox(props: BoxProps) {
-        const isPaused: boolean = boardGame?.isState(PausedState) || false
-        const isOngoing: boolean = boardGame?.isState(OngoingState) || false
-
-        return (
-            <Box
-                display="flex"
-                flexDirection="column"
-                {...props}
-            >
-                <Button
-                    marginBottom="1rem"
-                    colorScheme="orange"
-                    cursor={isOngoing ? 'pointer' : 'not-allowed'}
-                    variant={isOngoing ? 'solid' : 'outline'}
-                    onClick={handlePause}
-                >
-                    Pause
-                </Button>
-
-                <Button
-                    marginBottom="1rem"
-                    colorScheme="teal"
-                    variant={isPaused ? 'solid' : 'outline'}
-                    cursor={isPaused ? 'pointer' : 'not-allowed'}
-                    onClick={handleResume}
-                >
-                    Resume
-                </Button>
-
-                <Button onClick={onClose}>
-                    Cancel
-                </Button>
-            </Box>
-        )
+    function handleMouseUp() {
+        setProgress(0)
     }
 
     return (
-        <Box height="100%" display="flex" fontSize="1.25rem" {...otherProps}>
+        <LongPressBox
+            height="100%"
+            display="flex"
+            fontSize="1.25rem"
+            intervalMs={16} // fps = 60
+            timeoutMs={1000}
+            intervalCallback={handleInterval}
+            timeoutCallback={handleTimeout}
+            mouseUpCallback={handleMouseUp}
+            {...otherProps}
+        >
             <Box height="100%" flex={1}>
-                <RibbonLabel label={label} transform="rotate(180deg)" />
+                <RibbonLabel
+                    label={labelA}
+                    labelColor={labelColorA}
+                    toTransform
+                    progress={progress}
+                />
             </Box>
             <Box height="100%" flex={1}>
-                <RibbonLabel label={label} />
+                <RibbonLabel label={labelB} labelColor={labelColorB} progress={progress} />
             </Box>
-
-            <Modal
-                isOpen={isOpen}
-                onClose={onClose}
-                isCentered
-            >
-                <ModalOverlay />
-                <ModalContent padding="1rem">
-                    <OperationBox transform="rotate(180deg)" />
-                    <Horizontal marginTop="1.5rem" marginBottom="1.5rem" />
-                    <OperationBox />
-                </ModalContent>
-            </Modal>
-        </Box>
+        </LongPressBox>
     )
 }
 
 export interface ClockPageRibbonProps extends BoxProps {
     boardGame?: BoardGame
-    isOpen: boolean
-    onClose: () => void
-    label: string
 }
 
 function RibbonLabel(props: RibbonLabelProps) {
-    const { label, ...otherProps } = props
+    const { label, labelColor, toTransform = false, progress, ...otherProps } = props
 
     return (
         <Box
+            position="relative"
+            width="100%"
             height="100%"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            userSelect="none"
-            cursor="default"
+            transform={toTransform ? 'rotate(180deg)' : ''}
             {...otherProps}
         >
-            <div>
-                {label}
-            </div>
+            <Box
+                height="100%"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                userSelect="none"
+                cursor="default"
+                color={labelColor}
+                zIndex="2"
+            >
+                <div color={labelColor}> {label} </div>
+            </Box>
+            <Box
+                position="absolute"
+                top="0"
+                right="0"
+                width={(progress * 100) + '%'}
+                height="100%"
+                bgColor="#ffffff"
+                opacity={0.2}
+                zIndex="1"
+            />
         </Box>
     )
 }
 
 interface RibbonLabelProps extends BoxProps {
     label: string
+
+    labelColor: string
+
+    toTransform?: boolean
+
+    // [0, 1]
+    progress: number
 }

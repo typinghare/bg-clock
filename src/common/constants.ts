@@ -8,6 +8,13 @@ export const TimeColor = {
     TIME_UP_COLOR: 'red',
 } as const
 
+export const StateLabel = {
+    NOT_STARTED: 'NOT STARTED',
+    ONGOING: 'ONGOING',
+    PAUSED: 'PAUSED',
+    ENDED: 'ENDED',
+} as const
+
 export const StateThemeColor = {
     NOT_STARTED: 'whitesmoke',
     ONGOING: '#3dccc7',
