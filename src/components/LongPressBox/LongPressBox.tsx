@@ -18,8 +18,7 @@ export function LongPressBox(props: LongPressBoxProps) {
     const [intervalHandle, setIntervalHandle] = useState<number | null>(null)
     const durationMsHolder = Holder.of<number>(0)
 
-    function handleMouseDown(event: MouseEvent) {
-        if (event.button !== LEFT_MOUSE_BUTTON || isPressing) return
+    function handlePressDown() {
         setIsPressing(true)
 
         if (intervalHandle == null) {
@@ -45,9 +44,7 @@ export function LongPressBox(props: LongPressBoxProps) {
         }
     }
 
-    function handleMouseUp(event: MouseEvent) {
-        if (event.button !== LEFT_MOUSE_BUTTON || !isPressing) return
-
+    function handlePressUp() {
         if (mouseUpCallback) mouseUpCallback(durationMsHolder.getOrDefault(0), timeoutMs)
 
         // Clear interval handle and release the isPressing flag
@@ -61,10 +58,23 @@ export function LongPressBox(props: LongPressBoxProps) {
         durationMsHolder.assign(0)
     }
 
+    function handleMouseDown(event: MouseEvent) {
+        if (event.button !== LEFT_MOUSE_BUTTON || isPressing) return
+        handlePressDown()
+    }
+
+    function handleMouseUp(event: MouseEvent) {
+        if (event.button !== LEFT_MOUSE_BUTTON || !isPressing) return
+        handlePressUp()
+    }
+
     return (
         <Box
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
+            onTouchStart={handlePressDown}
+            onTouchEnd={handlePressUp}
+            onTouchCancel={handlePressUp}
             {...otherProps}
         >
             {children}
