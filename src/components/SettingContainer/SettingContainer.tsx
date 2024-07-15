@@ -18,7 +18,7 @@ export function SettingContainer(props: SettingContainerProps) {
         onSettingChange,
     } = props
     const [expanded, setExpanded] = useBoolean(defaultExpanded || false)
-    const attributeList = dataCollection.getDatumList() as BoardGameAttribute[]
+    const attributeList = dataCollection.getList() as BoardGameAttribute[]
 
     return (
         <ExpandableContainer

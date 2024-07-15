@@ -60,7 +60,7 @@ export function GameSettingsPage() {
             for (let i = 1; i < playerList.length; ++i) {
                 const player = playerList[i]
                 for (const key of keys) {
-                    player.getDatum(key).setValue(firstPlayer.getValue(key))
+                    player.get(key).setValue(firstPlayer.getValue(key))
                 }
             }
         }

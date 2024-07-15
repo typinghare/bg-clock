@@ -51,7 +51,7 @@ export class ChessStandardPlayer extends Player<ChessStandardPlayerSettings, Che
         super.getReady()
         this.setTime(this.getValue('mainTime'))
 
-        // this.extraData.getDatum('lastResumedTime').setValue(this.getValue('mainTime'))
+        // this.extraData.get('lastResumedTime').setValue(this.getValue('mainTime'))
     }
 
     public override pause() {
@@ -66,7 +66,7 @@ export class ChessStandardPlayer extends Player<ChessStandardPlayerSettings, Che
     }
 
     public override resume() {
-        this.extraData.getDatum('lastResumedTime').setValue(this.getTime())
+        this.extraData.get('lastResumedTime').setValue(this.getTime())
         super.resume()
     }
 }

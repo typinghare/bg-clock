@@ -5,14 +5,14 @@ import { settings } from '../../common/settings'
 
 export function ClockBubbleContainer(props: ClockBubbleContainerProps) {
     const { playerExtraData, ...boxProps } = props
-    const playerExtraDatumList = playerExtraData.getDatumList() as Datum<unknown, PlayerExtraDataMetadata>[]
+    const playerExtraDatumList = playerExtraData.getList() as Datum<unknown, PlayerExtraDataMetadata>[]
 
     function ClockBubbles() {
         const displayedExtraDatumList: Datum<unknown, PlayerExtraDataMetadata>[]
-            = playerExtraDatumList.filter(datum => datum.getMeta('isDisplayed'))
+            = playerExtraDatumList.filter(datum => datum.meta('isDisplayed'))
 
         return (displayedExtraDatumList.map((datum, index) => {
-            const getDisplayedContent = datum.getMeta('getDisplayedContent')
+            const getDisplayedContent = datum.meta('getDisplayedContent')
             if (!getDisplayedContent) {
                 throw new Error('getDisplayedContent() function should not be undefined!')
             }

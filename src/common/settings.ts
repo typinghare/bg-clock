@@ -58,7 +58,7 @@ export function loadSettingsFromLocalStorage() {
     const object: SettingsData = JSON.parse(settingsItem)
     for (const key of Object.keys(object)) {
         // @ts-ignore
-        settings.getDatum(key).setValue(object[key])
+        settings.get(key).setValue(object[key])
     }
 }
 

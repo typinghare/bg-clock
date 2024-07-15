@@ -17,10 +17,10 @@ export function AttributeContainer(props: AttributeContainerProps) {
     const { attribute, onChange } = props
     const [expanded, setExpanded] = useBoolean()
     const [value, setValue] = useState(attribute.getValue())
-    const type = attribute.getMeta('type')
-    const label: string = attribute.getMeta('label')
-    const description: string = attribute.getMeta('description')
-    const optionList = attribute.getMeta('optionList')
+    const type = attribute.meta('type')
+    const label: string = attribute.meta('label')
+    const description: string = attribute.meta('description')
+    const optionList = attribute.meta('optionList')
 
     function handleSelect(newValue: BoardGameExpandedAttributeValue): void {
         attribute.setValue(newValue)

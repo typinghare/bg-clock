@@ -69,7 +69,7 @@ export class GoYingshiPlayer extends Player<YingshiPlayerSettings, GoYingshiPlay
             return super.runOutTime()
         }
 
-        this.extraData.getDatum('penaltiesUsed').setValue(penaltiesUsed - 1)
+        this.extraData.get('penaltiesUsed').setValue(penaltiesUsed - 1)
         const penaltyTime = this.getValue('penaltyTime')
         this.setTime(penaltyTime)
     }
